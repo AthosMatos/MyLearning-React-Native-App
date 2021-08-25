@@ -13,7 +13,7 @@ const styles = StyleSheet.create(
         {
             justifyContent: "center",
             alignItems: "center",
-            marginTop:"50%",
+            marginTop:"-10%",
             marginBottom:"20%",
 
         },
@@ -42,7 +42,7 @@ export default ()=>
             }
             else 
             {
-                navigation.navigate('Signin')
+                navigation.navigate('Login')
             }
 
         }

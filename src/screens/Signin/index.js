@@ -9,7 +9,7 @@ const styles = StyleSheet.create(
             justifyContent: "center",
             alignItems: "center",
             marginTop:"50%",
-            marginBottom:"20%",
+            
 
         },
         logo:

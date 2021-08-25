@@ -1,20 +1,20 @@
 import React from "react";
 import {Text,Image, StyleSheet, View} from 'react-native'
-import {Container,LoadingIcon} from './styles'
-import  AsyncStorage  from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
-
-import Logo from '../../assets/testlogo.svg'
-import { useEffect } from "react";
+import {Container,
+        InputArea,
+        CustomButton,
+        CustomButtonText,
+        SignMessageButton,
+        SignMessageButtonText,
+        SignMessageButtonTextBold} from './styles'
 
 const styles = StyleSheet.create(
     {
         logoContainer:
         {
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop:"50%",
-            marginBottom:"20%",
+           
+            marginTop:"-10%",
+            
 
         },
         logo:
@@ -28,36 +28,29 @@ const styles = StyleSheet.create(
 
 export default ()=>
 {
-    const navigation = useNavigation()
-
-
-    useEffect(()=>
-    {
-        const checkToken = async()=>{
-            const token = await AsyncStorage.getItem('token')
-
-            if(token)
-            {
-
-            }
-            else 
-            {
-              //  navigation.navigate('Signin')
-            }
-
-        }
-        checkToken()
-    },[])
-
 
 
     return (
         <Container>
             <View style={styles.logoContainer}>
                 <Image style={styles.logo} 
-                source = {require('../../assets/logo_white.png')}/>
+                source = {require('../../assets/logo.png')}/>
             </View>
-            <LoadingIcon size="large" color="#FFFFFF"/>
+
+            <InputArea>
+              
+                
+                <CustomButton>
+                    <CustomButtonText>LOGIN</CustomButtonText>
+                </CustomButton>
+            
+            </InputArea>
+
+            <SignMessageButton>
+                <SignMessageButtonText>Ainda n ppossui uma conta?</SignMessageButtonText>
+                <SignMessageButtonTextBold>Cadastre-se</SignMessageButtonTextBold>
+            </SignMessageButton>
+
         </Container>
     )
 }
