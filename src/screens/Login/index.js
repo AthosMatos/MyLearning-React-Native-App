@@ -2,27 +2,34 @@ import React from "react";
 import {Text,Image, StyleSheet, View} from 'react-native'
 import {Container,
         InputArea,
+        InputExternalArea,
         CustomButton,
         CustomButtonText,
         SignMessageButton,
         SignMessageButtonText,
         SignMessageButtonTextBold} from './styles'
 
+import EmailInput from '../../components/emailInput'
+import PasswordInput from '../../components/passwordInput'
+
 const styles = StyleSheet.create(
     {
-        logoContainer:
-        {
-           
-            marginTop:"-10%",
-            
-
+        TXTContainer:
+        {         
+            marginVertical: "8%",
+            justifyContent: "center",
+            width: "80%",
+          
         },
-        logo:
+        txt:
         {
-            height:200,
-            width:200,
-            resizeMode:'center'
-        }
+            fontSize: 30,
+            color: "#FFFFFF",
+        },
+        inputStyle:
+        {
+            marginTop: "15%",
+        },
     }
 )
 
@@ -32,24 +39,34 @@ export default ()=>
 
     return (
         <Container>
-            <View style={styles.logoContainer}>
-                <Image style={styles.logo} 
-                source = {require('../../assets/logo.png')}/>
+            <View style={styles.TXTContainer}>
+                <Text style={styles.txt}>Entrar</Text>
             </View>
 
-            <InputArea>
-              
+            <InputExternalArea>
+                <InputArea style={styles.inputStyle}>
+                    <EmailInput />
+                    <PasswordInput />
                 
-                <CustomButton>
-                    <CustomButtonText>LOGIN</CustomButtonText>
-                </CustomButton>
-            
-            </InputArea>
+                    <Text style={styles.EsqueceuSenha}>Esqueceu a senha?</Text>
 
-            <SignMessageButton>
-                <SignMessageButtonText>Ainda n ppossui uma conta?</SignMessageButtonText>
-                <SignMessageButtonTextBold>Cadastre-se</SignMessageButtonTextBold>
-            </SignMessageButton>
+                    <CustomButton>
+                        <CustomButtonText>LOGIN</CustomButtonText>
+                    </CustomButton>
+                
+                </InputArea>
+
+                <SignMessageButton>
+                    <SignMessageButtonText>Ainda n ppossui uma conta?</SignMessageButtonText>
+                    <SignMessageButtonTextBold>Cadastre-se</SignMessageButtonTextBold>
+                </SignMessageButton>
+
+
+
+            </InputExternalArea>
+            
+
+            
 
         </Container>
     )

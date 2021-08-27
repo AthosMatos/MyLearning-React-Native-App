@@ -2,16 +2,27 @@ import React from "react";
 import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
-    background-color: #FFFFfF;
+    background-color: #FF7605;
     flex: 1;
-    justify-content: center;
     align-items:center
 `;
 
-export const InputArea = styled.View``
+export const InputArea = styled.View`
+    width: 90%
+   
+    
+`
+export const InputExternalArea = styled.SafeAreaView`
+    width: 100%
+    flex:1
+    align-items:center
+    background-color: #FFFFFF
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+`
 
 export const CustomButton = styled.TouchableOpacity`
-    height: 60px;
+    height: 65px;
     background-color: #7605FF;
     border-radius: 30px;
     justify-content:center;
