@@ -1,14 +1,20 @@
 import React from "react";
-import {Text,Image, StyleSheet, View} from 'react-native'
-import {Container,LoadingIcon} from './styles'
+import {Image, StyleSheet, View,StatusBar} from 'react-native'
+import { ActivityIndicator } from "react-native-paper";
 import  AsyncStorage  from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-
-import Logo from '../../assets/testlogo.svg'
 import { useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const styles = StyleSheet.create(
     {
+        Container: 
+        {
+            backgroundColor: "#FF7605",
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+        },
         logoContainer:
         {
             justifyContent: "center",
@@ -22,18 +28,18 @@ const styles = StyleSheet.create(
             height:200,
             width:200,
             resizeMode:'center'
-        }
+        },
     }
 )
 
-export default ()=>
+export default () =>
 {
     const navigation = useNavigation()
 
-
     useEffect(()=>
     {
-        const checkToken = async()=>{
+        const checkToken = async() =>
+        {
             const token = await AsyncStorage.getItem('token')
 
             if(token)
@@ -42,22 +48,27 @@ export default ()=>
             }
             else 
             {
-                navigation.navigate('Login')
+                navigation.reset({ routes:[{name: "CameraTest"} ]})
             }
 
         }
         checkToken()
     },[])
 
-
-
     return (
-        <Container>
+        <SafeAreaView>
+
+            <StatusBar
+            backgroundColor = "#FF7605"
+            barStyle={'light-content'}/>
+
             <View style={styles.logoContainer}>
                 <Image style={styles.logo} 
-                source = {require('../../assets/logo_white.png')}/>
+                source = { require('../../assets/logo_white.png') }/>
             </View>
-            <LoadingIcon size="large" color="#FFFFFF"/>
-        </Container>
+
+            <ActivityIndicator size="large" color="#FFFFFF"/>
+
+        </SafeAreaView>
     )
 }
