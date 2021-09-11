@@ -16,6 +16,7 @@ import CustomInput from '../components/CustomInput'
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useNavigation } from "@react-navigation/native";
+import ApiFake from "../../Api/ApiFake";
 
 const styles = StyleSheet.create(
     {
@@ -89,6 +90,14 @@ export default ()=>
     {
         navigation.navigate('Login')
     }
+    function SignUp()
+    {
+        ApiFake.signUp(userField,emailField,passwordField).then((value)=>
+        {
+            console.log(value)
+            navigation.navigate('Login')
+        })
+    }
 
     return (
         <SafeAreaView 
@@ -122,7 +131,7 @@ export default ()=>
                     onChangeText={t=>setPasswordField(t)}
                     />
             
-                    <CustomButton style={styles.Entrar_B}>
+                    <CustomButton style={styles.Entrar_B} onPress={SignUp}>
                         <CustomButtonText style={styles.Entrar_B_txt}>Cadastrar</CustomButtonText>
                     </CustomButton>
 

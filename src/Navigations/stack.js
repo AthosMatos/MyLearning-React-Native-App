@@ -7,6 +7,7 @@ import Login from '../screens/Login'
 import LogORSign from '../screens/LogOrSign'
 import CameraTest from '../screens/CameraTest'
 import UserList from '../FakeUsers/Userlist'
+import HomeScreen from '../screens/HomeScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -52,7 +53,7 @@ export default () =>
             <Stack.Screen 
             name="Login" 
             component={Login} 
-             options=
+            options=
              {{
                 headerShadowVisible:false,
                 headerTitle:"",
@@ -66,6 +67,12 @@ export default () =>
 
             <Stack.Screen name="CameraTest" component={CameraTest} />
             <Stack.Screen name="UserList" component={UserList} />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} 
+             options=
+             {{
+                headerShown:false,
+             }}/>
+            
         </Stack.Navigator>
     )
 }

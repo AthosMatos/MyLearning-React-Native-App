@@ -1,7 +1,8 @@
 import React from "react";
-import {Image, StyleSheet, View,StatusBar} from 'react-native'
+import { Image, StyleSheet, View,StatusBar } from 'react-native'
 import { ActivityIndicator } from "react-native-paper";
-import  AsyncStorage  from "@react-native-async-storage/async-storage";
+import AsyncStorage  from "@react-native-async-storage/async-storage";
+import ApiFake from '../../Api/ApiFake'
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -39,18 +40,31 @@ export default () =>
     useEffect(()=>
     {
         const checkToken = async() =>
-        {
-            const token = await AsyncStorage.getItem('token')
-
-            if(token)
+        {          
+            ApiFake.checkToken().then((token) => 
             {
-                
-            }
-            else 
-            {
-                navigation.reset({ routes:[{name: "CameraTest"} ]})
-            }
+                if(token != null)
+                {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{name: 'HomeScreen', params: {userData: token}}],
+                    })
+                }
+                else 
+                {
+                    navigation.reset({ routes:[{name: "LogSign"} ]})
 
+                    /*let userData = 
+                    {
+                        id: 5,
+                        name: "testuser",
+                        avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+                    }
+
+                    navigation.reset({ 
+                        routes:[{name: "HomeScreen",params:{userData:userData} } ]})*/
+                }
+            })           
         }
         checkToken()
     },[])

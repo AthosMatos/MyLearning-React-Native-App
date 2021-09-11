@@ -13,11 +13,11 @@ import EmailInput from '../components/emailInput'
 import PasswordInput from '../components/passwordInput'
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,NavigationAction } from "@react-navigation/native";
+import ApiFake from '../../Api/ApiFake'
 
 const styles = StyleSheet.create(
     {
-
         ContainerS:
         {
             backgroundColor: "#FF7605",
@@ -79,15 +79,37 @@ export default ()=>
 {
     const [emailField,setEmailField] = useState('')
     const [passwordField,setPasswordField] = useState('')
+
     const navigation = useNavigation()
 
     function GoToSignin()
     {
         navigation.navigate('Signin')
     }
-    function CameraTest()
+
+    function LoginHandler()
     {
-        navigation.navigate('CameraTest')
+        if(emailField != '' && passwordField != '')
+        {
+            ApiFake.signIn(emailField,passwordField).then((userData) =>
+            {
+                //console.log('LOG USERID: ' + value.id)
+            
+                if (userData == 0) 
+                {
+                    alert('Conta nao encontrada') 
+                }
+                else 
+                {
+                    alert('Conta encontrada')
+                    navigation.reset({
+                        index: 0,
+                        routes: [{name: 'HomeScreen', params: {userData: userData}}],
+                    })
+                }
+            })
+        }
+        else alert('Preencha todos os campos')
     }
 
     return (
@@ -96,7 +118,7 @@ export default ()=>
 
             <StatusBar
             backgroundColor = "#FF7605"
-            barStyle={'light-content'}/>
+            barStyle = {'light-content'}/>
             
             <View style={styles.TXTContainer}>
                 <Text style={styles.txt}>Entrar</Text>
@@ -104,6 +126,7 @@ export default ()=>
 
             <SafeAreaView style={styles.ExternalAreaContainer}>
                 <InputArea style={styles.inputStyle}>
+
                     <EmailInput 
                     value={emailField}
                     onChangeText={t=>setEmailField(t)}
@@ -113,15 +136,15 @@ export default ()=>
                     value={passwordField}
                     onChangeText={t=>setPasswordField(t)}
                     />
-                
+
                     <SignMessageButton style={styles.EsqueceuSenha}>
                         <SignMessageButtonText style={styles.EsqueceuSenhaTxt}>Esqueceu a Senha?</SignMessageButtonText>
                     </SignMessageButton>
 
-                    <CustomButton style={styles.Entrar_B} onPress={CameraTest}>
+                    <CustomButton style={styles.Entrar_B} onPress={LoginHandler}>
                         <CustomButtonText style={styles.Entrar_B_txt}>Entrar</CustomButtonText>
                     </CustomButton>
-                
+
                 </InputArea>
 
                 <SignMessageButton onPress={GoToSignin}>
