@@ -1,5 +1,6 @@
 const { getDefaultConfig } = require("metro-config");
- 
+const path = require('path');
+
 module.exports = (async () => {
   const {
     resolver: { sourceExts, assetExts } 
@@ -21,3 +22,5 @@ module.exports = (async () => {
     }
   };
 })();
+
+

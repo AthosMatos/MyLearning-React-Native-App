@@ -4,8 +4,8 @@ export default {
     checkToken: async () => {
 
     },
-    signIn: async () => {
-
+    signIn: async (email,password) => {
+        
     },
     signUp: async () => {
 

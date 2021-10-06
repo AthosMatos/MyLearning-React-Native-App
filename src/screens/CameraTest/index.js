@@ -131,10 +131,13 @@ export default () => {
   };
 
   return (
+    
     <SafeAreaView style={{flex: 1}}>
+      
       <Text style={styles.titleText}>
         Example of Image Picker in React Native
       </Text>
+
       <View style={styles.container}>
         <Image
           source={{uri: filePath.uri}}
@@ -170,6 +173,7 @@ export default () => {
           <Text style={styles.textStyle}>Choose Video</Text>
         </TouchableOpacity>
       </View>
+
     </SafeAreaView>
   );
 };

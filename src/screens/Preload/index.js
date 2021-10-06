@@ -52,17 +52,16 @@ export default () =>
                 }
                 else 
                 {
-                    navigation.reset({ routes:[{name: "LogSign"} ]})
+                    navigation.reset({ routes:[{name: "CameraTest2"} ]})
 
-                    /*let userData = 
+                   /* let userData = 
                     {
                         id: 5,
                         name: "testuser",
                         avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
                     }
 
-                    navigation.reset({ 
-                        routes:[{name: "HomeScreen",params:{userData:userData} } ]})*/
+                    navigation.reset({routes:[{name: "ShrimpScreen",params:{userData:userData}} ]})*/
                 }
             })           
         }

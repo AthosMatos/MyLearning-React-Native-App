@@ -95,7 +95,7 @@ export default ()=>
         ApiFake.signUp(userField,emailField,passwordField).then((value)=>
         {
             console.log(value)
-            navigation.navigate('Login')
+            navigation.reset({ routes:[{name: "Login"} ]})
         })
     }
 

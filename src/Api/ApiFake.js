@@ -1,19 +1,22 @@
-import FakeUsers from '../FakeUsers/users'
+//import FakeUsers from '../FakeUsers/users'
+import customData from '../FakeUsers/usersJSON.json'
 
 var dataBase = []
 var LogedAccount = null
 
-for (var i = 0; i < FakeUsers.length; i++)
+for (var i = 0; i < customData.users.length; i++)
 {
     let PreDefineduserData = {
-        id: FakeUsers[i].id,
-        name: FakeUsers[i].name,
-        email: FakeUsers[i].email,
-        password: FakeUsers[i].password,
-        avatar: FakeUsers[i].avatar
+        id: customData.users[i].id,
+        name: customData.users[i].name,
+        email: customData.users[i].email,
+        password: customData.users[i].password,
+        avatar: customData.users[i].avatar
     }
     dataBase.push(PreDefineduserData)
 }
+
+//console.log(dataBase)
 
 export default {
      
