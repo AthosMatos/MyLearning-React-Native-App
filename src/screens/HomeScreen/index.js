@@ -1,9 +1,9 @@
-import React, {Component} from "react";
-import {Image, StyleSheet, View,Dimensions,Text,FlatList,TouchableOpacity,TouchableHighlight} from 'react-native'
+import React from "react";
+import {Image, StyleSheet, View,Dimensions,Text,TouchableOpacity} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import {Header,Card} from 'react-native-elements'
 import { ScrollView } from "react-native-gesture-handler";
-import Canvas from 'react-native-canvas'
+import { useNavigation } from "@react-navigation/native";
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -31,9 +31,28 @@ const styles = StyleSheet.create(
 
 export default ({route}) =>
 {
+    const navigation = useNavigation()
     const UserData = route.params.userData
-    //console.log(UserData)
+    const FotoW = Dimensions.get('window').width*0.46
+    const FotoH = Dimensions.get('window').height*0.3
 
+    function onCameraClick()
+    {
+        navigation.navigate('CameraTest')
+    }
+
+    const HorizontalCardsView = () =>
+    (
+        <>
+            <ScrollView 
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+                
+                <Cards source={require('../../assets/imagetest.jpeg')}/>
+
+            </ScrollView>
+        </>
+    )
     const HorizontalButtonsView = () =>
     (
         <>
@@ -41,8 +60,10 @@ export default ({route}) =>
             <ScrollView 
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            style={{marginTop:"10%"}}>
-                <ButtonIcon IconName = 'camera-outline'/>
+            style={{marginTop:"5%"}}>
+                <ButtonIcon onPress={onCameraClick}
+                    IconName = 'camera-outline'
+                    />
                 <ButtonIcon IconName = 'image'/>
                 <ButtonIcon IconName = 'star-outline'/>
                 <ButtonIcon IconName = 'cloud-upload'/>
@@ -55,7 +76,8 @@ export default ({route}) =>
         </View>   
         </>
     )
-    function ButtonIcon({IconName})
+
+    function ButtonIcon({IconName,onPress})
     {
         let IconSize = Dimensions.get('window').width * 0.14
         let OutIconSize = 1.3
@@ -71,7 +93,8 @@ export default ({route}) =>
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginHorizontal: Dimensions.get('window').width * 0.03,
-                }}>
+                }}
+            onPress={onPress}>
                 <Icon
                 name = {IconName}
                 color = {"#FFF"}
@@ -81,18 +104,33 @@ export default ({route}) =>
         </>
         )
     }  
-
-    handleCanvas = (canvas) => {
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'purple';
-        ctx.fillRect(0, 0, 100, 100);
-        ctx.fillStyle = 'white';
-        ctx.lineWidth = 10
-        ctx.beginPath()
-        ctx.moveTo(10,50)
-        ctx.lineTo(100,100)
-        ctx.closePath()
-        ctx.stroke()
+    function Cards({source})
+    {
+        return (
+            <>
+            <TouchableOpacity
+             onPress={()=>{navigation.navigate('ShrimpScreen',{route:source})}}
+            >
+                 <Card containerStyle = {{
+                    width:FotoW,
+                    height:FotoH,
+                    borderRadius: 20,
+                    justifyContent:'center', 
+                    alignItems:'center',
+                    elevation:10
+                    }}
+                    >
+                   
+                   <Image style = {{
+                    width:FotoW , 
+                    height:FotoH ,
+                    borderRadius: 20,
+                    }}
+                    source = {source}/> 
+                </Card>
+            </TouchableOpacity>          
+            </>
+        )
     }
       
     return (
@@ -103,17 +141,17 @@ export default ({route}) =>
                     barStyle: 'light-content',
                     backgroundColor: '#FF7605'  
                 }}
-                leftComponent = 
+                /*leftComponent = 
                 {{ 
                     icon: 'menu', 
                     color: '#fff', 
                     iconStyle: { color: '#fff' } 
-                }}
+                }}*/
 
-                centerComponent = 
+                leftComponent = 
                 {{ 
-                    text: 'MY TITLE', 
-                    style: { color: '#fff' } 
+                    text: UserData.name, 
+                    style: { color: '#fff', fontSize: 15, fontWeight: '700' } 
                 }}
 
                 rightComponent = 
@@ -134,10 +172,9 @@ export default ({route}) =>
                 }}/>
 
             <ScrollView style={{
-                marginVertical: Dimensions.get('window').height * 0.05,
+                paddingVertical: Dimensions.get('window').height * 0.05,
                 
-            }}
-            StickyHeaderComponent= {{}}>
+            }}>
                 <Text 
                 style={{
                     marginLeft: '5%',
@@ -159,21 +196,23 @@ export default ({route}) =>
                 Fotos
                 </Text>
 
-                <Card containerStyle = {{
-                    width:Dimensions.get('window').width*0.3,
-                    height:Dimensions.get('window').height*0.2,
+                <HorizontalCardsView/>
+
+                <Text 
+                style={{
+                    marginTop: '15%',
+                    marginLeft: '5%',
+                    fontSize: 22,
+                    color: '#868686'
                     }}>
-                    <Card.Title>HELLO WORLD</Card.Title>
+                Envios
+                </Text>
 
-                    <Card.Divider/>
-                </Card>
-
-                <Canvas ref={handleCanvas}/>
-                    
+                <HorizontalCardsView/>
 
 
+                <View style={{marginBottom:200}}/>
             </ScrollView>
-          
         </SafeAreaView>
     )
 }

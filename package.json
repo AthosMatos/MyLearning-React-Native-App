@@ -1,6 +1,6 @@
 {
-  "name": "novoproj",
-  "version": "0.0.1",
+  "name": "potiquality",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -20,6 +20,7 @@
     "@react-navigation/native-stack": "^6.0.4",
     "@react-navigation/stack": "^6.0.7",
     "axios": "^0.22.0",
+    "gradlew": "^0.0.1-security",
     "permissions": "^0.1.0",
     "react": "^17.0.1",
     "react-native": "^0.64.2",

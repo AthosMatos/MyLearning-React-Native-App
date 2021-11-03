@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, View,StatusBar } from 'react-native'
 import { ActivityIndicator } from "react-native-paper";
-import AsyncStorage  from "@react-native-async-storage/async-storage";
 import ApiFake from '../../Api/ApiFake'
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
@@ -11,7 +10,7 @@ const styles = StyleSheet.create(
     {
         Container: 
         {
-            backgroundColor: "#FF7605",
+            backgroundColor: "#FFF",
             flex: 1,
             justifyContent: "center",
             alignItems: "center"
@@ -20,7 +19,7 @@ const styles = StyleSheet.create(
         {
             justifyContent: "center",
             alignItems: "center",
-            marginTop:"-10%",
+            marginTop:"0%",
             marginBottom:"20%",
 
         },
@@ -47,21 +46,21 @@ export default () =>
                 {
                     navigation.reset({
                         index: 0,
-                        routes: [{name: 'HomeScreen', params: {userData: token}}],
+                        routes: [{name: 'ShrimpScreen', params: {userData: token}}],
                     })
                 }
                 else 
                 {
-                    navigation.reset({ routes:[{name: "CameraTest2"} ]})
+                    //navigation.reset({ routes:[{name: "LogSign"} ]})
 
-                   /* let userData = 
+                    let userData = 
                     {
                         id: 5,
-                        name: "testuser",
+                        name: "Test User",
                         avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
                     }
 
-                    navigation.reset({routes:[{name: "ShrimpScreen",params:{userData:userData}} ]})*/
+                    navigation.reset({routes:[{name: "HomeScreen",params:{userData:userData}} ]})
                 }
             })           
         }
@@ -69,18 +68,18 @@ export default () =>
     },[])
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style = {styles.Container}>
 
             <StatusBar
-            backgroundColor = "#FF7605"
-            barStyle={'light-content'}/>
+            backgroundColor = "#FFF"
+            barStyle={'dark-content'}/>
 
             <View style={styles.logoContainer}>
                 <Image style={styles.logo} 
-                source = { require('../../assets/logo_white.png') }/>
+                source = { require('../../assets/logo.png') }/>
             </View>
 
-            <ActivityIndicator size="large" color="#FFFFFF"/>
+            <ActivityIndicator size="large" color="#FF7605"/>
 
         </SafeAreaView>
     )

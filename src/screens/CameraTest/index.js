@@ -1,213 +1,164 @@
-import React, {useState} from 'react';
+import React,{useState} from 'react'
+import { View, Image, Button, Platform,PermissionsAndroid,Text,ActivityIndicator } from 'react-native'
+import { launchCamera,launchImageLibrary } from 'react-native-image-picker'
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Platform,
-  PermissionsAndroid,
-} from 'react-native';
-
-import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
+const SERVER_URL = 'http://192.168.0.10:3000'
+//const SERVER_URL = 'http://177.65.202.66:3000'
 
 export default () => {
-  const [filePath, setFilePath] = useState({});
+  const [photo, setPhoto] = useState(null)
+  const [uploadstatus, setUploadstatus] = useState('IDLE')
+  const [isLoading, setLoading] = useState(false);
+  const [step,setstep] = useState(null)
+
+  const createFormData = (photo, body = {}) => {
+    const data = new FormData()
+  
+    data.append('photo', {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    })
+  
+    Object.keys(body).forEach((key) => {
+      data.append(key, body[key])
+    })
+  
+    return data
+  }
+
+  const handleTakePhoto = () => {
+    launchCamera({ noData: true }, (response) => {
+      // console.log(response);
+      if (!response.didCancel) {
+        console.log(response.assets[0].height)
+        console.log(response.assets[0].width)
+        setPhoto(response.assets[0])
+      }
+    })
+  }
+  const handleChoosePhoto = () => {
+    launchImageLibrary({ noData: true }, (response) => {
+      // console.log(response);
+      if (!response.didCancel) {
+        console.log(response.assets[0].height)
+        console.log(response.assets[0].width)
+        setPhoto(response.assets[0])
+      }
+    })
+  }
 
   const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'App needs camera permission',
-          },
-        );
-        // If CAMERA Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else return true;
-  };
-
-  const requestExternalWritePermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs write permission',
-          },
-        );
-        // If WRITE_EXTERNAL_STORAGE Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        alert('Write permission err', err);
-      }
-      return false;
-    } else return true;
-  };
-
-  const captureImage = async (type) => {
-    let options = {
-      mediaType: type,
-      maxWidth: 3000,
-      maxHeight: 3000,
-      quality: 1,
-      videoQuality: 'high',
-      durationLimit: 30, //Video max duration in seconds
-      saveToPhotos: true,
-    };
-    let isCameraPermitted = await requestCameraPermission();
-    let isStoragePermitted = await requestExternalWritePermission();
-    if (isCameraPermitted && isStoragePermitted) {
-      launchCamera(options, (response) => {
-        console.log('Response = ', response);
-
-        if (response.didCancel) {
-          alert('User cancelled camera picker');
-          return;
-        } else if (response.errorCode == 'camera_unavailable') {
-          alert('Camera not available on device');
-          return;
-        } else if (response.errorCode == 'permission') {
-          alert('Permission not satisfied');
-          return;
-        } else if (response.errorCode == 'others') {
-          alert(response.errorMessage);
-          return;
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Permissao pra Camera",
+          message:"App nescessita acessar sua camera",
+          buttonNeutral: "Pergunte-me depois",
+          buttonNegative: "Cancelar",
+          buttonPositive: "OK"
         }
-        console.log('base64 -> ', response.assets[0].base64);
-        console.log('uri -> ', response.assets[0].uri);
-        console.log('width -> ', response.assets[0].width);
-        console.log('height -> ', response.assets[0].height);
-        console.log('fileSize -> ', response.assets[0].fileSize);
-        console.log('type -> ', response.assets[0].type);
-        console.log('fileName -> ', response.assets[0].fileName);
-        setFilePath(response);
-      });
-    }
-  };
-
-  const chooseFile = (type) => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-    };
-    launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        alert('User cancelled camera picker');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        alert(response.errorMessage);
-        return;
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("Camera permission given");
+        handleTakePhoto()
+      } else {
+        console.log("Camera permission denied");
       }
-      console.log('base64 -> ', response.assets[0].base64);
-      console.log('uri -> ', response.assets[0].uri);
-      console.log('width -> ', response.assets[0].width);
-      console.log('height -> ', response.assets[0].height);
-      console.log('fileSize -> ', response.assets[0].fileSize);
-      console.log('type -> ', response.assets[0].type);
-      console.log('fileName -> ', response.assets[0].fileName);
-      setFilePath(response);
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
+  const isReachable = async () =>{
+    const timeout = new Promise((resolve, reject) => {
+        setTimeout(reject, 5000, 'Request timed out');
     });
-  };
+    const request = fetch(SERVER_URL);
+    try {
+        const response = await Promise
+            .race([timeout, request]);
+        return true
+    }
+    catch (error) {
+      setLoading(false)
+      setUploadstatus('ENVIO CANCELADO')
+      alert('Nao foi possivel se conectar ao server')
+      return false
+      
+    }
+}
+
+const checkstep = async () =>{
+
+  index = 0
+  prevstep = 0
+
+  fetch(`${SERVER_URL}/pytest`)
+
+  while(index!=10)
+  {
+      const request = await fetch(`${SERVER_URL}/getstep`)
+      const json = await request.json()
+      
+      if(json.step!=prevstep)
+      {
+        //console.log('response', json.step)
+        index++
+        prevstep=json.step
+        setstep(prevstep)
+      }
+  }
+  setstep("Processado!!!")
+}
+
+const handleUploadPhoto = async() => {
+    setUploadstatus('ENVIANDO...')
+    setLoading(true)
+    if(isReachable())
+    {
+      try {
+        const response = await fetch(`${SERVER_URL}/api/upload`, {
+          method: 'POST',
+          body: createFormData(photo, { userId: 'RandomUser' }),
+          headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        const json = await response.json()
+        setUploadstatus('Imagem Enviada!')
+
+        checkstep()
+
+        //console.log('response', json)
+      } catch (error) {
+        setUploadstatus('Imagem NAO Enviada!')
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }    
+    }
+  }
 
   return (
-    
-    <SafeAreaView style={{flex: 1}}>
-      
-      <Text style={styles.titleText}>
-        Example of Image Picker in React Native
-      </Text>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {isLoading && <ActivityIndicator color={'#000'} /> }
 
-      <View style={styles.container}>
-        <Image
-          source={{uri: filePath.uri}}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>{filePath.uri}</Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => captureImage('photo')}>
-          <Text style={styles.textStyle}>
-            Launch Camera for Image
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => captureImage('video')}>
-          <Text style={styles.textStyle}>
-            Launch Camera for Video
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => chooseFile('photo')}>
-          <Text style={styles.textStyle}>Choose Image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => chooseFile('video')}>
-          <Text style={styles.textStyle}>Choose Video</Text>
-        </TouchableOpacity>
-      </View>
-
-    </SafeAreaView>
-  );
-};
-
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-  titleText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    paddingVertical: 20,
-  },
-  textStyle: {
-    padding: 10,
-    color: 'black',
-    textAlign: 'center',
-  },
-  buttonStyle: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 5,
-    marginVertical: 10,
-    width: 250,
-  },
-  imageStyle: {
-    width: 200,
-    height: 200,
-    margin: 5,
-  },
-});
+      {step && <Text>{"Processando passo: " + step}</Text>}
+      <Text>{uploadstatus}</Text>
+      {photo && (
+        <>
+          <Image
+            source={{ uri: photo.uri }}
+            style={{ width: 300, height: 300 }}
+          />
+          <Button title="Enviar para o server" onPress={handleUploadPhoto} />
+        </>
+      )}
+      <Button title="Tirar Foto" onPress = {requestCameraPermission} />
+      <Button title="Escolher da galeria" onPress = {handleChoosePhoto} />
+    </View>
+  )
+}

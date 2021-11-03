@@ -1,8 +1,10 @@
-//import FakeUsers from '../FakeUsers/users'
 import customData from '../FakeUsers/usersJSON.json'
 
 var dataBase = []
 var LogedAccount = null
+
+const SERVER_URL = 'http://192.168.0.12:3000'
+const SERVER_URL2 = 'http://177.65.202.66:3000'
 
 for (var i = 0; i < customData.users.length; i++)
 {
@@ -17,6 +19,36 @@ for (var i = 0; i < customData.users.length; i++)
 }
 
 //console.log(dataBase)
+
+const isReachable = async () =>
+{
+    const timeout = new Promise((resolve, reject) => {
+        setTimeout(reject, 5000, 'Request timed out');
+    });
+    const request = fetch(SERVER_URL);
+    try {
+        const response = await Promise
+            .race([timeout, request]);
+        return true
+    }
+    catch (error) {
+      alert('Nao foi possivel se conectar ao server')
+      return false
+    }
+}
+const getDataBase = async () =>
+{
+    if(isReachable())
+    {
+      try {
+       
+      } catch (error) {
+        
+      } finally {
+       
+      }    
+    }
+}
 
 export default {
      
@@ -55,6 +87,5 @@ export default {
 
     LogOff: async () => {
         LogedAccount = null
-    }
-
+    },
 }

@@ -6,8 +6,6 @@ import Signin from '../screens/Signin'
 import Login from '../screens/Login'
 import LogORSign from '../screens/LogOrSign'
 import CameraTest from '../screens/CameraTest'
-import CameraTest2 from '../screens/CameraTest copy'
-import UserList from '../FakeUsers/Userlist'
 import HomeScreen from '../screens/HomeScreen'
 import ShrimpScreen from '../screens/shrimpcontour'
 
@@ -68,9 +66,7 @@ export default () =>
             />   
 
             <Stack.Screen name="CameraTest" component={CameraTest} />
-            <Stack.Screen name="CameraTest2" component={CameraTest2} />
-            
-            <Stack.Screen name="UserList" component={UserList} />
+
             <Stack.Screen name="HomeScreen" component={HomeScreen} 
              options=
              {{
@@ -79,7 +75,8 @@ export default () =>
              <Stack.Screen name="ShrimpScreen" component={ShrimpScreen} 
              options=
              {{
-               headerShown: false,
+               headerShadowVisible:false,
+               headerTitle:"",
              }}/>
             
         </Stack.Navigator>

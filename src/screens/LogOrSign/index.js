@@ -1,5 +1,5 @@
-import React, {useState,useEffect} from "react";
-import {Text,Image, StyleSheet, View, StatusBar, Animated,BackHandler,Alert,Dimensions} from 'react-native'
+import React, {useState, useEffect} from "react";
+import {Image, StyleSheet, View, StatusBar, Animated, BackHandler, Dimensions} from 'react-native'
 import {Container,
         InputArea,
         InputExternalArea,
@@ -129,7 +129,7 @@ export default ()=>
 
             <Animated.View style={value2.getLayout()}>     
                 <InputArea style={styles.Anonimo_Container}>
-                    <CustomButton style={styles.Anonimo_B}>
+                    <CustomButton style={styles.Anonimo_B} onPress={() => {navigation.navigate('CameraTest')}}>
                         <CustomButtonText style={styles.Anonimo_B_txt}>Anonimo</CustomButtonText>
                     </CustomButton>
                 </InputArea>   
