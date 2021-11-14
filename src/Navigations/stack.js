@@ -1,31 +1,63 @@
 import React from "react"
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
 
-import Preload from '../screens/Preload'
+import { enableScreens } from "react-native-screens";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+
+
+import Preload from '../actualApp/Preload'
 import Signin from '../screens/Signin'
 import Login from '../screens/Login'
 import LogORSign from '../screens/LogOrSign'
-import CameraTest from '../screens/CameraTest'
+import CameraTest from '../actualApp/CameraTest'
 import HomeScreen from '../screens/HomeScreen'
 import ShrimpScreen from '../screens/shrimpcontour'
+import FirstScreen from '../actualApp/Start'
+import MainScreen from '../actualApp/Main'
 
-const Stack = createNativeStackNavigator()
+enableScreens()
 
+const Shared_Stack = createSharedElementStackNavigator()
+
+const options = {
+  headerShown:false,
+  cardStyleInterpolator: ({ current: { progress } }) => {
+    return {
+      cardStyle: {
+        opacity: progress
+      }
+    };
+  }
+};
 export default () =>
 {
     return (
-        <Stack.Navigator
+        <Shared_Stack.Navigator
         initialRouteName="Preload">
             
-            <Stack.Screen 
+            <Shared_Stack.Screen
             name="Preload" 
-            component={Preload} 
-            options=
-            {{
-                headerShown:false,
-            }}
+            component={Preload}
+            options={()=>options}
             />
 
+            <Shared_Stack.Screen
+            name="FirstScreen" 
+            component={FirstScreen}
+            options={()=>options}
+            />
+
+            <Shared_Stack.Screen
+            name="MainScreen" 
+            component={MainScreen}
+            options={()=>options}
+            />
+
+            <Shared_Stack.Screen
+            name="CameraTest" 
+            component={CameraTest}
+            options={()=>options}
+            />
+            {/*
             <Stack.Screen
             name="LogSign" 
             component={LogORSign} 
@@ -78,7 +110,8 @@ export default () =>
                headerShadowVisible:false,
                headerTitle:"",
              }}/>
+            */}
             
-        </Stack.Navigator>
+        </Shared_Stack.Navigator>
     )
 }

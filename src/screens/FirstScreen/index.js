@@ -52,7 +52,6 @@ export default () =>
                 else 
                 {
                     //navigation.reset({ routes:[{name: "LogSign"} ]})
-                    navigation.reset({ routes:[{name: "FirstScreen"} ]})
                     
                    /* let userData = 
                     {

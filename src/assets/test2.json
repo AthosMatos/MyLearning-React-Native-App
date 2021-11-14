@@ -544,9 +544,9 @@
             "curvature30":null,
             "perimeter":281,
             "area":0.08439,
-            "shrimpLength":null,
-            "shrimpWidth":null,
-            "peso":null
+            "shrimpLength":20,
+            "shrimpWidth":10,
+            "peso":100
         },
         {
             "contour":[
@@ -1559,9 +1559,9 @@
             "curvature30":null,
             "perimeter":521,
             "area":0.25199,
-            "shrimpLength":null,
-            "shrimpWidth":null,
-            "peso":null
+            "shrimpLength":30,
+            "shrimpWidth":15,
+            "peso":150
         }
     ]
 }

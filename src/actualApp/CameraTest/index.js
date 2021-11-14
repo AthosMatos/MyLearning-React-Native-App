@@ -1,14 +1,15 @@
 import React,{useState} from 'react'
-import { View, Image, Button, Platform,PermissionsAndroid,Text,ActivityIndicator } from 'react-native'
+import { View, Image, Button, Platform,PermissionsAndroid,Text,ActivityIndicator,Dimensions } from 'react-native'
 import { launchCamera,launchImageLibrary } from 'react-native-image-picker'
+import { ProgressBar,Colors } from 'react-native-paper'
 
 const SERVER_URL = 'http://192.168.0.74:3000'
 //const SERVER_URL = 'http://177.65.202.66:3000'
 
-export default () => {
+export default ({navigation}) => {
   const [photo, setPhoto] = useState(null)
   const [uploadstatus, setUploadstatus] = useState('IDLE')
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false)
   const [step,setstep] = useState(null)
 
   const createFormData = (photo, body = {}) => {
@@ -110,7 +111,7 @@ const checkstep = async () =>{
         setstep(prevstep)
       }
   }
-  setstep("Processado!!!")
+ // setstep("Processado!!!")
 }
 
 const handleUploadPhoto = async() => {
@@ -144,10 +145,15 @@ const handleUploadPhoto = async() => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+
+      <ProgressBar progress={step/10} color={Colors.red800} style={{width:Dimensions.get('window').width}} />
+
       {isLoading && <ActivityIndicator color={'#000'} /> }
 
       {step && <Text>{"Processando passo: " + step}</Text>}
+
       <Text>{uploadstatus}</Text>
+
       {photo && (
         <>
           <Image
@@ -157,8 +163,11 @@ const handleUploadPhoto = async() => {
           <Button title="Enviar para o server" onPress={handleUploadPhoto} />
         </>
       )}
+    
+
       <Button title="Tirar Foto" onPress = {requestCameraPermission} />
       <Button title="Escolher da galeria" onPress = {handleChoosePhoto} />
+
     </View>
   )
 }

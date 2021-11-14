@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, StyleSheet, View,Dimensions,Text,TouchableOpacity} from 'react-native'
+import {Image, StyleSheet, View,Dimensions,Text,TouchableOpacity,PixelRatio} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import {Header,Card} from 'react-native-elements'
 import { ScrollView } from "react-native-gesture-handler";
@@ -79,7 +79,7 @@ export default ({route}) =>
 
     function ButtonIcon({IconName,onPress})
     {
-        let IconSize = Dimensions.get('window').width * 0.14
+        let IconSize = PixelRatio.getPixelSizeForLayoutSize(22)
         let OutIconSize = 1.3
 
         return (
