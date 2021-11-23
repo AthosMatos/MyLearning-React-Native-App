@@ -8,7 +8,7 @@ const SERVER_URL = 'http://192.168.0.74:3000'
 export default () => {
   const [photo, setPhoto] = useState(null)
   const [uploadstatus, setUploadstatus] = useState('IDLE')
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false)
   const [step,setstep] = useState(null)
 
   const createFormData = (photo, body = {}) => {
@@ -142,6 +142,8 @@ const handleUploadPhoto = async() => {
     }
   }
 
+  requestCameraPermission
+  
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       {isLoading && <ActivityIndicator color={'#000'} /> }
@@ -158,7 +160,7 @@ const handleUploadPhoto = async() => {
         </>
       )}
       <Button title="Tirar Foto" onPress = {requestCameraPermission} />
-      <Button title="Escolher da galeria" onPress = {handleChoosePhoto} />
+      {/*<Button title="Escolher da galeria" onPress = {handleChoosePhoto} />*/}
     </View>
   )
 }

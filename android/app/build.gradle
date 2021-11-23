@@ -126,10 +126,9 @@ android {
     signingConfigs {
         release {
             storeFile file('release.keystore')
-            storePassword '123456'
-            keyAlias 'androidrelease'
-            keyPassword '1234567'
-    
+            storePassword '2982982'
+            keyAlias 'my-key-alias'
+            keyPassword '2982982'
         }
     }
 

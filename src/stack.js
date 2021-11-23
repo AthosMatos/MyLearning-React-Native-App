@@ -4,15 +4,14 @@ import { enableScreens } from "react-native-screens";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 
-import Preload from '../actualApp/Preload'
-import Signin from '../screens/Signin'
-import Login from '../screens/Login'
-import LogORSign from '../screens/LogOrSign'
-import CameraTest from '../actualApp/CameraTest'
-import HomeScreen from '../screens/HomeScreen'
-import ShrimpScreen from '../screens/shrimpcontour'
-import FirstScreen from '../actualApp/Start'
-import MainScreen from '../actualApp/Main'
+import Preload from './actualApp/screens/Preload'
+import Signin from './screens/Signin'
+import Login from './screens/Login'
+import LogORSign from './screens/LogOrSign'
+import HomeScreen from './screens/HomeScreen'
+import ShrimpScreen from './screens/shrimpcontour'
+import StartScreen from './actualApp/screens/Start'
+import MainScreen from './actualApp/screens/Main'
 
 enableScreens()
 
@@ -41,8 +40,8 @@ export default () =>
             />
 
             <Shared_Stack.Screen
-            name="FirstScreen" 
-            component={FirstScreen}
+            name="StartScreen" 
+            component={StartScreen}
             options={()=>options}
             />
 
@@ -52,11 +51,6 @@ export default () =>
             options={()=>options}
             />
 
-            <Shared_Stack.Screen
-            name="CameraTest" 
-            component={CameraTest}
-            options={()=>options}
-            />
             {/*
             <Stack.Screen
             name="LogSign" 

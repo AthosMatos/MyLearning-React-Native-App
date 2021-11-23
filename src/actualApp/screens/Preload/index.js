@@ -9,7 +9,7 @@ const styles = StyleSheet.create(
     {
         Container: 
         {
-            backgroundColor: "#FFF",
+            backgroundColor: "#EDF2F4",
             flex: 1,
             justifyContent: "center",
             alignItems: "center"
@@ -31,29 +31,32 @@ const styles = StyleSheet.create(
     }
 )
 
-export default ({navigation}) =>
+const Preload = ({navigation}) =>
 {
     setTimeout(() => 
     {  
         //console.log("App Started!"); 
-        navigation.reset({ routes:[{name: "FirstScreen"} ]})
+        navigation.reset({ routes:[{name: "StartScreen"} ]})
 
-    }, 100);
+    }, 1000);
 
     return (
         <SafeAreaView style = {styles.Container}>
 
             <StatusBar
-            backgroundColor = "#FFF"
+            backgroundColor = "#EDF2F4"
             barStyle={'dark-content'}/>   
-
+            
             <SharedElement id="image" style={styles.logoContainer}>
                 <Image style={styles.logo} 
-                source = { require('../../assets/logo.png') }/>
+                source = { require('../../../assets/logo.png') }/>
             </SharedElement>
 
-            <ActivityIndicator size="large" color="#FF7605"/>
+            <SharedElement id="loading">
+                <ActivityIndicator size="large" color="#EF233C"/>
+            </SharedElement>
 
         </SafeAreaView>
     )
 }
+export default Preload

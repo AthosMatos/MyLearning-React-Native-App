@@ -10,7 +10,7 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
 
     if(!fontColor){fontColor='#FFF'}
 
-    if(!borderRadius){borderRadius=PixelRatio.getPixelSizeForLayoutSize(20)}
+    if(!borderRadius){borderRadius=PixelRatio.getPixelSizeForLayoutSize(8)}
 
     const styles = StyleSheet.create(
         {
@@ -22,74 +22,69 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
             },
             FABstyle:
             {
-                alignItems:'center',
-                justifyContent:'center',
-                flexDirection:'row',
+                alignItems:'flex-start',
+                justifyContent:'flex-end',
             },
             FABstyle2:
             {
-                alignItems:'center',
-                justifyContent:'center',
-                flexDirection:'row',
+                alignItems:'flex-start',
+                justifyContent:'flex-end',         
                 height:PixelRatio.getPixelSizeForLayoutSize(28),
             },
             FABstyleW:
             {
-                alignItems:'center',
-                justifyContent:'center',
-                flexDirection:'row',
+                alignItems:'flex-start',
+                justifyContent:'flex-end',   
                 width:width,
             },
             FABstyleH:
             {
-                alignItems:'center',
-                justifyContent:'center',
-                flexDirection:'row',
+                alignItems:'flex-start',
+                justifyContent:'flex-end',
                 height:height,
             },
             FABstyleHW:
             {
-                alignItems:'center',
-                justifyContent:'center',
-                flexDirection:'row',
+                alignItems:'flex-start',
+                justifyContent:'flex-end',
                 height:height,
                 width:width,
             },
             FABTextStyle:
             {
-                paddingRight:PixelRatio.getPixelSizeForLayoutSize(14),
-                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),
-                
+                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(8),   
                 paddingVertical:PixelRatio.getPixelSizeForLayoutSize(6),
                 color:fontColor,
                 fontSize:fontSize,
             },
             FABTextStyle2:
             {
-                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(14),    
+                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(8),   
                 paddingVertical:PixelRatio.getPixelSizeForLayoutSize(6),
                 color:fontColor,
                 fontSize:fontSize
             },
             FABTextStyle3:
             {
-                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(14),    
+                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(8),     
                 paddingVertical:PixelRatio.getPixelSizeForLayoutSize(6),
                 color:fontColor,
                 fontSize:PixelRatio.getPixelSizeForLayoutSize(8),
             },
             IconStyle:
             {
-                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(6)
+                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),
+                paddingTop:PixelRatio.getPixelSizeForLayoutSize(10),
             },
             ImageStyle:
-            {
-                width:PixelRatio.getPixelSizeForLayoutSize(20),
-                height:PixelRatio.getPixelSizeForLayoutSize(20),
+            {               
+                width:PixelRatio.getPixelSizeForLayoutSize(12),
+                height:PixelRatio.getPixelSizeForLayoutSize(12),
             },
             ImageContainer:
             {
-                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(6),
+                paddingTop:PixelRatio.getPixelSizeForLayoutSize(10),
+                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),
             },
         }
     )
@@ -122,6 +117,7 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
                     <Icon
                     name={icon}
                     color='#FFF' 
+                    size={PixelRatio.getPixelSizeForLayoutSize(12)}
                     style={styles.IconStyle}/>
                     <Text style={styles.FABTextStyle}>{text}</Text>
                 </>
