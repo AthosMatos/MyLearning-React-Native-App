@@ -12,6 +12,9 @@ import HomeScreen from './screens/HomeScreen'
 import ShrimpScreen from './screens/shrimpcontour'
 import StartScreen from './actualApp/screens/Start'
 import MainScreen from './actualApp/screens/Main'
+import Info from './actualApp/screens/Info'
+import Historic from './actualApp/screens/Historic'
+
 
 enableScreens()
 
@@ -51,6 +54,16 @@ export default () =>
             options={()=>options}
             />
 
+            <Shared_Stack.Screen
+            name="Info" 
+            component={Info}
+            options={()=>options}
+            />
+             <Shared_Stack.Screen
+            name="Historic" 
+            component={Historic}
+            options={()=>options}
+            />
             {/*
             <Stack.Screen
             name="LogSign" 

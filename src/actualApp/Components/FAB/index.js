@@ -122,7 +122,9 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
                     <Icon
                     name={icon}
                     color='#FFF' 
-                    style={styles.IconStyle}/>
+                    style={styles.IconStyle}
+                    type={type}
+                    />
                     <Text style={styles.FABTextStyle}>{text}</Text>
                 </>
             )

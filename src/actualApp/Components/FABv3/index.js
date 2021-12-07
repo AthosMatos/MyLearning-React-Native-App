@@ -11,7 +11,7 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
 
     if(!fontColor){fontColor='#FFF'}
 
-    if(!borderRadius){borderRadius=PixelRatio.getPixelSizeForLayoutSize(8)}
+    if(!borderRadius){borderRadius=PixelRatio.getPixelSizeForLayoutSize(20)}
 
     const styles = StyleSheet.create(
         {
@@ -19,77 +19,80 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
             {
                 backgroundColor:color,
                 borderRadius:borderRadius,
-                elevation:PixelRatio.getPixelSizeForLayoutSize(2),
+                //elevation:PixelRatio.getPixelSizeForLayoutSize(2),
+                borderWidth:PixelRatio.roundToNearestPixel(4),
+                borderColor:'#2B2D42'
             },
             FABstyle:
             {
-                alignItems:'flex-start',
-                justifyContent:'flex-end',
+                alignItems:'center',
+                justifyContent:'center',
+                flexDirection:'row',
             },
             FABstyle2:
             {
-                alignItems:'flex-start',
-                justifyContent:'flex-end',         
+                alignItems:'center',
+                justifyContent:'center',
+                flexDirection:'row',
                 height:PixelRatio.getPixelSizeForLayoutSize(28),
             },
             FABstyleW:
             {
-                alignItems:'flex-start',
-                justifyContent:'flex-end',   
+                alignItems:'center',
+                justifyContent:'center',
+                flexDirection:'row',
                 width:width,
             },
             FABstyleH:
             {
-                alignItems:'flex-start',
-                justifyContent:'flex-end',
+                alignItems:'center',
+                justifyContent:'center',
+                flexDirection:'row',
                 height:height,
             },
             FABstyleHW:
             {
-                alignItems:'flex-start',
-                justifyContent:'flex-end',
+                alignItems:'center',
+                justifyContent:'center',
+                flexDirection:'row',
                 height:height,
                 width:width,
             },
             FABTextStyle:
             {
-                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),   
+                paddingRight:PixelRatio.getPixelSizeForLayoutSize(12),
+                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),
+                
                 paddingVertical:PixelRatio.getPixelSizeForLayoutSize(6),
                 color:fontColor,
                 fontSize:fontSize,
             },
             FABTextStyle2:
             {
-                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(8),   
+                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(12),    
                 paddingVertical:PixelRatio.getPixelSizeForLayoutSize(6),
                 color:fontColor,
                 fontSize:fontSize
             },
             FABTextStyle3:
             {
-                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(8),     
+                paddingHorizontal:PixelRatio.getPixelSizeForLayoutSize(12),    
                 paddingVertical:PixelRatio.getPixelSizeForLayoutSize(6),
                 color:fontColor,
                 fontSize:PixelRatio.getPixelSizeForLayoutSize(8),
             },
             IconStyle:
             {
-                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),
-                paddingTop:PixelRatio.getPixelSizeForLayoutSize(10),
+                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(6)
             },
             ImageStyle:
-            {               
-                width:PixelRatio.getPixelSizeForLayoutSize(12),
-                height:PixelRatio.getPixelSizeForLayoutSize(12),
+            {
+                width:PixelRatio.getPixelSizeForLayoutSize(20),
+                height:PixelRatio.getPixelSizeForLayoutSize(20),
             },
             ImageContainer:
             {
-                paddingTop:PixelRatio.getPixelSizeForLayoutSize(10),
-                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(8),
-            },
-            LoadingStyle:
-            {
-                padding:PixelRatio.getPixelSizeForLayoutSize(16),
+                paddingLeft:PixelRatio.getPixelSizeForLayoutSize(6),
             },
         }
     )
@@ -115,31 +118,31 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
     }
     function TheresIcon()
     {
-
-        if(loading)
+        function opt()
         {
-            return (
+            return(
                 <>
-                <View style={{alignItems:'center',justifyContent:'center'}}>
-                    <ActivityIndicator
-                    color='#FFF' 
-                    size={PixelRatio.getPixelSizeForLayoutSize(12)}
-                    style={styles.LoadingStyle}
-                    />
-                </View>
+                {image && 
+                    <View style={styles.ImageContainer}><Image source={image} style={styles.ImageStyle}/></View>
+                }
+                {big ? <Text style={styles.FABTextStyle3}>{text}</Text>
+                :
+                    <Text style={styles.FABTextStyle2}>{text}</Text>
+                }
                 </>
             )
         }
-        else if(icon)
+
+        if(icon)
         {
             return (
                 <>
                     <Icon
                     name={icon}
                     color='#FFF' 
-                    size={PixelRatio.getPixelSizeForLayoutSize(12)}
                     style={styles.IconStyle}
-                    type={type}/>
+                    type={type}
+                    />
                     <Text style={styles.FABTextStyle}>{text}</Text>
                 </>
             )
@@ -148,13 +151,13 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
         {
             return (
                 <>
-                    {image && 
-                        <View style={styles.ImageContainer}><Image source={image} style={styles.ImageStyle}/></View>
-                    }
-                    {big ? <Text style={styles.FABTextStyle3}>{text}</Text>
-                    :
-                        <Text style={styles.FABTextStyle2}>{text}</Text>
-                    }
+                {loading ? 
+                <View style={styles.ImageContainer}>
+                    <ActivityIndicator/>
+                </View>
+                :
+                opt()
+                }
                 </>
             )
         }

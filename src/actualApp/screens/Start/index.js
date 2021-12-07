@@ -4,6 +4,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
 import FAB from '../../Components/FAB'
 import * as Animatable from 'react-native-animatable'
+import {
+    coin,
+    coinPhoto,
+    GetCoinB,
+    GetHistB,
+    GetImg,
+    GetInfoB,
+    GetPhotoB,
+    handleCoinB,
+    handleHistB,
+    handleImg,
+    handleInfoB,
+    handlePhotoB
+} from '../../variables'
 
 const {width, height} = Dimensions.get('window')
 
@@ -27,16 +41,29 @@ const mainscreen = ({navigation}) =>
 {
     const [Button_Anim,setButton_Anim] = useState('slideInUp')
     const [Logo_Anim,setLogo_Anim] = useState('')
-
+    var backHandler
+    
     useEffect(() => {
-       
-        BackHandler.addEventListener("hardwareBackPress", ()=>
+
+        const backAction = () => 
         {
+            /*GetHistB().slideOutRight(1000)
+            GetInfoB().slideOutLeft(1000)
+            GetCoinB().slideOutLeft(1000)
+            GetPhotoB().slideOutRight(1000)
+            GetImg().slideOutUp(1000)*/
             setLogo_Anim('')
             setButton_Anim('slideInUp')
-        })
-    },[])
-  
+        }
+        
+        backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        )
+        return () => backHandler.remove()
+      }, [])
+
+
     return (
         <SafeAreaView style = {styles.Container}>
             
@@ -47,22 +74,23 @@ const mainscreen = ({navigation}) =>
             <Animatable.View 
             animation={Logo_Anim}
             direction="normal"
-            duration={500}
+            duration={600}
             useNativeDriver
-            style={{ 
+            easing='ease'
+            style={{
                 alignItems:'center',
                 flex: 1,
                 paddingTop: height*0.1,
             }}
             >
-                <SharedElement id="image" >
-                    <Image style={styles.logo} 
+                <SharedElement id="image">
+                    <Image style={styles.logo}
                     source = { require('../../../assets/logo.png') }/>
-                </SharedElement>    
+                </SharedElement>
             </Animatable.View>
                      
             <Animatable.View
-            style={{  
+            style={{
                 justifyContent:'flex-end',
                 alignItems:'center',
                 flex: 1,
@@ -70,9 +98,10 @@ const mainscreen = ({navigation}) =>
             }}
             animation={Button_Anim}
             direction="normal"
-            duration={500}
+            duration={600}
             useNativeDriver
-            >          
+            easing='ease'
+            >
                 <FAB 
                 text="Começar" 
                 height={PixelRatio.getPixelSizeForLayoutSize(25)} 
@@ -82,10 +111,9 @@ const mainscreen = ({navigation}) =>
                 onPress={()=>
                     {
                         setLogo_Anim('slideOutUp')
-                        setButton_Anim('slideOutDown')  
-                        navigation.navigate('MainScreen')            
+                        setButton_Anim('slideOutDown')
+                        navigation.navigate('MainScreen')       
                     }}
-
                     />
             </Animatable.View>
             

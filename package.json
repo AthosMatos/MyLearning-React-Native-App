@@ -25,6 +25,7 @@
     "@types/react-native-snap-carousel": "^3.8.5",
     "axios": "^0.22.0",
     "gradlew": "^0.0.1-security",
+    "lottie-react-native": "^5.0.1",
     "permissions": "^0.1.0",
     "react": "^17.0.1",
     "react-native": "^0.64.2",
