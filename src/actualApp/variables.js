@@ -1,7 +1,10 @@
 export let coin = 0;
 export let coinPhoto = null
-export function setCoin(value) {
+export let onsetcoin = false
+export function setCoin(value) 
+{
   coin = value;
+  onsetcoin=true
     if(value===5)
     {
         coinPhoto = require('../assets/moedas/5_cents.png')
@@ -22,6 +25,10 @@ export function setCoin(value) {
     {
         coinPhoto = require('../assets/moedas/1_real.png')
     } 
+}
+export function resetsetcoin()
+{
+    onsetcoin = false
 }
 
 var CoinB

@@ -14,7 +14,7 @@ import StartScreen from './actualApp/screens/Start'
 import MainScreen from './actualApp/screens/Main'
 import Info from './actualApp/screens/Info'
 import Historic from './actualApp/screens/Historic'
-
+import ShrimpInfo from './actualApp/screens/shrimpcontour'
 
 enableScreens()
 
@@ -62,6 +62,11 @@ export default () =>
              <Shared_Stack.Screen
             name="Historic" 
             component={Historic}
+            options={()=>options}
+            />
+             <Shared_Stack.Screen
+            name="ShrimpInfo" 
+            component={ShrimpInfo}
             options={()=>options}
             />
             {/*

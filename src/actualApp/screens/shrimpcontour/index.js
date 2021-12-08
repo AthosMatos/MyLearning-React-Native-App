@@ -4,14 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import Canvas,{Image as CanvasImage} from 'react-native-canvas'
-import shrimpcoord from '../../assets/test2.json'
+import shrimpcoord from '../../../assets/test2.json'
 import RNFS from 'react-native-fs';
 import { Divider } from "react-native-elements";
 
-export default ({route}) =>
+export default ({navigation,route}) =>
 {
-    const navigation = useNavigation()
-    const UserData = route.params.userData
     const [imagedata,setimagedata] = useState('noData')
     const [isloading,setloading] = useState(true)
     const [ShrimpIndex,setShrimpIndex] = useState(0) //eh pra starta com 0
@@ -21,8 +19,8 @@ export default ({route}) =>
         // work with it
         setimagedata(`data:image/jpeg;base64,${binary}`)
         setloading(false)
-    })
-        .catch(console.error)
+    }).catch(console.error)
+
          
     handleCanvas = (canvas) => {
         //console.log("EnteredCanvas")
@@ -89,8 +87,8 @@ export default ({route}) =>
           
         })
 
-        image.src = imagedata
-        //image.src = 'http://i.imgur.com/O712qpO.jpg'
+        //image.src = imagedata
+        image.src = 'http://104.251.214.172:4000/getimage/' + route.params.photoname
         
     }
 

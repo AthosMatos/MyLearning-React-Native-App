@@ -47,23 +47,34 @@ const carousel = () =>
                     setCoin(item.key)
                 }}
             >
-                <Image source={item.image} 
-                style={{width:coinsize,height:coinsize}}
-                resizeMode='cover'
-                
-                />
+                <View style={{
+                    backgroundColor:'#EDF2F4',
+                    width:width*0.75,
+                    height:coinsize*2.2,
+                    borderColor:'#000',
+                    borderWidth:PixelRatio.roundToNearestPixel(6),
+                    borderRadius:PixelRatio.roundToNearestPixel(30),        
+                    overflow: 'hidden',
+                    }}>
+                    <Image source={item.image} 
+                    style={{
+                        width:undefined,
+                        height:undefined,
+                        flex:1,
+                        marginLeft:-PixelRatio.roundToNearestPixel(160),
+                        //transform: [{ scale: 0.8 }]
+                    }}
+                    resizeMode='cover'
+                    
+                    />
+                </View>
+               
             </TouchableOpacity>      
             )
     }
 
     return (
-        <View style={
-            {
-                width,
-                left:-(PixelRatio.getPixelSizeForLayoutSize(8))
-            }}>
-            <StatusBar backgroundColor={'#FFF'} />
-
+        <View>
             <Carousel
             layout={"default"}
             data={moedas}
@@ -73,13 +84,11 @@ const carousel = () =>
             enableMomentum 
             enableSnap
             sliderWidth={width}
-            itemWidth={coinsize}
+            itemWidth={width*0.65}
             inactiveSlideScale={0.6}
-            inactiveSlideOpacity={0.3}
-            
+            inactiveSlideOpacity={0.4}
             />
           
-
         </View>
     )
 

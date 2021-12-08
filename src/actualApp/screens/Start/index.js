@@ -74,7 +74,7 @@ const mainscreen = ({navigation}) =>
             <Animatable.View 
             animation={Logo_Anim}
             direction="normal"
-            duration={600}
+            duration={800}
             useNativeDriver
             easing='ease'
             style={{
@@ -98,7 +98,7 @@ const mainscreen = ({navigation}) =>
             }}
             animation={Button_Anim}
             direction="normal"
-            duration={600}
+            duration={800}
             useNativeDriver
             easing='ease'
             >
@@ -112,7 +112,9 @@ const mainscreen = ({navigation}) =>
                     {
                         setLogo_Anim('slideOutUp')
                         setButton_Anim('slideOutDown')
-                        navigation.navigate('MainScreen')       
+                        navigation.navigate('MainScreen')  
+                        //navigation.navigate('ShrimpInfo')      
+                          
                     }}
                     />
             </Animatable.View>

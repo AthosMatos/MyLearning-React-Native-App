@@ -1,5 +1,5 @@
 import React,{useState,useEffect, Component} from "react";
-import { Image, StyleSheet, View,StatusBar,PixelRatio,Dimensions,Platform,PermissionsAndroid,Text,BackHandler,TouchableOpacity} from 'react-native'
+import { Image, StyleSheet, View,StatusBar,PixelRatio,Dimensions,Platform,PermissionsAndroid,Text,BackHandler,TouchableOpacity,TouchableWithoutFeedback, Alert} from 'react-native'
 import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Carousel from '../../Components/Carousel2.0'
@@ -26,6 +26,11 @@ import {
     handleInfoB,
     handlePhotoB
 } from '../../variables'
+
+import { BlurView } from "@react-native-community/blur"
+import {saveDeviceData, loadDeviceData,deleteDeviceData} from "../AsyncStorageHelper";
+
+
 const {width, height} = Dimensions.get('window')
 
 //const SERVER_URL = 'http://192.168.0.74:3000'
@@ -56,12 +61,8 @@ const styles = StyleSheet.create(
 )
 
 
-
-
-const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,navigation}) =>
+const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,navigation,handleUploadPhoto,imgdone}) =>
 {
-    var backHandler
-
     useEffect(() => {
         
         GetCoinB().slideInLeft(1000)
@@ -79,7 +80,7 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
             GetHistB().slideInRight(1000)
         }
         
-        backHandler = BackHandler.addEventListener(
+        const backHandler = BackHandler.addEventListener(
             "hardwareBackPress",
             backAction
         )
@@ -112,12 +113,13 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
                     text="Enviar Foto" 
                     onPress={()=>
                         {
-                            
-                            //CoinB.slideOutLeft(1000)
+                            handleUploadPhoto()
+
+                            GetCoinB().slideOutLeft(1000)
                             GetPhotoB().slideOutRight(1000).then(()=>
                             {
                                 handleUploadPhoto()
-                            })                           
+                            })                       
                             
                         }} 
                     color='#7605FF'
@@ -125,7 +127,8 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
                     type='font-awesome'
                     fontSize={PixelRatio.roundToNearestPixel(15)}
                     />
-                    </>)
+                    </>
+                    )
             }
         }
 
@@ -182,28 +185,62 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
     {
         return (
             <>
-            
-            <Animatable.View 
-            style=
-            {{
-                alignItems:'center',
-                marginTop:PixelRatio.roundToNearestPixel(80)
-            }}
-            ref={handleImg}
-            useNativeDriver
-            easing='ease'
-            >
-                <Image 
-                source={photo ? {uri:photo.uri} : require('../../../assets/landscape.png')} 
-                style={{
-                    width:width*0.95,
-                    height:PixelRatio.roundToNearestPixel(250),
-                    borderColor:'#2B2D42',
-                    borderWidth:PixelRatio.roundToNearestPixel(6),
-                    borderRadius:PixelRatio.roundToNearestPixel(15)
+            {!imgdone ? 
+                <Animatable.View 
+                style=
+                {{
+                    alignItems:'center',
+                    marginTop:PixelRatio.roundToNearestPixel(80)
+                }}
+                ref={handleImg}
+                useNativeDriver
+                easing='ease'
+                >
+                    <Image 
+                    source={photo ? {uri:photo.uri} : require('../../../assets/landscape.png')} 
+                    style={{
+                        width:width*0.95,
+                        height:PixelRatio.roundToNearestPixel(250),
+                        borderColor:'#2B2D42',
+                        borderWidth:PixelRatio.roundToNearestPixel(6),
+                        borderRadius:PixelRatio.roundToNearestPixel(15)
+                        }}
+                    />
+                </Animatable.View>
+            :
+                <TouchableOpacity 
+                onPress={()=>
+                    {
+                        console.log(photo.fileName)
+                        navigation.navigate('ShrimpInfo',{
+                            photoname:photo.fileName,
+                        })
                     }}
-                />
-            </Animatable.View>
+                >
+                    <Animatable.View 
+                    style=
+                    {{
+                        alignItems:'center',
+                        marginTop:PixelRatio.roundToNearestPixel(80)
+                    }}
+                    ref={handleImg}
+                    useNativeDriver
+                    easing='ease'
+                    >
+                        <Image 
+                        source={photo ? {uri:photo.uri} : require('../../../assets/landscape.png')} 
+                        style={{
+                            width:width*0.95,
+                            height:PixelRatio.roundToNearestPixel(250),
+                            borderColor:'#2B2D42',
+                            borderWidth:PixelRatio.roundToNearestPixel(6),
+                            borderRadius:PixelRatio.roundToNearestPixel(15)
+                            }}
+                        />
+                    </Animatable.View>
+                </TouchableOpacity>
+            }
+            
             </>
         )
     }
@@ -266,15 +303,18 @@ const mainscreen = ({navigation}) =>
 {
     const [photo,setphoto] = useState(null)
     const [uploadstatus,setuploadstatus] = useState('IDLE')
+    const [imgdone,setimgdone] = useState(false)
     const [isLoading,setisLoading] = useState(false)
     const [step,setstep] = useState(null)
     const [changeButton,setchangeButton] = useState(0)
 
     const [isModalVisible, setModalVisible] = useState(false)
-     
+    const [statusbar, setstatusbar] = useState('dark-content')
+    
+
     const toggleModal = () => 
     {
-        setModalVisible(!isModalVisible);
+        setModalVisible(!isModalVisible); 
     }
 
     const isReachable  = async () =>
@@ -303,6 +343,8 @@ const mainscreen = ({navigation}) =>
             if (!response.didCancel) {
                 console.log(response.assets[0].height)
                 console.log(response.assets[0].width)
+                console.log(response.assets[0].fileName)
+
                 setphoto(response.assets[0])
 
                 setchangeButton(1)
@@ -327,8 +369,19 @@ const mainscreen = ({navigation}) =>
     {
         index = 0
         prevstep = 0
-        
-        fetch(`${SERVER_URL}/pytest`)
+       
+        async function pyresq()
+        {
+            const pyrequest = await fetch(`${SERVER_URL}/pytest`)
+            let shrimpdata = await pyrequest.json()
+
+            saveDeviceData('shrimpjson',shrimpdata)
+            let data = await loadDeviceData('shrimpjson')
+
+            console.log('shrimpdata', data)
+            setimgdone(true)
+        }
+        pyresq()
         
         while(index!=10)
         {
@@ -343,6 +396,7 @@ const mainscreen = ({navigation}) =>
             setstep(prevstep)
             }
         }
+       
         // setstep("Processado!!!")
     }
 
@@ -390,6 +444,14 @@ const mainscreen = ({navigation}) =>
     
     const handleUploadPhoto = async () =>
     {
+        if(!coin)
+        {
+            alert('Selecione uma moeda!')
+            GetCoinB().slideInLeft(1000)
+            GetPhotoB().slideInRight(1000)
+            return;
+        }
+
         setuploadstatus('ENVIANDO...')
         setisLoading(true)
       
@@ -425,41 +487,22 @@ const mainscreen = ({navigation}) =>
     }
     }   
 
-    const PopUp = () =>
-    {
-        //console.log(coin)
-        return (
-            <>
-            <Modal isVisible={isModalVisible}
-                useNativeDriverForBackdrop
-                hideModalContentWhileAnimating
-                useNativeDriver
-                onBackButtonPress={()=>{ setModalVisible(!isModalVisible)}}
-                onBackdropPress={()=>{ setModalVisible(!isModalVisible)}}
-                animationIn='zoomIn'
-                animationOut='zoomOut'
-                >
-                    <Carousel />
-            </Modal>
-            </>
-            )
-    }
-
     return (  
     <SafeAreaView style = {styles.Container}>
         
         <StatusBar
         backgroundColor = "#EDF2F4"
-        barStyle={'dark-content'}/>
-
-        <PopUp/>  
+        barStyle={statusbar}
+        />
 
         <Movables 
         photo={photo} 
-        toggleModal={toggleModal} 
+        toggleModal={toggleModal}
         changeButton={changeButton} 
         requestCameraPermission={requestCameraPermission}
         navigation={navigation}
+        handleUploadPhoto={handleUploadPhoto}
+        imgdone={imgdone}
         />
 
         <View style = {{justifyContent:'center',alignItems:'center'}}>
@@ -470,7 +513,7 @@ const mainscreen = ({navigation}) =>
             {step && 
             <View style={{ 
                 position:'absolute',
-                top:height*0.5
+                top:height*0.5,
                 }}>
                     <Text>{"Processando passo: " + step}</Text>
             </View>
@@ -486,7 +529,42 @@ const mainscreen = ({navigation}) =>
             }
         </View>
 
-       
+        <Modal 
+        isVisible={isModalVisible}
+        useNativeDriverForBackdrop
+        hideModalContentWhileAnimating
+        useNativeDriver
+        onBackButtonPress={()=>
+            {
+                toggleModal()
+            }}
+        style={{margin:0}}
+        animationIn="fadeIn"
+        animationOut="fadeOut"
+        animationInTiming={500}
+        animationOutTiming={500}
+        hasBackdrop={false}
+        hardwareAccelerated
+        statusBarTranslucent
+        > 
+            <BlurView
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+                }}
+            blurType="dark"
+            blurAmount={20}
+            downsampleFactor={25}
+            blurRadius={25}
+            overlayColor='rgba(0,0,0,0.2)'
+            />
+           
+            <Carousel />
+              
+        </Modal>
 
     </SafeAreaView>
     )
