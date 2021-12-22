@@ -15,6 +15,7 @@ import MainScreen from './actualApp/screens/Main'
 import Info from './actualApp/screens/Info'
 import Historic from './actualApp/screens/Historic'
 import ShrimpInfo from './actualApp/screens/shrimpcontour'
+import HistoricOpenMonth from './actualApp/screens/Historic/HistoricOpenMonth'
 
 enableScreens()
 
@@ -67,6 +68,11 @@ export default () =>
              <Shared_Stack.Screen
             name="ShrimpInfo" 
             component={ShrimpInfo}
+            options={()=>options}
+            />
+             <Shared_Stack.Screen
+            name="HistoricOpenMonth" 
+            component={HistoricOpenMonth}
             options={()=>options}
             />
             {/*

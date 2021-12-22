@@ -19,14 +19,20 @@ const styles = StyleSheet.create(
             justifyContent: "center",
             alignItems: "center",
             marginTop:"0%",
-            marginBottom:"20%",
+            marginBottom:"40%",
 
         },
         logo:
         {
             height:PixelRatio.getPixelSizeForLayoutSize(80),
             width:PixelRatio.getPixelSizeForLayoutSize(80),
-            resizeMode:'center'
+            resizeMode:'contain'
+        },
+        newOldlogo:
+        {
+            height:PixelRatio.getPixelSizeForLayoutSize(80),
+            width:PixelRatio.getPixelSizeForLayoutSize(80),
+            resizeMode:'contain'
         },
     }
 )
@@ -35,7 +41,6 @@ const Preload = ({navigation}) =>
 {
     setTimeout(() => 
     {  
-        //console.log("App Started!"); 
         navigation.reset({ routes:[{name: "StartScreen"} ]})
 
     }, 1000);
@@ -49,7 +54,10 @@ const Preload = ({navigation}) =>
             
             <SharedElement id="image" style={styles.logoContainer}>
                 <Image style={styles.logo} 
-                source = { require('../../../assets/logo.png') }/>
+                source = { 
+                    require('../../../assets/logo.png') 
+                    //require('../../../assets/newOldLogo.png') 
+                    }/>
             </SharedElement>
 
             <SharedElement id="loading">

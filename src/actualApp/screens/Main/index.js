@@ -1,16 +1,14 @@
-import React,{useState,useEffect, Component} from "react";
+import React,{useState,useEffect} from "react";
 import { Image, StyleSheet, View,StatusBar,PixelRatio,Dimensions,Platform,PermissionsAndroid,Text,BackHandler,TouchableOpacity,TouchableWithoutFeedback, Alert} from 'react-native'
 import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Carousel from '../../Components/Carousel2.0'
 import FABv2 from "../../Components/FABv2";
-import FAB from "../../Components/FAB";
 import FABv3 from "../../Components/FABv3";
 import Modal from 'react-native-modal'
 import { ProgressBar,Colors } from 'react-native-paper'
 import * as Animatable from 'react-native-animatable'
 import { launchCamera,launchImageLibrary } from "react-native-image-picker";
-import {DebugView} from '../../Components/View2.0/index'
 import { Icon } from "react-native-elements";
 import {
     coin,
@@ -28,11 +26,12 @@ import {
 } from '../../variables'
 
 import { BlurView } from "@react-native-community/blur"
-import {saveDeviceData, loadDeviceData,deleteDeviceData} from "../AsyncStorageHelper";
-
+import {saveDeviceData, loadDeviceData,deleteAllItems,fetchAllItems} from "../AsyncStorageHelper";
 
 const {width, height} = Dimensions.get('window')
-
+var name
+var filepath
+var imageuri
 //const SERVER_URL = 'http://192.168.0.74:3000'
 const SERVER_URL = 'http://104.251.214.172:4000'
 //const SERVER_URL = 'http://192.168.15.43:3000'
@@ -64,7 +63,9 @@ const styles = StyleSheet.create(
 const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,navigation,handleUploadPhoto,imgdone}) =>
 {
     useEffect(() => {
-        
+
+        //deleteAllItems()
+
         GetCoinB().slideInLeft(1000)
         GetPhotoB().slideInRight(1000)
         GetImg().slideInDown(1000)
@@ -89,7 +90,6 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
     
     const BelowButtons = () =>
     {
-
         function Button2()
         {
             if(!changeButton)
@@ -113,15 +113,13 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
                     text="Enviar Foto" 
                     onPress={()=>
                         {
-                            handleUploadPhoto()
-
                             GetCoinB().slideOutLeft(1000)
                             GetPhotoB().slideOutRight(1000).then(()=>
                             {
                                 handleUploadPhoto()
-                            })                       
+                            })
                             
-                        }} 
+                        }}
                     color='#7605FF'
                     icon='upload'
                     type='font-awesome'
@@ -183,6 +181,23 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
 
     const CenterImage = () =>
     {
+
+        async function func()
+        {
+            //console.log(photo.fileName)
+            //console.log(name)
+            let shrimpdata = await loadDeviceData(name)
+            //console.log(shrimpdata)
+
+            navigation.navigate('ShrimpInfo',{
+                photoname: shrimpdata.Serverimage,
+                dataname:name,
+                imageuri:shrimpdata.uri,
+                imageW:shrimpdata.imageW,
+                imageH:shrimpdata.imageH
+            })
+        }
+
         return (
             <>
             {!imgdone ? 
@@ -197,7 +212,7 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
                 easing='ease'
                 >
                     <Image 
-                    source={photo ? {uri:photo.uri} : require('../../../assets/landscape.png')} 
+                    source={photo ? {uri:photo.uri} : require('../../../assets/exampleimage_1.png')}
                     style={{
                         width:width*0.95,
                         height:PixelRatio.roundToNearestPixel(250),
@@ -209,15 +224,9 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
                 </Animatable.View>
             :
                 <TouchableOpacity 
-                onPress={()=>
-                    {
-                        console.log(photo.fileName)
-                        navigation.navigate('ShrimpInfo',{
-                            photoname:photo.fileName,
-                        })
-                    }}
+                onPress={func}
                 >
-                    <Animatable.View 
+                    <Animatable.View
                     style=
                     {{
                         alignItems:'center',
@@ -227,14 +236,14 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
                     useNativeDriver
                     easing='ease'
                     >
-                        <Image 
-                        source={photo ? {uri:photo.uri} : require('../../../assets/landscape.png')} 
+                        <Image
+                        source={photo ? {uri:photo.uri} : require('../../../assets/landscape.png')}
                         style={{
                             width:width*0.95,
                             height:PixelRatio.roundToNearestPixel(250),
                             borderColor:'#2B2D42',
                             borderWidth:PixelRatio.roundToNearestPixel(6),
-                            borderRadius:PixelRatio.roundToNearestPixel(15)
+                            borderRadius:PixelRatio.roundToNearestPixel(15),
                             }}
                         />
                     </Animatable.View>
@@ -307,14 +316,13 @@ const mainscreen = ({navigation}) =>
     const [isLoading,setisLoading] = useState(false)
     const [step,setstep] = useState(null)
     const [changeButton,setchangeButton] = useState(0)
-
+  
     const [isModalVisible, setModalVisible] = useState(false)
     const [statusbar, setstatusbar] = useState('dark-content')
-    
 
     const toggleModal = () => 
     {
-        setModalVisible(!isModalVisible); 
+        setModalVisible(!isModalVisible);
     }
 
     const isReachable  = async () =>
@@ -338,17 +346,25 @@ const mainscreen = ({navigation}) =>
 
     const handleTakePhoto = () =>
     {
-        launchCamera({ noData: true }, (response) => {
-            // console.log(response);
+        launchCamera({ 
+            noData: true,
+        }, (response) => {
+            console.log(response)
             if (!response.didCancel) {
+
                 console.log(response.assets[0].height)
                 console.log(response.assets[0].width)
                 console.log(response.assets[0].fileName)
 
+                filepath = response.assets[0].uri.replace('file://', '')
+                imageuri = response.assets[0].uri
+
+                console.log(imageuri)
+                console.log(filepath)
+
                 setphoto(response.assets[0])
 
                 setchangeButton(1)
-
             }
         })
     }
@@ -365,39 +381,100 @@ const mainscreen = ({navigation}) =>
         })
     }
 
-    const checkstep = async () =>
+    const checkstep = async (imageNewname) =>
     {
         index = 0
         prevstep = 0
-       
+        
         async function pyresq()
         {
+            setisLoading(true)
+            setuploadstatus('Analisando')
             const pyrequest = await fetch(`${SERVER_URL}/pytest`)
-            let shrimpdata = await pyrequest.json()
+            let Sjson = await pyrequest.json()
 
-            saveDeviceData('shrimpjson',shrimpdata)
-            let data = await loadDeviceData('shrimpjson')
+            console.log('json', Sjson)
+            //console.log('image', imageNewname)
 
-            console.log('shrimpdata', data)
-            setimgdone(true)
+            let date = new Date();
+
+            let day = date.getDay()
+            let month = date.getMonth()
+            let year = date.getFullYear()
+            let hours = date.getHours()
+            let minutes = date.getMinutes()
+            let seconds = date.getSeconds()
+            name  = `SIMAGE_${day}_${month}_${year}__${hours}:${minutes}:${seconds}`
+            
+            let imageW
+            let imageH
+
+            await Image.getSize('http://104.251.214.172:4000/getimage/' + imageNewname, (width, height) => 
+            {
+                imageW = width
+                imageH = height
+            })
+
+            let shrimpdata = 
+            {
+                json:Sjson,
+                Serverimage:imageNewname,
+                NewName:name,
+                filepath:filepath,
+                uri:imageuri,
+                imageW:imageW,
+                imageH:imageH,
+                day:day,
+                month:month,
+                year:year,
+                hours:hours,
+                minutes:minutes,
+                seconds:seconds
+            }
+            
+            await saveDeviceData(name,shrimpdata)
+            //console.log('dataname',name)
+            /*loadDeviceData(name).then((shrimpdata)=>
+            {
+                console.log(shrimpdata)
+            })
+            */
+
+           // console.log('shrimpdata:shrimpList', data.json.shrimpList[0])
+            //console.log('shrimpdata:json:shrimpcoord', data.json.)
+            
+            //var data = await fetchAllItems()
+           // console.log('data',data.length)
+
+           setimgdone(true)
+           setisLoading(false)
+           setuploadstatus('Pronto!!')
+            
         }
-        pyresq()
+        await pyresq()
         
-        while(index!=10)
+        /*while(!imgdone)
         {
+            if(prevstep===10 || prevstep==='10')
+            {
+                break
+            }
+            console.log('while loop')
+
             const request = await fetch(`${SERVER_URL}/getstep`)
             const json = await request.json()
             
             if(json.step!=prevstep)
             {
-            //console.log('response', json.step)
-            index++
-            prevstep=json.step
-            setstep(prevstep)
+                console.log('response', json.step)
+                index++
+                prevstep=json.step
+                setstep(prevstep)
             }
-        }
-       
-        // setstep("Processado!!!")
+
+        }*/
+
+        
     }
 
     const createFormData = (photo, body = {}) => 
@@ -449,12 +526,13 @@ const mainscreen = ({navigation}) =>
             alert('Selecione uma moeda!')
             GetCoinB().slideInLeft(1000)
             GetPhotoB().slideInRight(1000)
-            return;
+            return false
         }
 
         setuploadstatus('ENVIANDO...')
         setisLoading(true)
       
+        var imageNewname
         if(await isReachable())
         {
             await fetch(`${SERVER_URL}/api/upload`, {
@@ -469,6 +547,8 @@ const mainscreen = ({navigation}) =>
             .then((response) => response.json())
             .then((response) => {
                 console.log('response', response);
+                imageNewname = response.filename
+                console.log('imagename', imageNewname);
             })
             .catch((error) => {
                 console.log('error', error);
@@ -480,12 +560,13 @@ const mainscreen = ({navigation}) =>
            // const json = await response.json()
             setuploadstatus('Imagem Enviada!')
             
-            checkstep()
-            setisLoading(false)
+            checkstep(imageNewname)
+
+           // setisLoading(false)
 
             //console.log('response', json)    
+        }
     }
-    }   
 
     return (  
     <SafeAreaView style = {styles.Container}>
@@ -494,6 +575,7 @@ const mainscreen = ({navigation}) =>
         backgroundColor = "#EDF2F4"
         barStyle={statusbar}
         />
+
 
         <Movables 
         photo={photo} 
@@ -510,7 +592,7 @@ const mainscreen = ({navigation}) =>
                 <ActivityIndicator color={'#000'} />
             }
 
-            {step && 
+            {step &&
             <View style={{ 
                 position:'absolute',
                 top:height*0.5,
@@ -553,7 +635,7 @@ const mainscreen = ({navigation}) =>
                 top: 0,
                 left: 0,
                 bottom: 0,
-                right: 0
+                right: 0,
                 }}
             blurType="dark"
             blurAmount={20}
@@ -562,7 +644,7 @@ const mainscreen = ({navigation}) =>
             overlayColor='rgba(0,0,0,0.2)'
             />
            
-            <Carousel />
+            <Carousel toggleModal={toggleModal}/>
               
         </Modal>
 

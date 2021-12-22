@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 */
 export const saveDeviceData = async (key, data) => {
     try {
-
         await AsyncStorage.setItem(key, JSON.stringify(data));
     } catch (e) {
       console.log(`Error saving data for key ${key}`, data);
@@ -39,3 +38,28 @@ export const deleteDeviceData = async (key) => {
       throw e;
     }
 };
+
+export const fetchAllItems = async () => {
+  try {
+      const keys = await AsyncStorage.getAllKeys()
+      const result = await AsyncStorage.multiGet(keys)
+
+      return result.map(req => JSON.parse(req[1]))
+  } catch (error) {
+      console.log(error, "problemo")
+  }
+}
+
+export const deleteAllItems = async () => {
+  try 
+  {
+    AsyncStorage.getAllKeys()
+    .then(keys => AsyncStorage.multiRemove(keys))
+    .then(() =>  console.log('all data removed'));
+  }
+  catch (e) 
+  {
+    console.log(`Error deleting data for key ${key}`);
+  }
+};
+

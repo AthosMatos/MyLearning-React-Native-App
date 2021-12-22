@@ -4,7 +4,7 @@ import Carousel from 'react-native-snap-carousel'
 const {width,height} =  Dimensions.get('window');
 import {setCoin} from '../../variables'
 
-const moedas = [
+const views = [
     {
         key:100,
         image: require('../../../assets/moedas/1_real.png'),
@@ -24,14 +24,10 @@ const moedas = [
     {
         key:25,
         image: require('../../../assets/moedas/25_cents.png')
-    },
-    {
-        key:1,
-        image: require('../../../assets/moedas/poticoin.png')
     }
   ]
 
-const carousel = ({toggleModal}) =>
+const carousel2 = () =>
 {
     const coinsize = width * 0.5
 
@@ -43,7 +39,6 @@ const carousel = ({toggleModal}) =>
             onPress={()=>
                 {
                     setCoin(item.key)
-                    toggleModal()
                 }}
             >
                 <View style={{
@@ -76,7 +71,7 @@ const carousel = ({toggleModal}) =>
         <View>
             <Carousel
             layout={"default"}
-            data={moedas}
+            data={views}
             ref={(c) => { this._carousel = c; }}
             renderItem={renderItem}
             scrollEndDragDebounceValue ={0.9}
@@ -93,4 +88,4 @@ const carousel = ({toggleModal}) =>
 
 }
 
-export default carousel
+export default carousel2
