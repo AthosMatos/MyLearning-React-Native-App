@@ -2,8 +2,7 @@ import React,{useCallback, useEffect, useState,useLayoutEffect} from "react";
 import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList, Image} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import Canvas,{Image as CanvasImage} from 'react-native-canvas'
-import shrimpdata from '../../../assets/test2.json'
-import { loadDeviceData } from "../AsyncStorageHelper";
+import { loadDeviceData } from "../../Helpers/AsyncStorageHelper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 var filepath

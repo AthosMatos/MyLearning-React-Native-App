@@ -14,8 +14,6 @@ export const saveDeviceData = async (key, data) => {
       throw e;
     }
 };
-
-
 /*
 * @param key {String} Key identifier for data to load
 */

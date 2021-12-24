@@ -4,50 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
 import FAB from '../../Components/FAB'
 import * as Animatable from 'react-native-animatable'
-import PopoverTooltip from 'react-native-popover-tooltip';
+
 
 const {width, height} = Dimensions.get('window')
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      order: 1
-    };
-  }
-  render() {
-    return (
-      <View style={{flex:1, alignSelf:'stretch', alignItems:'center', justifyContent:'flex-start', backgroundColor:'#fff'}}>
-
-        <Text>Button Expansion</Text>
-        <PopoverTooltip
-          ref='tooltip3'
-          buttonComponent={
-            <View style={{width:200, height:50, backgroundColor: 'yellow', justifyContent: 'center', alignItems: 'center', borderRadius: 5}}>
-              <Text>
-                Press Me
-              </Text>
-            </View>
-          }
-          items={[
-            {
-              label: 'Item 1',
-              onPress: () => {}
-            },
-            {
-              label: 'Item 2',
-              onPress: () => {}
-            }
-          ]}
-          animationType='spring'
-          buttonComponentExpandRatio={1.2} // ratio of button component expansion after tooltip poped up
-          />
-
-      </View>
-    )
-  }
-}
-
 
 const styles = StyleSheet.create(
     {
@@ -75,7 +34,6 @@ const mainscreen = ({navigation}) =>
 {
     const [Button_Anim,setButton_Anim] = useState('slideInUp')
     const [Logo_Anim,setLogo_Anim] = useState('')
-    const [toolTipVisible,settoolTipVisible] = useState(false)
     var backHandler
     
     useEffect(() => {
@@ -93,6 +51,7 @@ const mainscreen = ({navigation}) =>
         return () => backHandler.remove()
       }, [])
 
+
     return (
         <SafeAreaView style = {styles.Container}>
             
@@ -100,8 +59,6 @@ const mainscreen = ({navigation}) =>
             backgroundColor = "#EDF2F4"
             barStyle={'dark-content'}/>
 
-            <App/>
-            
             <Animatable.View 
             animation={Logo_Anim}
             direction="normal"
@@ -117,12 +74,20 @@ const mainscreen = ({navigation}) =>
                 <SharedElement id="image">
                     <Image style={styles.logo}
                     source = { 
-                        require('../../../assets/logo.png') 
-                        //require('../../../assets/newOldLogo.png') 
+                        //require('../../../assets/logo.png') 
+                        require('../../../assets/newOldLogo.png') 
                         }/>
                 </SharedElement>
             </Animatable.View>
-                     
+
+            <View 
+            style={{
+                justifyContent:'flex-end',
+                alignItems:'center',
+            }}>
+                
+            </View>
+           
             <Animatable.View
             style={{
                 justifyContent:'flex-end',

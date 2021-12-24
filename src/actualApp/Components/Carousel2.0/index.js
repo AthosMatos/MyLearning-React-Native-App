@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {Text, View,StatusBar,PixelRatio,Dimensions,Image,TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel'
 const {width,height} =  Dimensions.get('window');
-import {setCoin} from '../../variables'
+import {setCoin} from './CoinVariables'
 
 const moedas = [
     {

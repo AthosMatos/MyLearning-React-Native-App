@@ -11,8 +11,6 @@ import * as Animatable from 'react-native-animatable'
 import { launchCamera,launchImageLibrary } from "react-native-image-picker";
 import { Icon } from "react-native-elements";
 import {
-    coin,
-    coinPhoto,
     GetCoinB,
     GetHistB,
     GetImg,
@@ -23,15 +21,19 @@ import {
     handleImg,
     handleInfoB,
     handlePhotoB
-} from '../../variables'
+} from './AnimationMain'
+import {
+   coinPhoto,
+} from '../../Components/Carousel2.0/CoinVariables'
 
 import { BlurView } from "@react-native-community/blur"
-import {saveDeviceData, loadDeviceData,deleteAllItems,fetchAllItems} from "../AsyncStorageHelper";
+import {saveDeviceData, loadDeviceData,deleteAllItems,fetchAllItems} from "../../Helpers/AsyncStorageHelper";
+import {handleUploadPhoto,getname} from "../../Helpers/AsyncConectionHelper";
+
+var filepath,imageuri
 
 const {width, height} = Dimensions.get('window')
-var name
-var filepath
-var imageuri
+
 //const SERVER_URL = 'http://192.168.0.74:3000'
 const SERVER_URL = 'http://104.251.214.172:4000'
 //const SERVER_URL = 'http://192.168.15.43:3000'
@@ -58,7 +60,6 @@ const styles = StyleSheet.create(
         },
     }
 )
-
 
 const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,navigation,handleUploadPhoto,imgdone}) =>
 {
@@ -181,20 +182,19 @@ const Movables = ({photo,toggleModal,changeButton,requestCameraPermission,naviga
 
     const CenterImage = () =>
     {
-
         async function func()
         {
             //console.log(photo.fileName)
-            //console.log(name)
-            let shrimpdata = await loadDeviceData(name)
+            console.log(getname())
+            let shrimpdata = await loadDeviceData(getname())
             //console.log(shrimpdata)
 
             navigation.navigate('ShrimpInfo',{
                 photoname: shrimpdata.Serverimage,
-                dataname:name,
+                dataname:getname(),
                 imageuri:shrimpdata.uri,
                 imageW:shrimpdata.imageW,
-                imageH:shrimpdata.imageH
+                imageH:shrimpdata.imageH,
             })
         }
 
@@ -325,25 +325,6 @@ const mainscreen = ({navigation}) =>
         setModalVisible(!isModalVisible);
     }
 
-    const isReachable  = async () =>
-    {
-        const timeout = new Promise((resolve, reject) => {
-            setTimeout(reject, 5000, 'Request timed out');
-        });
-        const request = fetch(SERVER_URL);
-        try {
-            const response = await Promise
-                .race([timeout, request]);
-            return true
-        }
-        catch (error) {
-            setisLoading(false)
-            setuploadstatus('ENVIO CANCELADO, server indisponivel')
-            alert('Nao foi possivel se conectar ao server')
-            return false
-        }
-    }
-
     const handleTakePhoto = () =>
     {
         launchCamera({ 
@@ -381,106 +362,10 @@ const mainscreen = ({navigation}) =>
         })
     }
 
-    const checkstep = async (imageNewname) =>
-    {
-        index = 0
-        prevstep = 0
-        
-        async function pyresq()
-        {
-            setisLoading(true)
-            setuploadstatus('Analisando')
-            const pyrequest = await fetch(`${SERVER_URL}/pytest`)
-            let Sjson = await pyrequest.json()
-
-            console.log('json', Sjson)
-            //console.log('image', imageNewname)
-
-            let date = new Date();
-
-            let day = date.getDay()
-            let month = date.getMonth()
-            let year = date.getFullYear()
-            let hours = date.getHours()
-            let minutes = date.getMinutes()
-            let seconds = date.getSeconds()
-            name  = `SIMAGE_${day}_${month}_${year}__${hours}:${minutes}:${seconds}`
-            
-            let imageW
-            let imageH
-
-            await Image.getSize('http://104.251.214.172:4000/getimage/' + imageNewname, (width, height) => 
-            {
-                imageW = width
-                imageH = height
-            })
-
-            let shrimpdata = 
-            {
-                json:Sjson,
-                Serverimage:imageNewname,
-                NewName:name,
-                filepath:filepath,
-                uri:imageuri,
-                imageW:imageW,
-                imageH:imageH,
-                day:day,
-                month:month,
-                year:year,
-                hours:hours,
-                minutes:minutes,
-                seconds:seconds
-            }
-            
-            await saveDeviceData(name,shrimpdata)
-            //console.log('dataname',name)
-            /*loadDeviceData(name).then((shrimpdata)=>
-            {
-                console.log(shrimpdata)
-            })
-            */
-
-           // console.log('shrimpdata:shrimpList', data.json.shrimpList[0])
-            //console.log('shrimpdata:json:shrimpcoord', data.json.)
-            
-            //var data = await fetchAllItems()
-           // console.log('data',data.length)
-
-           setimgdone(true)
-           setisLoading(false)
-           setuploadstatus('Pronto!!')
-            
-        }
-        await pyresq()
-        
-        /*while(!imgdone)
-        {
-            if(prevstep===10 || prevstep==='10')
-            {
-                break
-            }
-            console.log('while loop')
-
-            const request = await fetch(`${SERVER_URL}/getstep`)
-            const json = await request.json()
-            
-            if(json.step!=prevstep)
-            {
-                console.log('response', json.step)
-                index++
-                prevstep=json.step
-                setstep(prevstep)
-            }
-
-        }*/
-
-        
-    }
-
-    const createFormData = (photo, body = {}) => 
+    const createFormData = (photo, body = {}) =>
     {
         var data = new FormData()
-      
+
         data.append('photo', {
           name: photo.fileName,
           type: photo.type,
@@ -519,56 +404,7 @@ const mainscreen = ({navigation}) =>
         }
     }
     
-    const handleUploadPhoto = async () =>
-    {
-        if(!coin)
-        {
-            alert('Selecione uma moeda!')
-            GetCoinB().slideInLeft(1000)
-            GetPhotoB().slideInRight(1000)
-            return false
-        }
-
-        setuploadstatus('ENVIANDO...')
-        setisLoading(true)
-      
-        var imageNewname
-        if(await isReachable())
-        {
-            await fetch(`${SERVER_URL}/api/upload`, {
-                method: 'post',
-                body: createFormData(photo, { userId: 'randomuser', coin: coin }),
-                headers:
-                {
-                  'content-type': 'multipart/form-data',
-                  'Accept':'application/json'
-                }
-            })
-            .then((response) => response.json())
-            .then((response) => {
-                console.log('response', response);
-                imageNewname = response.filename
-                console.log('imagename', imageNewname);
-            })
-            .catch((error) => {
-                console.log('error', error);
-                setuploadstatus('Imagem NAO Enviada!,erro de server')
-                setisLoading(false)
-                return
-            })
-            
-           // const json = await response.json()
-            setuploadstatus('Imagem Enviada!')
-            
-            checkstep(imageNewname)
-
-           // setisLoading(false)
-
-            //console.log('response', json)    
-        }
-    }
-
-    return (  
+    return (
     <SafeAreaView style = {styles.Container}>
         
         <StatusBar
@@ -576,14 +412,13 @@ const mainscreen = ({navigation}) =>
         barStyle={statusbar}
         />
 
-
         <Movables 
-        photo={photo} 
+        photo={photo}
         toggleModal={toggleModal}
-        changeButton={changeButton} 
+        changeButton={changeButton}
         requestCameraPermission={requestCameraPermission}
         navigation={navigation}
-        handleUploadPhoto={handleUploadPhoto}
+        handleUploadPhoto={()=>{handleUploadPhoto(setuploadstatus,setisLoading,createFormData,photo,filepath,imageuri,setimgdone)}}
         imgdone={imgdone}
         />
 
@@ -593,7 +428,7 @@ const mainscreen = ({navigation}) =>
             }
 
             {step &&
-            <View style={{ 
+            <View style={{
                 position:'absolute',
                 top:height*0.5,
                 }}>
@@ -604,16 +439,15 @@ const mainscreen = ({navigation}) =>
             <Text>{uploadstatus}</Text>
 
             {photo &&
-                <ProgressBar progress={step/10} color={Colors.black} 
+                <ProgressBar progress={step/10} color={Colors.black}
                     style={{
-                    width:width*0.8,          
+                    width:width*0.8,
                     }}/>
             }
         </View>
 
-        <Modal 
+        <Modal
         isVisible={isModalVisible}
-        useNativeDriverForBackdrop
         hideModalContentWhileAnimating
         useNativeDriver
         onBackButtonPress={()=>
@@ -625,10 +459,8 @@ const mainscreen = ({navigation}) =>
         animationOut="fadeOut"
         animationInTiming={500}
         animationOutTiming={500}
-        hasBackdrop={false}
-        hardwareAccelerated
         statusBarTranslucent
-        > 
+        >
             <BlurView
             style={{
                 position: "absolute",

@@ -1,13 +1,9 @@
-import React,{useEffect,useState,useCallback} from "react";
-import { Image, StyleSheet, View,StatusBar,PixelRatio,FlatList,TouchableOpacity,Text, Dimensions,TouchableHighlight } from 'react-native'
-import { ActivityIndicator } from "react-native-paper";
+import React,{useEffect,useState,} from "react";
+import { View,StatusBar,PixelRatio,FlatList,TouchableOpacity,Text, Dimensions,} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SharedElement } from "react-navigation-shared-element";
-import { fetchAllItems } from "../AsyncStorageHelper";
-import { Divider } from "react-native-elements";
-import { TouchableHighlightBase } from "react-native";
+import { fetchAllItems } from "../../Helpers/AsyncStorageHelper";
 import { Card } from "react-native-paper";
-
+import Image from 'react-native-fast-image'
 
 const Historic = ({navigation}) =>
 {
@@ -119,12 +115,6 @@ const Historic = ({navigation}) =>
         loadjsondata()  
       }, [])
 
-
-    /*const onViewableItemsChanged = useCallback(({ changed }) => {
-        console.log("Changed in this iteration", changed[0].index);
-    },[])*/
-
-
     const Item = ({ uri,itemsize }) => 
     (
         <Image 
@@ -138,33 +128,36 @@ const Historic = ({navigation}) =>
 
     const renderItem2 = ({ item,index }) => 
     {
-        //console.log(item)
-        let itemsize = PixelRatio.roundToNearestPixel(150)
-        return(
-            <TouchableOpacity 
-            style={{
-                width:itemsize,
-                height:itemsize,
-                borderColor:'#000',
-                borderWidth:1
-            }}
-            onPress={()=>
-            {
-                navigation.navigate('ShrimpInfo',{
-                    photoname: item.Serverimage,
-                    dataname:item.NewName,
-                    imageuri:item.uri,
-                    imageW:item.imageW,
-                    imageH:item.imageH
-                })
-            }}
-            >
-            <Item 
-            uri={item.uri}
-            itemsize={itemsize}
-            />
-            </TouchableOpacity>
-        )
+        let itemsize = (Dimensions.get('window').width-PixelRatio.roundToNearestPixel(20))/8
+        
+        if(index<24)
+        {
+            return(
+                <TouchableOpacity 
+                style={{
+                    width:itemsize,
+                    height:itemsize,
+                    //borderColor:'#000',
+                    //borderWidth:1
+                }}
+                onPress={()=>
+                {
+                    navigation.navigate('ShrimpInfo',{
+                        photoname: item.Serverimage,
+                        dataname:item.NewName,
+                        imageuri:item.uri,
+                        imageW:item.imageW,
+                        imageH:item.imageH
+                    })
+                }}
+                >
+                <Item 
+                uri={item.uri}
+                itemsize={itemsize}
+                />
+                </TouchableOpacity>
+            )
+        }
     }
 
     const renderItem = ({ item,index }) => 
@@ -177,37 +170,35 @@ const Historic = ({navigation}) =>
             {{
                 marginHorizontal:PixelRatio.roundToNearestPixel(10),
                 marginVertical:PixelRatio.roundToNearestPixel(10),
+                backgroundColor:'#EDF2F4',
                 //backgroundColor:'#D7E2E6',
-                borderRadius:PixelRatio.roundToNearestPixel(20),
+                borderRadius:PixelRatio.roundToNearestPixel(10),
                 //borderTopRightRadius:PixelRatio.roundToNearestPixel(20),
                 //borderColor:'#2B2D42',
                 //borderWidth:PixelRatio.roundToNearestPixel(1),
-                
-                
                 //elevation: 8,
             }}
+            mode="outlined"
             >
-                <TouchableOpacity onPress={()=>
-                    { 
-                    navigation.navigate('HistoricOpenMonth',{
-                        dados:item.dados,
-                        mes:item.mes
-                    })
-                    
+                <Card onPress={()=>
+                    {
+                        navigation.navigate('HistoricOpenMonth',{
+                            dados:item.dados,
+                            mes:item.mes
+                        })
                     }}
                     
                     style={
                     item.theresdata ?
                     {
-                        backgroundColor:'#2B2D42',
-                        borderTopLeftRadius:PixelRatio.roundToNearestPixel(19),
-                        borderTopRightRadius:PixelRatio.roundToNearestPixel(19),
+                        backgroundColor:'#EDF2F4',
+                        borderTopLeftRadius:PixelRatio.roundToNearestPixel(10),
+                        borderTopRightRadius:PixelRatio.roundToNearestPixel(10),
                     }:
                     {
-                        backgroundColor:'#2B2D42',
-                        borderRadius:PixelRatio.roundToNearestPixel(19),
-                    }
-                    }
+                        backgroundColor:'#EDF2F4',
+                        borderRadius:PixelRatio.roundToNearestPixel(10),
+                    }}
                     >
 
                     <Text
@@ -216,17 +207,19 @@ const Historic = ({navigation}) =>
                         fontSize:PixelRatio.roundToNearestPixel(20),
                         margin:PixelRatio.roundToNearestPixel(20),
                         fontWeight:'normal',
-                        color:'#EDF2F4'
+                        //color:'#EDF2F4'
+                        color:'#2B2D42'
                     }}>
                         {item.mes}
                     </Text>    
-                </TouchableOpacity>
+                </Card>
 
                 
 
                 {item.theresdata &&
                     <View 
                     style={{
+                    marginTop:PixelRatio.roundToNearestPixel(10),
                     paddingBottom:PixelRatio.roundToNearestPixel(40),
                     
                     }}>
@@ -234,8 +227,8 @@ const Historic = ({navigation}) =>
                         data={item.dados}
                         renderItem={renderItem2}
                         keyExtractor={item => item.NewName}
-                        horizontal
-
+                        numColumns={8}
+                        
                         />
                     </View>
                 }
@@ -251,7 +244,7 @@ const Historic = ({navigation}) =>
             backgroundColor = "#EF233C"
             barStyle={'dark-content'}
             />
-             <View style={{backgroundColor:'#EF233C'}}>
+            <View style={{backgroundColor:'#EF233C'}}>
                 <Text
                 style=
                 {{
@@ -259,7 +252,7 @@ const Historic = ({navigation}) =>
                     marginHorizontal:PixelRatio.roundToNearestPixel(30),
                     marginVertical:PixelRatio.roundToNearestPixel(20),
                     fontWeight:'normal',
-                    color:'#EDF2F4'
+                    color:'#EDF2F4',
                 }}>
                    {'Meses'} 
                 </Text>   
@@ -271,10 +264,7 @@ const Historic = ({navigation}) =>
                 viewabilityConfig={{
                 itemVisiblePercentThreshold: 50
                 }}
-                
-                />  
-            
-                  
+                />             
         </SafeAreaView>
     )
 }

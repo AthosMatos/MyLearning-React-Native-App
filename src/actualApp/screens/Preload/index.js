@@ -55,8 +55,8 @@ const Preload = ({navigation}) =>
             <SharedElement id="image" style={styles.logoContainer}>
                 <Image style={styles.logo} 
                 source = { 
-                    require('../../../assets/logo.png') 
-                    //require('../../../assets/newOldLogo.png') 
+                   // require('../../../assets/logo.png') 
+                    require('../../../assets/newOldLogo.png') 
                     }/>
             </SharedElement>
 

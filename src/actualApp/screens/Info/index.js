@@ -4,7 +4,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SharedElement } from "react-navigation-shared-element";
-import {saveDeviceData, loadDeviceData,deleteDeviceData} from "../AsyncStorageHelper";
+import {saveDeviceData, loadDeviceData,deleteDeviceData} from "../../Helpers/AsyncStorageHelper";
 
 const Info = ({navigation}) =>
 {

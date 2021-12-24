@@ -1,48 +1,33 @@
-import React,{useEffect,useState,useCallback} from "react";
-import { Image, StyleSheet, View,StatusBar,PixelRatio,FlatList,TouchableOpacity,Text, Dimensions,TouchableHighlight } from 'react-native'
-import { ActivityIndicator } from "react-native-paper";
+import React from "react";
+import { View,StatusBar,PixelRatio,FlatList,TouchableOpacity,Text, Dimensions,TouchableHighlight } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SharedElement } from "react-navigation-shared-element";
-import { fetchAllItems } from "../../AsyncStorageHelper";
-import { Divider } from "react-native-elements";
-import { TouchableHighlightBase } from "react-native";
-
+import Image from 'react-native-fast-image'
 
 
 const HistoricOpenMonth = ({navigation,route}) =>
 {
-    useEffect(() => {
-       
-    
-      }, [])
-
-    const Photos = () =>
+    const renderItem = ({item,index}) =>
     {
+        let imagesize = (Dimensions.get('window').width-PixelRatio.roundToNearestPixel(8))/4
+
         return (
-            <>
-                {route.params.dados.map((item) => 
-                {
-                //console.log(item)
-                return (  
-                    <TouchableOpacity onPress={()=>{
-                        navigation.navigate('ShrimpInfo',{
-                            photoname: item.Serverimage,
-                            dataname:item.NewName,
-                            imageuri:item.uri,
-                            imageW:item.imageW,
-                            imageH:item.imageH
-                        })
-                    }}
-                    key={item.NewName}
-                    >
-                        <Image style={{ width: PixelRatio.roundToNearestPixel(80), height: PixelRatio.roundToNearestPixel(80) }} source={{ uri: item.uri }} />
-                    </TouchableOpacity>
-                )
-                })}
-            </>
+            <TouchableOpacity onPress={()=>{
+                navigation.navigate('ShrimpInfo',{
+                    photoname: item.Serverimage,
+                    dataname:item.NewName,
+                    imageuri:item.uri,
+                    imageW:item.imageW,
+                    imageH:item.imageH
+                })
+            }}
+            key={item.NewName}
+            style={{margin:PixelRatio.roundToNearestPixel(1)}}
+            >
+                <Image style={{ width: imagesize, height: imagesize }} source={{ uri: item.uri }} />
+            </TouchableOpacity>
         )
-        
     }
+
     return (
         <SafeAreaView style = {{backgroundColor:'#EDF2F4',flex:1}}>
 
@@ -63,23 +48,22 @@ const HistoricOpenMonth = ({navigation,route}) =>
                 </Text>   
             </View>
             
-            
-            <View style={{margin:PixelRatio.roundToNearestPixel(2)}}>
-                <View 
-                style={{flexDirection:'row',flexWrap:'wrap',
-                //borderColor:'#000',borderWidth:1,
-                justifyContent:'space-between' 
-                }}>
+            <View 
+            style={{
+            //borderColor:'#000',borderWidth:1,
+            alignItems:'baseline'
+            }}
+            >
+                <FlatList
+                    data={route.params.dados}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.NewName}
+                    //horizontal
+                    numColumns={4}
+                    />
                 
-                    <Photos/>
-                    
-                </View>
             </View>
             
-           
-          
-            
-           
         </SafeAreaView>
     )
 }
