@@ -320,9 +320,9 @@ const mainscreen = ({navigation}) =>
     const [isModalVisible, setModalVisible] = useState(false)
     const [statusbar, setstatusbar] = useState('dark-content')
 
-    const toggleModal = () => 
+    const toggleModal = () =>
     {
-        setModalVisible(!isModalVisible);
+        setModalVisible(!isModalVisible)
     }
 
     const handleTakePhoto = () =>
@@ -412,7 +412,7 @@ const mainscreen = ({navigation}) =>
         barStyle={statusbar}
         />
 
-        <Movables 
+        <Movables
         photo={photo}
         toggleModal={toggleModal}
         changeButton={changeButton}

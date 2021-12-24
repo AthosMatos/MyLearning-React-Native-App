@@ -8,9 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 */
 export const saveDeviceData = async (key, data) => {
     try {
-        await AsyncStorage.setItem(key, JSON.stringify(data));
+        await AsyncStorage.setItem(key, JSON.stringify(data))
     } catch (e) {
-      console.log(`Error saving data for key ${key}`, data);
+      console.log(`Error saving data for key ${key}`, data)
       throw e;
     }
 };
@@ -20,9 +20,9 @@ export const saveDeviceData = async (key, data) => {
 export const loadDeviceData = async (key) => {
     try {
 
-        return JSON.parse(await AsyncStorage.getItem(key));
+        return JSON.parse(await AsyncStorage.getItem(key))
     } catch (e) {
-      console.log(`Error loading data for key ${key}`);
+      console.log(`Error loading data for key ${key}`)
       throw e;
     }
 };
@@ -30,9 +30,9 @@ export const loadDeviceData = async (key) => {
 export const deleteDeviceData = async (key) => {
     try {
 
-        return JSON.parse(await AsyncStorage.removeItem(key));
+        return JSON.parse(await AsyncStorage.removeItem(key))
     } catch (e) {
-      console.log(`Error deleting data for key ${key}`);
+      console.log(`Error deleting data for key ${key}`)
       throw e;
     }
 };
@@ -53,11 +53,11 @@ export const deleteAllItems = async () => {
   {
     AsyncStorage.getAllKeys()
     .then(keys => AsyncStorage.multiRemove(keys))
-    .then(() =>  console.log('all data removed'));
+    .then(() =>  console.log('all data removed'))
   }
   catch (e) 
   {
-    console.log(`Error deleting data for key ${key}`);
+    console.log(`Error deleting data for key ${key}`)
   }
 };
 

@@ -191,19 +191,20 @@ export default ({navigation,route}) =>
     const renderItem = ({ item,index }) => 
     {
         //console.log(index)
-
-        return(
-            <Group 
-            perimeter={item.perimeter}
-            length={item.shrimpLength}
-            width={item.shrimpWidth}
-            area={item.area}
-            peso={item.peso}
-            cor={item.cor}
-            red={item.red}
-            />
-        )
-      
+        if(item.perimeter)
+        {
+            return(
+                <Group
+                perimeter={item.perimeter}
+                length={item.shrimpLength}
+                width={item.shrimpWidth}
+                area={item.area}
+                peso={item.peso}
+                cor={item.cor}
+                red={item.red}
+                />
+            )
+        } 
     }
     return (
         <SafeAreaView style=
