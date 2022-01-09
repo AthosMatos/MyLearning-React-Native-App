@@ -1,11 +1,12 @@
 import React,{useCallback, useEffect, useState,useLayoutEffect} from "react";
-import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList, Image} from 'react-native'
+import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import Canvas,{Image as CanvasImage} from 'react-native-canvas'
 import { loadDeviceData } from "../../Helpers/AsyncStorageHelper";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-var filepath
+import { Card } from "react-native-paper";
+import Image from 'react-native-fast-image'
+import { Divider } from "react-native-elements";
+import FAB from "../../Components/FABv3";
 
 export default ({navigation,route}) =>
 {
@@ -13,41 +14,22 @@ export default ({navigation,route}) =>
     const [shrimpcoord,setshrimpcoord] = useState([])
     const [ShrimpIndex,setShrimpIndex] = useState(0)
     const [canvasW,setcanvasW] = useState( Dimensions.get('window').width)
-    const [canvasH,setcanvasH] = useState(Dimensions.get('window').height*0.7)
-    
+    const [canvasH,setcanvasH] = useState(Dimensions.get('window').height*0.5)
+    const [shrimpgeral,setshrimpgeral] = useState([])
+
     const [imgW,setimgW] = useState(canvasW)
     const [imgH,setimgH] = useState(canvasH)
     const [imagesize,setimagesize] = useState(0)
     const [imageuri,setimageuri] = useState(null)
+    const [Gbuttonselected,setGbuttonselected] = useState(false)
+    const [Cbuttonselected,setCbuttonselected] = useState(true)
+
+    const [showGeral,setshowGeral] = useState(false)
 
     useEffect(() => {
-    
+
         setimageuri(route.params.imageuri)
-        setimagesize(((Dimensions.get('window').width*100)/route.params.imageW)/100)
-
-        function debugData()
-        {
-            let tempshrimpcoord = []
-
-            for(let i = 0 ;i<shrimpdata.shrimpList.length;i++ )
-            {
-                let SC = 
-                {
-                    id:i,
-                    contour30:shrimpdata.shrimpList[i].contour30,
-                    perimeter: shrimpdata.shrimpList[i].perimeter,
-                    area:shrimpdata.shrimpList[i].area ,
-                    shrimpLength: shrimpdata.shrimpList[i].shrimpLength,
-                    shrimpWidth: shrimpdata.shrimpList[i].shrimpWidth,
-                    peso:shrimpdata.shrimpList[i].peso ,
-                    cor: 1,
-                    red: 5
-                }
-                tempshrimpcoord.push(SC)
-            }
-            console.log(tempshrimpcoord)
-            setshrimpcoord(tempshrimpcoord)
-        }
+        setimagesize(((Dimensions.get('window').height*50)/route.params.imageH)/100)
        
         function loadjsondata()
         {
@@ -55,7 +37,28 @@ export default ({navigation,route}) =>
             
             loadDeviceData(route.params.dataname).then((shrimpdata)=>
             {
-                filepath = shrimpdata.filepath
+                console.log(shrimpdata)
+
+                let gdata = 
+                {       
+                colorA1:shrimpdata.json.distribution.color.a1,
+                colorA2:shrimpdata.json.distribution.color.a2,
+                colorA3:shrimpdata.json.distribution.color.a3,
+                colorA4:shrimpdata.json.distribution.color.a4,
+                red1:shrimpdata.json.distribution.red_head.healthy,
+                red2:shrimpdata.json.distribution.red_head.moderate,
+                red3:shrimpdata.json.distribution.red_head.diseased,
+                shrimpamount:shrimpdata.json.distribution.total,
+                area:shrimpdata.json.distribution.area,
+                day:shrimpdata.day,
+                month:shrimpdata.month,
+                year:shrimpdata.year,
+                hour:shrimpdata.hours,
+                minutes:shrimpdata.minutes,
+                }
+                
+                //console.log(gdata)
+                setshrimpgeral(gdata)
 
                 let tempshrimpcoord = []
                 console.log(shrimpdata.json.shrimpList.length)
@@ -84,22 +87,7 @@ export default ({navigation,route}) =>
 
         loadjsondata()
 
-        //debugData()
       }, [])
-    
-    function Hookdealer(image)
-    {
-        useLayoutEffect(
-            () => {
-                setimagesize( {
-
-                    width:image.width,
-                    height:image.height
-                })
-            },
-            [],
-          );
-    }
 
     handleCanvas = (canvas) => {
         //console.log("EnteredCanvas")
@@ -119,40 +107,80 @@ export default ({navigation,route}) =>
         //ctx.fillStyle = 'blue'
         //ctx.fillRect(0, 0, width, height)
         ctx.strokeStyle = 'blue'
-        ctx.lineWidth = 3
+        ctx.lineWidth = PixelRatio.roundToNearestPixel(4)
         
-        if(shrimpcoord[ShrimpIndex]!=null)
+
+        if(!showGeral)
         {
-            if(shrimpcoord[ShrimpIndex].contour30!=null)
+            if(shrimpcoord[ShrimpIndex]!=null)
             {
-                //console.log("drawing Contour...")
-                ctx.beginPath()
-                let ContoursizeMutiplier = imagesize
-        
-                for(let i = 0; i < shrimpcoord[ShrimpIndex].contour30.length; i++)
+                if(shrimpcoord[ShrimpIndex].contour30!=null)
                 {
-                    let X = shrimpcoord[ShrimpIndex].contour30[i][0][x] 
-                    let Y = shrimpcoord[ShrimpIndex].contour30[i][0][y]
+                    //console.log("drawing Contour...")
+                    ctx.beginPath()
+                    let ContoursizeMutiplier = imagesize
+            
+                    for(let i = 0; i < shrimpcoord[ShrimpIndex].contour30.length; i++)
+                    {
+                        let X = shrimpcoord[ShrimpIndex].contour30[i][0][x] 
+                        let Y = shrimpcoord[ShrimpIndex].contour30[i][0][y]
+            
+                        if (i == 0) ctx.moveTo(X * ContoursizeMutiplier, Y * ContoursizeMutiplier)
+                        else ctx.lineTo(X * ContoursizeMutiplier, Y * ContoursizeMutiplier)
+                        
+                        //console.log(shrimpcoord[ShrimpIndex].contour30[i][0][x])
+                        //console.log(shrimpcoord[ShrimpIndex].contour30[i][0][y])
+                    }
         
-                    if (i == 0) ctx.moveTo(X * ContoursizeMutiplier, Y * ContoursizeMutiplier)
-                    else ctx.lineTo(X * ContoursizeMutiplier, Y * ContoursizeMutiplier)
-                    
-                    //console.log(shrimpcoord[ShrimpIndex].contour30[i][0][x])
-                    //console.log(shrimpcoord[ShrimpIndex].contour30[i][0][y])
+                    ctx.closePath()
+                    ctx.stroke()
                 }
-    
-                ctx.closePath()
-                ctx.stroke()
+                else
+                {
+                    console.log("noCountour30")
+                }
             }
             else
             {
-                console.log("noCountour30")
+                //console.log("nodata")
             }
         }
         else
         {
-            console.log("nodata")
+            for(let index = 0 ; index<shrimpcoord.length;index++)
+            {
+                if(shrimpcoord[index].perimeter)
+                {
+                    if(shrimpcoord[index]!=null)
+                    {
+                        if(shrimpcoord[index].contour30!=null)
+                        {
+                            //console.log("drawing Contour...")
+                            ctx.beginPath()
+                            let ContoursizeMutiplier = imagesize
+                    
+                            for(let i = 0; i < shrimpcoord[index].contour30.length; i++)
+                            {
+                                let X = shrimpcoord[index].contour30[i][0][x] 
+                                let Y = shrimpcoord[index].contour30[i][0][y]
+                    
+                                if (i == 0) ctx.moveTo(X * ContoursizeMutiplier, Y * ContoursizeMutiplier)
+                                else ctx.lineTo(X * ContoursizeMutiplier, Y * ContoursizeMutiplier)
+                                
+                                //console.log(shrimpcoord[ShrimpIndex].contour30[i][0][x])
+                                //console.log(shrimpcoord[ShrimpIndex].contour30[i][0][y])
+                            }
+                
+                            ctx.closePath()
+                            ctx.stroke()
+                        }
+                    }
+                }
+               
+            }
+           
         }
+       
     }
 
     const onViewableItemsChanged = useCallback(({ changed }) => {
@@ -162,31 +190,81 @@ export default ({navigation,route}) =>
     },[])
 
     const Item = ({name,data}) =>
-    {
+    {   
         return(
-            <View style={{flexDirection:"row",marginHorizontal:PixelRatio.roundToNearestPixel(5)}}>
-                <Text >{name + ': '}</Text>
-                <Text >{data}</Text>
+            <>
+             <Divider/>
+             <View style={{
+                height:PixelRatio.roundToNearestPixel(60),
+                backgroundColor:'#FFF',
+                justifyContent:'center',
+                 }}>
+                <Text style={{paddingLeft:PixelRatio.roundToNearestPixel(10)}}>{name + ': '} {data}</Text>
             </View>
+            <Divider/>
+            </>
+            
         )
     }
 
     const Group = ({ perimeter,length,width,area,peso,cor,red }) => 
-    (
-        <View style=
+    {
+        let cv
+        if(red===0)
+        {
+            cv='Saudavel'
+        }
+        else if(red===1)
+        {
+            cv='Moderado'
+        }
+        else
+        {
+            cv='Critico'
+        }
+
+        return(
+        <ScrollView style=
         {{
-            paddingVertical:PixelRatio.roundToNearestPixel(5),
             width:Dimensions.get('window').width
             }}>
-          <Item data= {perimeter} name='perimetro'/>
-          <Item data= {length} name='altura'/>
-          <Item data= {width} name='largura'/>
-          <Item data= {area} name='area'/>
-          <Item data= {peso} name='peso'/>
-          <Item data= {cor} name='cor'/>
-          <Item data= {red} name='C. vermelha'/>
-        </View>
-    )
+            <Item data= {Math.trunc(peso) + ' g'} name='Peso'/>
+            <Item data= {'A' + Math.trunc(cor)} name='Cor'/>
+            <Item data= {cv} name='C. vermelha'/>
+            {/*<Item data= {Math.trunc(perimeter) + ' cm'} name='Perimetro'/>
+            <Item data= {Math.trunc(length) + ' cm'} name='Altura'/>
+            <Item data= {Math.trunc(width) + ' cm'} name='Largura'/>
+            <Item data= {Math.trunc(area) + ' cm'} name='Area'/>*/}
+           
+        </ScrollView>
+        )
+    }
+    const Group2 = ({ day,month,year,hour,minute,shrimpamount,colorA1,colorA2,colorA3,colorA4,red1,red2,red3 }) => 
+    {
+        //console.log('day',day)
+        //console.log('sgeral',shrimpgeral)
+        return(
+        <ScrollView style=
+        {{
+            width:Dimensions.get('window').width
+            }}>
+                
+            <Item data= {`${day}/${month}/${year}`} name='Data'/>
+            <Item data= {`${hour}:${minute}`} name='Hora'/>
+            <Item data= {shrimpamount} name='Total de Camarões'/>
+            <Item data= {''} name='Media de Peso'/>
+            <Item data= {colorA1} name='Camarões com cor A1'/>
+            <Item data= {colorA2} name='Camarões com cor A2'/>
+            <Item data= {colorA3} name='Camarões com cor A3'/>
+            <Item data= {colorA4} name='Camarões com cor A4'/>
+            <Item data= {red1} name='C. Vermelha Saudavel'/>
+            <Item data= {red2} name='C. Vermelha Moderado'/>
+            <Item data= {red3} name='C. Vermelha Critico'/>
+            
+           
+        </ScrollView>
+        )
+    }
 
     const renderItem = ({ item,index }) => 
     {
@@ -206,52 +284,140 @@ export default ({navigation,route}) =>
             )
         } 
     }
+
     return (
-        <SafeAreaView style=
-        {{
-            flex:1,
-        }}> 
+        <SafeAreaView style={{flex:1,flexGrow:1}}> 
             <StatusBar
                 backgroundColor = "#FFF"
                 barStyle={'dark-content'}/>
 
-
-            {!isloading && <View 
-            style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: imgW,
-                bottom: imgH
-                }}>
-                    
-               {imageuri &&
-                <Image
-                source={{uri: imageuri}}
-                style={{width: imgW, height: imgH}}
-                />
-               }
-                
-            </View>}
-
-            <View 
+                {!isloading && 
+                <View>
+                    <View 
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        //justifyContent:'center',
+                        alignItems: 'center',
+                        right: 0, bottom: 0,
+                        
+    
+                        }}>
+                            
+                    {imageuri &&
+                        <Image
+                        source={{uri: imageuri}}
+                        style={{width: imgW, height: imgH}}
+                        />
+                    }
+                    </View>
+                </View>}
+           
+            <View
             style=
             {{
                 width: imgW,
                 height: imgH,
+                alignSelf:'center',
+                //borderWidth:2,
+                //borderColor:'#000'
             }}
             >
                 {isloading && 
-                    <ActivityIndicator style={{paddingTop:canvasH*0.4}} color={'#000'} size={'large'} />       
+                <View style={{
+                    //borderWidth:2,
+                    //borderColor:'#000',
+                    justifyContent:'center',
+                    alignItems:'center',
+                    width: imgW,
+                    height: imgH,
+                    }}>
+                    <ActivityIndicator color={'#000'} size={'large'}/>
+                </View>   
                 }
-
+                
+                
                 <TouchableOpacity onPress={() =>{}}>
                     <Canvas ref = {handleCanvas} />
                 </TouchableOpacity>
-               
-                    
+                           
             </View>
             
+            <View style={{
+                flexDirection: 'row',
+                //marginHorizontal:PixelRatio.roundToNearestPixel(20),
+                justifyContent:'space-evenly',
+                elevation:PixelRatio.getPixelSizeForLayoutSize(2),
+                backgroundColor:'rgba(255,255,255,1)'
+            }}>
+                
+                <TouchableOpacity style={
+                !Gbuttonselected?
+                {
+                height:PixelRatio.roundToNearestPixel(70),
+                justifyContent:'center',
+                alignItems:'center',
+                backgroundColor:'#828282',
+                flex:1
+                } 
+                :
+                {
+                    height:PixelRatio.roundToNearestPixel(70),
+                    justifyContent:'center',
+                    alignItems:'center',
+                    flex:1,
+                    backgroundColor:'#EF233C'
+                }
+                }
+                onPress={()=> 
+                {
+                    setshowGeral(true)
+                    setGbuttonselected(true)
+                    setCbuttonselected(false)
+                    //console.log(shrimpgeral)
+                }}
+                >
+                    <Text style={{
+                        color:'rgba(255,255,255,1)'
+                    }}>Geral</Text>
+                    
+                </TouchableOpacity>
+                
+                <TouchableOpacity style=
+                {!Cbuttonselected?
+                {
+                    height:PixelRatio.roundToNearestPixel(70),
+                    justifyContent:'center',
+                    alignItems:'center',
+                    backgroundColor:'#828282',
+                    flex:1
+                } 
+                :
+                {
+                    height:PixelRatio.roundToNearestPixel(70),
+                    justifyContent:'center',
+                    alignItems:'center',
+                    flex:1,
+                    backgroundColor:'#EF233C'
+                }
+                }
+                    onPress={()=> 
+                    {
+                        setshowGeral(false)
+                        setCbuttonselected(true)
+                        setGbuttonselected(false)
+                    }}
+                    >
+                    <Text style={{
+                        color:'rgba(255,255,255,1)'
+                    }}>Camarão</Text>
+                    
+                </TouchableOpacity>
+                
+            </View>
+
+            {!showGeral?
             <FlatList
             data={shrimpcoord}
             renderItem={renderItem}
@@ -260,9 +426,48 @@ export default ({navigation,route}) =>
             pagingEnabled
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={{
-              itemVisiblePercentThreshold: 50
+            itemVisiblePercentThreshold: 50,
             }}
+            key={'key2'}
+            initialScrollIndex={ShrimpIndex}
             />
+            :
+            <>
+        
+            <Group2
+            shrimpamount={shrimpgeral.shrimpamount}
+            colorA1={shrimpgeral.colorA1}
+            colorA2={shrimpgeral.colorA2}
+            colorA3={shrimpgeral.colorA3}
+            colorA4={shrimpgeral.colorA4}
+            red1={shrimpgeral.red1}
+            red2={shrimpgeral.red2}
+            red3={shrimpgeral.red3}
+            day={shrimpgeral.day}
+            month={shrimpgeral.month}
+            year={shrimpgeral.year}
+            hour={shrimpgeral.hour}
+            minute={shrimpgeral.minutes}
+            />
+
+            <View style={{ 
+            position:'absolute',
+            margin: 16,
+            right: 0,
+            bottom: 0,
+            }}>
+                <View style={{ width:PixelRatio.roundToNearestPixel(120) }}>
+                    <FAB 
+                    icon={'file-download'} 
+                    text={'PDF'}
+                    elevation={PixelRatio.roundToNearestPixel(4)}
+
+                    />
+                </View>
+
+            </View>
+            </>
+            }
            
         </SafeAreaView>
     )

@@ -1,30 +1,57 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { View,StatusBar,PixelRatio,FlatList,TouchableOpacity,Text, Dimensions,TouchableHighlight } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import Image from 'react-native-fast-image'
+import ImgPressable from "../ImgPressable";
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+ 'Non-serializable values were found in the navigation state',
+])
 
 const HistoricOpenMonth = ({navigation,route}) =>
 {
+    const [shrimpdata,setshrimpdata] = useState([])
+
+    useEffect(()=>{
+        if(shrimpdata.length)
+        {
+            console.log(shrimpdata)
+            route.params.setshrimpdata(shrimpdata)
+        }
+    },[shrimpdata])
+
+    useEffect(()=>{
+        console.log(route.params.shrimpdata)
+        setshrimpdata(route.params.shrimpdata)
+    },[])
+
     const renderItem = ({item,index}) =>
     {
         let imagesize = (Dimensions.get('window').width-PixelRatio.roundToNearestPixel(8))/4
+        
 
         return (
-            <TouchableOpacity onPress={()=>{
-                navigation.navigate('ShrimpInfo',{
-                    photoname: item.Serverimage,
-                    dataname:item.NewName,
-                    imageuri:item.uri,
-                    imageW:item.imageW,
-                    imageH:item.imageH
-                })
-            }}
-            key={item.NewName}
-            style={{margin:PixelRatio.roundToNearestPixel(1)}}
-            >
-                <Image style={{ width: imagesize, height: imagesize }} source={{ uri: item.uri }} />
-            </TouchableOpacity>
+            <ImgPressable
+            onPress={()=>
+                {
+                    navigation.navigate('ShrimpInfo',{
+                        photoname: item.Serverimage,
+                        dataname:item.NewName,
+                        imageuri:item.uri,
+                        imageW:item.imageW,
+                        imageH:item.imageH
+                    })
+                }}
+            
+            item={item} 
+            itemsize={imagesize}
+            activeDelete = {true}
+            setshrimpdata={setshrimpdata}
+            index={parseInt(item.month)-1}
+            index2={index}
+            margin={PixelRatio.roundToNearestPixel(1)}
+            />
         )
     }
 
@@ -60,6 +87,7 @@ const HistoricOpenMonth = ({navigation,route}) =>
                     keyExtractor={item => item.NewName}
                     //horizontal
                     numColumns={4}
+                    extraData={shrimpdata}
                     />
                 
             </View>

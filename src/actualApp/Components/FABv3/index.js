@@ -3,7 +3,7 @@ import { TouchableOpacity,Text,StyleSheet,PixelRatio,View,Image } from "react-na
 import { Icon } from "react-native-elements"
 import { ActivityIndicator } from "react-native-paper"
 
-export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontColor,borderRadius,type,loading}) =>
+export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontColor,borderRadius,type,loading,border,elevation}) =>
 {
     if(!color){color="#EF233C"}
     
@@ -19,9 +19,15 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
             {
                 backgroundColor:color,
                 borderRadius:borderRadius,
-                //elevation:PixelRatio.getPixelSizeForLayoutSize(2),
+                elevation:elevation,
                 borderWidth:PixelRatio.roundToNearestPixel(4),
                 borderColor:'#2B2D42'
+            },
+            ContainerNoBorder:
+            {
+                backgroundColor:color,
+                borderRadius:borderRadius,
+                elevation:elevation
             },
             FABstyle:
             {
@@ -141,7 +147,7 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
                     name={icon}
                     color='#FFF' 
                     style={styles.IconStyle}
-                    type={type}
+                    type={type&& type}
                     />
                     <Text style={styles.FABTextStyle}>{text}</Text>
                 </>
@@ -164,7 +170,7 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
     }
 
     return(
-        <TouchableOpacity onPress={onPress} style={styles.Container}> 
+        <TouchableOpacity onPress={onPress} style={border ? styles.Container : styles.ContainerNoBorder}> 
                 <View style={!big ? SelectStyle() : styles.FABstyle2}> 
                 
                     <TheresIcon/>

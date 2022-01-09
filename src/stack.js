@@ -24,14 +24,17 @@ const options = {
         opacity: progress
       }
     }
-  }
+  },
+
 }
 
 export default () =>
 {
     return (
         <Shared_Stack.Navigator
-        initialRouteName="Preload">
+        initialRouteName="Preload"
+        //detachInactiveScreens
+        >
             
             <Shared_Stack.Screen
             name="Preload" 
@@ -71,6 +74,7 @@ export default () =>
             component={HistoricOpenMonth}
             options={()=>options}
             />
+
         </Shared_Stack.Navigator>
     )
 }

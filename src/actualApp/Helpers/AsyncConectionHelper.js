@@ -3,11 +3,6 @@ import {saveDeviceData} from "../Helpers/AsyncStorageHelper";
 import {
     coin,
  } from '../Components/Carousel2.0/CoinVariables'
- import {
-    GetCoinB,
-    GetPhotoB,
-   
-} from '../screens/Main/AnimationMain'
 
 const SERVER_URL = 'http://104.251.214.172:4000'
 
@@ -37,7 +32,7 @@ const isReachable  = async (setuploadstatus,setisLoading) =>
     }
 }
 
-const checkstep = async (imageNewname,setisLoading,setuploadstatus,filepath,imageuri,setimgdone) =>
+const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setimgdone) =>
 {  
     async function pyresq()
     {
@@ -48,14 +43,19 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,filepath,imag
 
         console.log('json', Sjson)
 
+        function addZero(i) {
+            if (i < 10) {i = "0" + i}
+            return i;
+          }
+
         let date = new Date();
 
-        let day = date.getDay()
-        let month = date.getMonth()
+        let day = addZero(date.getDay()+2)
+        let month = addZero(date.getMonth()+1)
         let year = date.getFullYear()
-        let hours = date.getHours()
-        let minutes = date.getMinutes()
-        let seconds = date.getSeconds()
+        let hours = addZero(date.getHours())
+        let minutes = addZero(date.getMinutes())
+        let seconds = addZero(date.getSeconds())
         name  = `SIMAGE_${day}_${month}_${year}__${hours}:${minutes}:${seconds}`
         
         let imageW
@@ -72,7 +72,6 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,filepath,imag
             json:Sjson,
             Serverimage:imageNewname,
             NewName:name,
-            filepath:filepath,
             uri:imageuri,
             imageW:imageW,
             imageH:imageH,
@@ -95,51 +94,67 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,filepath,imag
     
 }
 
-export const handleUploadPhoto = async (setuploadstatus,setisLoading,createFormData,photo,filepath,imageuri,setimgdone) =>
+const createFormData = (photo, body = {}) =>
+{
+    var data = new FormData()
+
+    data.append('photo', {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    })
+    
+    Object.keys(body).forEach((key) => {
+      data.append(key, body[key])
+    })
+
+    return data
+}
+
+export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,imageuri,setimgdone) =>
+{
+    if(!coin)
     {
-        if(!coin)
-        {
-            alert('Selecione uma moeda!')
-            GetCoinB().slideInLeft(1000)
-            GetPhotoB().slideInRight(1000)
-            return false
-        }
-
-        setuploadstatus('ENVIANDO...')
-        setisLoading(true)
+        alert('Selecione uma moeda!')
       
-        var imageNewname
-        if(await isReachable(setuploadstatus,setisLoading))
-        {
-            await fetch(`${SERVER_URL}/api/upload`, {
-                method: 'post',
-                body: createFormData(photo, { userId: 'randomuser', coin: coin }),
-                headers:
-                {
-                  'content-type': 'multipart/form-data',
-                  'Accept':'application/json'
-                }
-            })
-            .then((response) => response.json())
-            .then((response) => {
-                console.log('response', response);
-                imageNewname = response.filename
-                console.log('imagename', imageNewname);
-            })
-            .catch((error) => {
-                console.log('error', error);
-                setuploadstatus('Imagem NAO Enviada!,erro de server')
-                setisLoading(false)
-                return
-            })
-            
-           // const json = await response.json()
-            setuploadstatus('Imagem Enviada!')
-            
-            checkstep(imageNewname,setisLoading,setuploadstatus,filepath,imageuri,setimgdone)
-
-           // setisLoading(false)
-
-            //console.log('response', json)    
-        }
+        return false
     }
+
+    setuploadstatus('ENVIANDO...')
+    setisLoading(true)
+    
+    var imageNewname
+    if(await isReachable(setuploadstatus,setisLoading))
+    {
+        await fetch(`${SERVER_URL}/api/upload`, {
+            method: 'post',
+            body: createFormData(photo, { userId: 'randomuser', coin: coin }),
+            headers:
+            {
+                'content-type': 'multipart/form-data',
+                'Accept':'application/json'
+            }
+        })
+        .then((response) => response.json())
+        .then((response) => {
+            console.log('response', response);
+            imageNewname = response.filename
+            console.log('imagename', imageNewname);
+        })
+        .catch((error) => {
+            console.log('error', error);
+            setuploadstatus('Imagem NAO Enviada!,erro de server')
+            setisLoading(false)
+            return
+        })
+        
+        // const json = await response.json()
+        setuploadstatus('Imagem Enviada!')
+        
+        checkstep(imageNewname,setisLoading,setuploadstatus,imageuri,setimgdone)
+
+        // setisLoading(false)
+
+        //console.log('response', json)    
+    }
+}

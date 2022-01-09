@@ -16,7 +16,7 @@ const {width, height} = Dimensions.get('window')
             show={true}
             />*/
 
-const CustomTooltip = ({title,text,textColor,backgroundColor,height,width,show}) =>
+const CustomTooltip = ({title,text,textColor,backgroundColor,height,width,show,Viewstyle,onClose}) =>
 {
     const [toolTipVisible,settoolTipVisible] = useState()
 
@@ -33,12 +33,14 @@ const CustomTooltip = ({title,text,textColor,backgroundColor,height,width,show})
     const Inside = () => 
             (
             <>
+            <View style={Viewstyle}>
                 <Card 
                 style={{
                     height:height, 
                     width:width,
                     backgroundColor:backgroundColor,
                     borderRadius:PixelRatio.roundToNearestPixel(12),
+                    
                 }}
                 mode="outlined"
                 >
@@ -56,19 +58,20 @@ const CustomTooltip = ({title,text,textColor,backgroundColor,height,width,show})
                         <Text 
                         style={{
                             color:textColor,
-                            marginTop:PixelRatio.roundToNearestPixel(10),
+                            marginVertical:PixelRatio.roundToNearestPixel(10),
                             fontWeight:'normal',
                         }}>{text}
                         </Text>
                     </View>
         
                 </Card>
+            </View>
             </>
             )   
 
     return (
         <>  
-            <Modal
+        <Modal
             isVisible={toolTipVisible}
             useNativeDriverForBackdrop
             hideModalContentWhileAnimating
@@ -77,19 +80,38 @@ const CustomTooltip = ({title,text,textColor,backgroundColor,height,width,show})
             onBackButtonPress={()=>
                 {
                     toggleModal()
+                    setTimeout(() => 
+                    {  
+                        if(onClose)
+                        {
+                            onClose()
+                        }  
+                    }, 500)
                 }}
-            onBackdropPress={()=>{ toggleModal()}}
+            onBackdropPress={()=>
+                { 
+                    toggleModal()
+                    setTimeout(() => 
+                    {  
+                        if(onClose)
+                        {
+                            onClose()
+                        }  
+                    }, 500)
+
+                }}
             animationIn="fadeIn"
             animationOut="fadeOut"
-            animationInTiming={200}
-            animationOutTiming={200}
+            animationInTiming={500}
+            animationOutTiming={500}
             backdropOpacity={0.3}
             hardwareAccelerated
             statusBarTranslucent
             >
+
                 <Inside/>
                 
-            </Modal>
+        </Modal>
         </>
     )
 }
