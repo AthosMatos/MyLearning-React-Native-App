@@ -4,35 +4,44 @@ import FABv2 from '../../../Components/FABv2'
 import { coinPhoto } from '../../../Components/Carousel2.0/CoinVariables'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
 import {height} from '../styles'
+import { OutJelloDown } from '../../../Helpers/FewPresetAnimations'
 
-var offset
+var osffsetY,flex
 
 export function InAnimation()
 {
-    offset.value = withSpring(0,{damping:15})   
+    osffsetY.value = withSpring(0,{damping:15})   
 }
 
+export function OnUploadAnimation()
+{
+    OutJelloDown(osffsetY)
+}
 
 export default ChooseCoinButtom = ({toggleModal}) =>
 {
     useEffect(()=>{
-        offset.value = withSpring(0,{damping:15})   
+        osffsetY.value = withSpring(0,{damping:15})   
     },[])
 
-    offset = useSharedValue(height)
+    osffsetY = useSharedValue(height)
+    flex = useSharedValue(1)
 
     const AnimatedStyle = useAnimatedStyle(()=>
     {
         return{
             //opacity:offset.value,
-            transform:[{translateY:offset.value},]
+            transform:[
+                {translateY:osffsetY.value},
+            ],
+            flex:flex.value,
+
         }
     },[])
 
     return(
         <Animated.View
         style={[{
-            flex:2,
             marginHorizontal:PixelRatio.roundToNearestPixel(10)
         },
         AnimatedStyle

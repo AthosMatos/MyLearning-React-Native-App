@@ -39,31 +39,13 @@ export default ({navigation,route}) =>
             {
                 console.log(shrimpdata)
 
-                let gdata = 
-                {       
-                colorA1:shrimpdata.json.distribution.color.a1,
-                colorA2:shrimpdata.json.distribution.color.a2,
-                colorA3:shrimpdata.json.distribution.color.a3,
-                colorA4:shrimpdata.json.distribution.color.a4,
-                red1:shrimpdata.json.distribution.red_head.healthy,
-                red2:shrimpdata.json.distribution.red_head.moderate,
-                red3:shrimpdata.json.distribution.red_head.diseased,
-                shrimpamount:shrimpdata.json.distribution.total,
-                area:shrimpdata.json.distribution.area,
-                day:shrimpdata.day,
-                month:shrimpdata.month,
-                year:shrimpdata.year,
-                hour:shrimpdata.hours,
-                minutes:shrimpdata.minutes,
-                }
-                
-                //console.log(gdata)
-                setshrimpgeral(gdata)
-
                 let tempshrimpcoord = []
+                let pesomedia = 0
+                let i 
                 console.log(shrimpdata.json.shrimpList.length)
-                for(let i = 0 ;i<shrimpdata.json.shrimpList.length;i++ )
+                for(i = 0;i<shrimpdata.json.shrimpList.length;i++ )
                 {
+                    pesomedia+=parseInt(shrimpdata.json.shrimpList[i].peso)
                     let SC = 
                     {
                         id:i,
@@ -78,7 +60,34 @@ export default ({navigation,route}) =>
                     }
                     tempshrimpcoord.push(SC)
                 }
+                pesomedia/=i
                 setshrimpcoord(tempshrimpcoord)
+                console.log(pesomedia)
+
+                let gdata = 
+                {       
+                    colorA1:shrimpdata.json.distribution.color.a1,
+                    colorA2:shrimpdata.json.distribution.color.a2,
+                    colorA3:shrimpdata.json.distribution.color.a3,
+                    colorA4:shrimpdata.json.distribution.color.a4,
+                    red1:shrimpdata.json.distribution.red_head.healthy,
+                    red2:shrimpdata.json.distribution.red_head.moderate,
+                    red3:shrimpdata.json.distribution.red_head.diseased,
+                    shrimpamount:shrimpdata.json.distribution.total,
+                    area:shrimpdata.json.distribution.area,
+                    day:shrimpdata.day,
+                    month:shrimpdata.month,
+                    year:shrimpdata.year,
+                    hour:shrimpdata.hours,
+                    minutes:shrimpdata.minutes,
+                    pesomedia:pesomedia,
+
+                }
+                
+                //console.log(gdata)
+                setshrimpgeral(gdata)
+
+
             }).then(()=>
             {
                 setloading(false)
@@ -239,7 +248,7 @@ export default ({navigation,route}) =>
         </ScrollView>
         )
     }
-    const Group2 = ({ day,month,year,hour,minute,shrimpamount,colorA1,colorA2,colorA3,colorA4,red1,red2,red3 }) => 
+    const Group2 = ({ day,month,year,hour,minute,shrimpamount,colorA1,colorA2,colorA3,colorA4,red1,red2,red3,pesomedia }) => 
     {
         //console.log('day',day)
         //console.log('sgeral',shrimpgeral)
@@ -252,7 +261,7 @@ export default ({navigation,route}) =>
             <Item data= {`${day}/${month}/${year}`} name='Data'/>
             <Item data= {`${hour}:${minute}`} name='Hora'/>
             <Item data= {shrimpamount} name='Total de Camarões'/>
-            <Item data= {''} name='Media de Peso'/>
+            <Item data= {Math.trunc(pesomedia)+ 'g'} name='Peso Medio'/>
             <Item data= {colorA1} name='Camarões com cor A1'/>
             <Item data= {colorA2} name='Camarões com cor A2'/>
             <Item data= {colorA3} name='Camarões com cor A3'/>
@@ -260,7 +269,7 @@ export default ({navigation,route}) =>
             <Item data= {red1} name='C. Vermelha Saudavel'/>
             <Item data= {red2} name='C. Vermelha Moderado'/>
             <Item data= {red3} name='C. Vermelha Critico'/>
-            
+              
            
         </ScrollView>
         )
@@ -448,6 +457,7 @@ export default ({navigation,route}) =>
             year={shrimpgeral.year}
             hour={shrimpgeral.hour}
             minute={shrimpgeral.minutes}
+            pesomedia={shrimpgeral.pesomedia}
             />
 
             <View style={{ 

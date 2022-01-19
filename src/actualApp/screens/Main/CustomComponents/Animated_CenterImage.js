@@ -13,7 +13,7 @@ export function InAnimation()
     offset.value = withSpring(1)
 }
 
-export default CenterImage = ({imgdone,photo,navigation}) =>
+export default CenterImage = ({uploadDone,photo,navigation}) =>
 {
     useEffect(()=>{
         offset.value = withSpring(1)   
@@ -48,7 +48,7 @@ export default CenterImage = ({imgdone,photo,navigation}) =>
 
     return (
         <>
-        {!imgdone ? 
+        {!uploadDone ? 
             <Animated.View 
             style=
             {[{

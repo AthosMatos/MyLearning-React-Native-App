@@ -1,6 +1,5 @@
-import React,{useState,useEffect,useCallback} from "react";
+import React,{useState,useEffect,useCallback,createRef} from "react";
 import {  View,StatusBar,PixelRatio,Text,BackHandler} from 'react-native'
-import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Carousel from '../../Components/Carousel2.0'
 import Modal from 'react-native-modal'
@@ -11,24 +10,37 @@ import Customtooltip from './CustomTooltip'
 import {AfterInteractions} from 'react-native-interactions';
 import { useFocusEffect } from "@react-navigation/native";
 
-import Animated_ChooseCoinButtom from "./CustomComponents/Animated_ChooseCoinButtom";
-import Animated_PhotoButtom from "./CustomComponents/Animated_PhotoButtom";
+import Animated_ChooseCoinButtom from "./CustomComponents/Animated_ChooseCoinButton";
+import Animated_PhotoButtom from "./CustomComponents/Animated_PhotoButton";
 import Animated_CenterImage from "./CustomComponents/Animated_CenterImage";
-import Animated_InfoButtom from "./CustomComponents/Animated_InfoButtom";
-import Animated_HistoricButtom from "./CustomComponents/Animated_HistoricButtom";
+import Animated_InfoButtom from "./CustomComponents/Animated_InfoButton";
+import Animated_HistoricButtom from "./CustomComponents/Animated_HistoricButton";
 import Placeholder from "../../Components/Animated_Placeholder";
 import { requestCameraPermission } from "../../Helpers/CameraHelper";
 import { styles } from "./styles";
+import Animated_ResetButton from "./CustomComponents/Animated_ResetButton";
+import Animated_OnLoad from "./CustomComponents/Animated_OnLoad";
+
+import {Transitioning,Transition} from "react-native-reanimated";
 
 const mainscreen = ({navigation,route}) =>
 {
     const [photo,setphoto] = useState(null)
+    const [showReset,setshowReset] = useState(false)
     const [uploadstatus,setuploadstatus] = useState('IDLE')
-    const [imgdone,setimgdone] = useState(false)
+    const [uploadDone,setuploadDone] = useState(false)
+    const [showloadingButton,setshowloadingButton] = useState(false)
     const [isLoading,setisLoading] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false)
     const [tooltip,settootip] = useState(0)
 
+    const LayoutRef = createRef()
+
+    useEffect(()=>
+    {
+        if(LayoutRef.current)LayoutRef.current.animateNextTransition()
+    },[photo])
+  
     useFocusEffect(
         useCallback(() => {
           const onBackPress = () => 
@@ -92,7 +104,13 @@ const mainscreen = ({navigation,route}) =>
 
     <AfterInteractions placeholder={<Placeholder/>}>
 
-          <SafeAreaView style = {styles.Container}>
+          <Transitioning.View style = {styles.Container}
+          transition={
+          <Transition.Together>
+              <Transition.Change/>
+          </Transition.Together>}
+          ref={LayoutRef}
+          >
         
             <StatusBar
             backgroundColor = "#EDF2F4"
@@ -108,31 +126,50 @@ const mainscreen = ({navigation,route}) =>
                             
             </View>
 
-            <Animated_CenterImage photo={photo} imgdone={imgdone} navigation={navigation} />
+            <Animated_CenterImage photo={photo} uploadDone={uploadDone} navigation={navigation} />
 
+
+           
             <View style={{
                 justifyContent:'flex-end',
                 flex:1,
                 }}>
-                
+                {!showloadingButton&&
                 <View style={styles.BottomButtonsView}>
-                    <Animated_ChooseCoinButtom toggleModal={toggleModal} />
+                    <Animated_ChooseCoinButtom toggleModal={toggleModal} showreset={showReset} />
                         
                     <Animated_PhotoButtom 
                     photo={photo} 
-                    handleUploadPhoto={()=>{handleUploadPhoto(setuploadstatus,setisLoading,photo,photo.uri,setimgdone)}}
-                    requestCameraPermission={()=>{requestCameraPermission({setphoto:setphoto})}}
+                    handleUploadPhoto={()=>
+                        {
+                            handleUploadPhoto(setuploadstatus,setisLoading,photo,photo.uri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef)
+                        }}
+                    requestCameraPermission={()=>{requestCameraPermission(setphoto,setshowReset)}}
+                    loading={isLoading}
                     />
+
+                    <Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset} LayoutRef={LayoutRef}/>
+
                 </View>
-                
-            </View>
-
-            <View style = {styles.UploadStatusView}>
-                {isLoading &&
-                    <ActivityIndicator color={'#000'} />
                 }
+                <Animated_OnLoad 
+                show={showloadingButton} 
+                uploadDone={uploadDone} 
+                loading={isLoading}
+                setuploadDone ={setuploadDone}
+                setisLoading={setisLoading}
+                setuploadstatus={setuploadstatus}
+                setphoto={setphoto}
+                setshowReset={setshowReset}
+                setshowloadingButton={setshowloadingButton}
+                />
+                {/*<Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset} LayoutRef={LayoutRef}/>*/}
 
-                <Text>{uploadstatus}</Text>
+                <View style = {styles.UploadStatusView}>
+
+                    <Text>{uploadstatus}</Text>
+
+                </View>
 
             </View>
 
@@ -165,7 +202,7 @@ const mainscreen = ({navigation,route}) =>
             </Modal>
 
             {/*<TooltipRender/>*/}
-        </SafeAreaView>
+        </Transitioning.View>
     </AfterInteractions>
 
   

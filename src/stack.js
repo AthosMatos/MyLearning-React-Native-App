@@ -35,7 +35,6 @@ export default () =>
         initialRouteName="Preload"
         //detachInactiveScreens
         >
-            
             <Shared_Stack.Screen
             name="Preload" 
             component={Preload}

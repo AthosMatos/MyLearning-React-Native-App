@@ -13,7 +13,7 @@ const handleChoosePhoto = ({setphoto}) =>
         })
     }
 
-const handleTakePhoto = ({setphoto}) =>
+const handleTakePhoto = (setphoto,setshowReset) =>
 {
     launchCamera({ 
         noData: true,
@@ -27,13 +27,13 @@ const handleTakePhoto = ({setphoto}) =>
 
             //onsole.log(imageuri)
          
-
             setphoto(response.assets[0])
+            setshowReset(true)
         }
     })
 }
 
-export const requestCameraPermission = async ({setphoto}) => 
+export const requestCameraPermission = async (setphoto,setshowReset) => 
 {
     try {
         const granted = await PermissionsAndroid.request(
@@ -48,7 +48,7 @@ export const requestCameraPermission = async ({setphoto}) =>
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log("Camera permission given");
-        handleTakePhoto({setphoto:setphoto})
+        handleTakePhoto(setphoto,setshowReset)
 
         } else {
         console.log("Camera permission denied");

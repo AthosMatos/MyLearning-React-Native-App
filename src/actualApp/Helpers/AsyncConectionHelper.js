@@ -3,6 +3,7 @@ import {saveDeviceData} from "../Helpers/AsyncStorageHelper";
 import {
     coin,
  } from '../Components/Carousel2.0/CoinVariables'
+import { ToogleInAll } from '../screens/Main/CustomComponents/GeneralAnimation';
 
 const SERVER_URL = 'http://104.251.214.172:4000'
 
@@ -32,7 +33,7 @@ const isReachable  = async (setuploadstatus,setisLoading) =>
     }
 }
 
-const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setimgdone) =>
+const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef) =>
 {  
     async function pyresq()
     {
@@ -41,7 +42,30 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,seti
         const pyrequest = await fetch(`${SERVER_URL}/pytest`)
         let Sjson = await pyrequest.json()
 
+        let imageW,imageH
+
+        await Image.getSize(SERVER_URL + '/getimage/' + imageNewname, (width, height) => 
+        {
+            imageW = width
+            imageH = height
+        })
+
         console.log('json', Sjson)
+
+        if(Sjson.error==='image does not follow acquisition standards!')
+        {
+            alert('Não foi detectado Camarões.\nPor favor, tente Novamente') //add more info
+            if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+            setuploadDone(false)
+            setisLoading(false)
+            setuploadstatus('IDLE')
+            setphoto(null)
+            setshowReset(false)
+            ToogleInAll()
+            if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+            setshowloadingButton(false)
+            return
+        }
 
         function addZero(i) {
             if (i < 10) {i = "0" + i}
@@ -57,15 +81,6 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,seti
         let minutes = addZero(date.getMinutes())
         let seconds = addZero(date.getSeconds())
         name  = `SIMAGE_${day}_${month}_${year}__${hours}:${minutes}:${seconds}`
-        
-        let imageW
-        let imageH
-
-        await Image.getSize(SERVER_URL + '/getimage/' + imageNewname, (width, height) => 
-        {
-            imageW = width
-            imageH = height
-        })
 
         let shrimpdata = 
         {
@@ -85,8 +100,13 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,seti
         
         await saveDeviceData(name,shrimpdata)
 
-        setimgdone(true)
+
+
+
+        if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+        setuploadDone(true)
         setisLoading(false)
+        setshowReset(false)
         setuploadstatus('Pronto!!')
         
     }
@@ -111,7 +131,7 @@ const createFormData = (photo, body = {}) =>
     return data
 }
 
-export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,imageuri,setimgdone) =>
+export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef) =>
 {
     if(!coin)
     {
@@ -121,6 +141,7 @@ export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,image
     }
 
     setuploadstatus('ENVIANDO...')
+    setshowloadingButton(true)
     setisLoading(true)
     
     var imageNewname
@@ -151,7 +172,7 @@ export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,image
         // const json = await response.json()
         setuploadstatus('Imagem Enviada!')
         
-        checkstep(imageNewname,setisLoading,setuploadstatus,imageuri,setimgdone)
+        checkstep(imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef)
 
         // setisLoading(false)
 

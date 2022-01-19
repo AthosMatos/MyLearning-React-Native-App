@@ -5,6 +5,7 @@ import { ActivityIndicator } from "react-native-paper"
 
 export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontColor,borderRadius,type,loading}) =>
 {
+
     if(!color){color="#EF233C"}
     
     if(!fontSize){fontSize=PixelRatio.getPixelSizeForLayoutSize(6) }
@@ -161,14 +162,14 @@ export default ({text,onPress,color,icon,big,image,width,height,fontSize,fontCol
     }
 
     return(
-        <TouchableOpacity onPress={onPress} style={styles.Container}> 
-                <View style={!big ? SelectStyle() : styles.FABstyle2}> 
-                
-                    <TheresIcon/>
+        <View style={[styles.Container]}>
+            <TouchableOpacity onPress={onPress} style={!big ? SelectStyle() : styles.FABstyle2} > 
+                 
+                <TheresIcon/>
 
-                </View>
-
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
+        
     )
 }
 

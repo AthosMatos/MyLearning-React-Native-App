@@ -1,8 +1,8 @@
-import { InAnimation as HB_ToogleAnimation } from "./Animated_HistoricButtom";
-import { InAnimation as CC_ToogleAnimation } from "./Animated_ChooseCoinButtom"; 
-import { InAnimation as PB_ToogleAnimation } from "./Animated_PhotoButtom"; 
+import { InAnimation as HB_ToogleAnimation } from "./Animated_HistoricButton";
+import { InAnimation as CC_ToogleAnimation } from "./Animated_ChooseCoinButton"; 
+import { InAnimation as PB_ToogleAnimation } from "./Animated_PhotoButton"; 
 import { InAnimation as CI_ToogleAnimation } from "./Animated_CenterImage"; 
-import { InAnimation as IB_ToogleAnimation } from "./Animated_InfoButtom"; 
+import { InAnimation as IB_ToogleAnimation } from "./Animated_InfoButton"; 
 
 export function ToogleInAll()
 {

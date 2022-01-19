@@ -1,27 +1,39 @@
-import React,{useEffect} from "react";
-import { Image, StyleSheet, View,StatusBar,PixelRatio } from 'react-native'
-import { ActivityIndicator } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import React,{useEffect,useCallback} from "react";
+import { Image, StyleSheet, View,StatusBar,PixelRatio,BackHandler } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SharedElement } from "react-navigation-shared-element";
-import {saveDeviceData, loadDeviceData,deleteDeviceData} from "../../Helpers/AsyncStorageHelper";
+import { useFocusEffect } from "@react-navigation/native";
+import { ToogleInAll } from "../Main/CustomComponents/GeneralAnimation";
 
 const Info = ({navigation}) =>
 {
-    async function loaddata()
-    {
-        //let data = await loadDeviceData('shrimpjson')
-        //console.log('shrimpdata', data)
-       // deleteDeviceData('shrimpjson')
-    }
+   
 
     useEffect(() => {
+
+        async function loaddata()
+        {
+            //let data = await loadDeviceData('shrimpjson')
+            //console.log('shrimpdata', data)
+           // deleteDeviceData('shrimpjson')
+        }
 
         loaddata()
 
       }, [])
 
-    
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => 
+            {
+                ToogleInAll()
+            }
+
+            BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+            return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+        }, [])
+    )
 
     return (
         <SafeAreaView style = {{backgroundColor:'#EDF2F4',flex:1}}>

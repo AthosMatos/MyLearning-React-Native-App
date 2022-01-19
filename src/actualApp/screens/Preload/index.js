@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SharedElement_Logo from "./CustomComponents/SharedElement_Logo";
 import { useSharedValue,useAnimatedStyle,withSpring } from "react-native-reanimated";
 import { styles } from "./styles";
+import { setCoin } from "../../Components/Carousel2.0/CoinVariables";
 
 const Preload = ({navigation}) =>
 {
@@ -29,6 +30,7 @@ const Preload = ({navigation}) =>
 
     useEffect(()=>{
         offset.value = withSpring(1)
+        setCoin(1)
     },[])
       
     return (
