@@ -1,6 +1,5 @@
 import React,{useState,useEffect,useCallback,createRef} from "react";
-import {  View,StatusBar,PixelRatio,Text,BackHandler} from 'react-native'
-import { SafeAreaView } from "react-native-safe-area-context";
+import {View,StatusBar,PixelRatio,Text,BackHandler} from 'react-native'
 import Carousel from '../../Components/Carousel2.0'
 import Modal from 'react-native-modal'
 
@@ -15,7 +14,7 @@ import Animated_PhotoButtom from "./CustomComponents/Animated_PhotoButton";
 import Animated_CenterImage from "./CustomComponents/Animated_CenterImage";
 import Animated_InfoButtom from "./CustomComponents/Animated_InfoButton";
 import Animated_HistoricButtom from "./CustomComponents/Animated_HistoricButton";
-import Placeholder from "../../Components/Animated_Placeholder";
+import Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
 import { requestCameraPermission } from "../../Helpers/CameraHelper";
 import { styles } from "./styles";
 import Animated_ResetButton from "./CustomComponents/Animated_ResetButton";
@@ -27,12 +26,15 @@ const mainscreen = ({navigation,route}) =>
 {
     const [photo,setphoto] = useState(null)
     const [showReset,setshowReset] = useState(false)
-    const [uploadstatus,setuploadstatus] = useState('IDLE')
+    const [uploadstatus,setuploadstatus] = useState('')
     const [uploadDone,setuploadDone] = useState(false)
     const [showloadingButton,setshowloadingButton] = useState(false)
     const [isLoading,setisLoading] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false)
     const [tooltip,settootip] = useState(0)
+
+    const [text1,settext1] = useState('Escolher Moeda')
+    const [text2,settext2] = useState('Tirar Foto')
 
     const LayoutRef = createRef()
 
@@ -56,7 +58,15 @@ const mainscreen = ({navigation,route}) =>
         }, [])
     )
 
+    const undefine = () =>
+    {
+        if(text1){settext1(undefined)}
+        else {settext1('Escolher Moeda')}
 
+        if(text2){settext2(undefined)}
+        else {settext2('Tirar Foto')}
+    }
+    
     const toggleModal = () =>
     {
         setModalVisible(!isModalVisible)
@@ -129,23 +139,29 @@ const mainscreen = ({navigation,route}) =>
             <Animated_CenterImage photo={photo} uploadDone={uploadDone} navigation={navigation} />
 
 
-           
             <View style={{
                 justifyContent:'flex-end',
+                //borderColor:'black',
+                //borderWidth:2,
                 flex:1,
                 }}>
                 {!showloadingButton&&
                 <View style={styles.BottomButtonsView}>
-                    <Animated_ChooseCoinButtom toggleModal={toggleModal} showreset={showReset} />
+                    
+                    <Animated_ChooseCoinButtom 
+                    toggleModal={toggleModal} 
+                    photo={photo} 
+                    />
                         
                     <Animated_PhotoButtom 
-                    photo={photo} 
                     handleUploadPhoto={()=>
                         {
                             handleUploadPhoto(setuploadstatus,setisLoading,photo,photo.uri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef)
                         }}
                     requestCameraPermission={()=>{requestCameraPermission(setphoto,setshowReset)}}
-                    loading={isLoading}
+                    text={text2}
+                    LayoutRef={LayoutRef}
+                    photo={photo}
                     />
 
                     <Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset} LayoutRef={LayoutRef}/>

@@ -1,7 +1,9 @@
 import React,{useEffect} from "react"
-import {PixelRatio, Text} from "react-native"
+import {Text} from "react-native"
 import { ActivityIndicator } from "react-native-paper"
 import Animated,{useSharedValue,useAnimatedStyle,withSpring} from "react-native-reanimated"
+import styles from './styles'
+import { TerciaryColor,PrimaryColor } from "../../../Defaults"
 
 export default Placeholder = () => 
 {
@@ -27,21 +29,16 @@ export default Placeholder = () =>
         flex:1,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'#EDF2F4'
-    },
-    AnimatedStyle
+        backgroundColor:TerciaryColor
+    },AnimatedStyle
     ]}
     >
-        <Text style={{
-            color:'#2B2D42', 
-            fontWeight:'bold',
-            paddingVertical:PixelRatio.roundToNearestPixel(20),
-            fontSize:PixelRatio.roundToNearestPixel(18)
-            }}>Carregando...</Text>
-        <ActivityIndicator size={'large'} color="#EF233C"/>
+        <Text style={styles.Text}>Carregando...</Text>
+        <ActivityIndicator style={styles.activityindicator} size={'large'} color={PrimaryColor}/>
+
     </Animated.View>
     )
-        
 }
+
 
 

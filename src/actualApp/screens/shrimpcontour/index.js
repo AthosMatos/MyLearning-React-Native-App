@@ -1,12 +1,13 @@
 import React,{useCallback, useEffect, useState,useLayoutEffect} from "react";
-import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView} from 'react-native'
+import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView,ToastAndroid} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import Canvas,{Image as CanvasImage} from 'react-native-canvas'
 import { loadDeviceData } from "../../Helpers/AsyncStorageHelper";
-import { Card } from "react-native-paper";
 import Image from 'react-native-fast-image'
 import { Divider } from "react-native-elements";
 import FAB from "../../Components/FABv3";
+import { SERVER_URL,Reachable } from "../../Helpers/AsyncConectionHelper";
+import RNFetchBlob from "rn-fetch-blob";
 
 export default ({navigation,route}) =>
 {
@@ -23,6 +24,8 @@ export default ({navigation,route}) =>
     const [imageuri,setimageuri] = useState(null)
     const [Gbuttonselected,setGbuttonselected] = useState(false)
     const [Cbuttonselected,setCbuttonselected] = useState(true)
+    const [Serverimage,setServerimage] = useState('')
+
 
     const [showGeral,setshowGeral] = useState(false)
 
@@ -32,11 +35,10 @@ export default ({navigation,route}) =>
         setimagesize(((Dimensions.get('window').height*50)/route.params.imageH)/100)
        
         function loadjsondata()
-        {
-            //console.log(route.params.dataname)
-            
+        {       
             loadDeviceData(route.params.dataname).then((shrimpdata)=>
             {
+                setServerimage(shrimpdata.Serverimage)
                 console.log(shrimpdata)
 
                 let tempshrimpcoord = []
@@ -115,7 +117,7 @@ export default ({navigation,route}) =>
         canvas.height = imgH
         //ctx.fillStyle = 'blue'
         //ctx.fillRect(0, 0, width, height)
-        ctx.strokeStyle = 'blue'
+        ctx.strokeStyle = 'red'
         ctx.lineWidth = PixelRatio.roundToNearestPixel(4)
         
 
@@ -466,12 +468,38 @@ export default ({navigation,route}) =>
             right: 0,
             bottom: 0,
             }}>
-                <View style={{ width:PixelRatio.roundToNearestPixel(120) }}>
+                <View style={{ width:PixelRatio.roundToNearestPixel(120)}}>
                     <FAB 
-                    icon={'file-download'} 
+                    icon={'file-download'}
                     text={'PDF'}
                     elevation={PixelRatio.roundToNearestPixel(4)}
-
+                    onPress={async ()=>
+                    {
+                        if(await Reachable())
+                        {
+                            ToastAndroid.show("Baixando",ToastAndroid.SHORT)
+                            const { config, fs } = RNFetchBlob
+                            let PictureDir = fs.dirs.DownloadDir // this is the pictures directory. You can check the available directories in the wiki.
+                            let options = {
+                                fileCache: true,
+                                addAndroidDownloads : {
+                                    useDownloadManager : true, // setting it to true will use the device's native download manager and will be shown in the notification bar.
+                                    notification : true,
+                                    path:  PictureDir + "/PDF FILE:"+ Serverimage.slice(0,Serverimage.length-9) + ".pdf", // this is the path where your downloaded file will live in
+                                    description : 'Downloading image.'
+                                }
+                            }
+                            config(options).fetch('GET', SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-9)+".pdf")).then((res) => {
+                                ToastAndroid.show("Download Finalizado",ToastAndroid.SHORT)
+                            })
+                        }
+                        else
+                        {
+                            alert("Conexão Indisponivel.Por favor, tente novamente")
+                        }
+                        //console.log("Serverimage",Serverimage.slice(0,Serverimage.length-9)+".pdf")
+                       
+                    }}
                     />
                 </View>
 

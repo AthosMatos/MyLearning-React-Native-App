@@ -1,32 +1,33 @@
-import { StyleSheet,PixelRatio,Dimensions} from 'react-native'
+import {Dimensions} from 'react-native'
+import EStyleSheet from "react-native-extended-stylesheet"
+import ResponsiveStuff from '../../Helpers/ResponsiveStuff'
+import { TerciaryColor } from '../../../Defaults'
 
 export const {width, height} = Dimensions.get('window')
 
-export const styles = StyleSheet.create(
+export const styles = EStyleSheet.create(
     {
         Container: 
         {
-            backgroundColor: "#EDF2F4",
+            backgroundColor: TerciaryColor,
             flex: 1,
         },
         logo:
         {
-            height:PixelRatio.getPixelSizeForLayoutSize(110),
-            width:PixelRatio.getPixelSizeForLayoutSize(110),
-            resizeMode:'contain'
-        },
-        newOldlogo:
-        {
-            height:PixelRatio.getPixelSizeForLayoutSize(110),
-            width:PixelRatio.getPixelSizeForLayoutSize(110),
-            resizeMode:'contain'
+            alignSelf:'center',
+            marginTop: ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.05),
+            height:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.4),
+            width:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.4),
+            resizeMode:'contain',
         },
         AnimatedButton:
         {
-            justifyContent:'flex-end',
-            alignItems:'center',
             flex: 1,
-            paddingBottom:height*0.2
+            justifyContent:'flex-end',
+            alignSelf:'center',
+            marginBottom:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.1)
         },
     }
 )
+
+

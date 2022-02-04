@@ -10,7 +10,11 @@ import Info from './actualApp/screens/Info'
 import Historic from './actualApp/screens/Historic'
 import ShrimpInfo from './actualApp/screens/shrimpcontour'
 import HistoricOpenMonth from './actualApp/screens/Historic/HistoricOpenMonth'
+import screentest from "./actualApp/screens/screentest";
 
+import EStyleSheet from 'react-native-extended-stylesheet'
+
+EStyleSheet.build({})
 enableScreens()
 
 const Shared_Stack = createSharedElementStackNavigator()
@@ -32,7 +36,7 @@ export default () =>
 {
     return (
         <Shared_Stack.Navigator
-        initialRouteName="Preload"
+        initialRouteName="MainScreen"
         //detachInactiveScreens
         >
             <Shared_Stack.Screen
@@ -71,6 +75,11 @@ export default () =>
              <Shared_Stack.Screen
             name="HistoricOpenMonth" 
             component={HistoricOpenMonth}
+            options={()=>options}
+            />
+             <Shared_Stack.Screen
+            name="screentest" 
+            component={screentest}
             options={()=>options}
             />
 

@@ -3,7 +3,6 @@ import { PixelRatio } from "react-native"
 import FABv3 from "../../../Components/FABv3"
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
 import {height} from '../styles'
-import { ToogleAll } from "./GeneralAnimation"
 import { SuperZoomButtonPressAnimation } from "../../../Helpers/FewPresetAnimations"
 
 var offsetY
@@ -48,7 +47,7 @@ export default HistoricButton = ({navigation}) =>
             text='Historico' 
             color={'#EDF2F4'} 
             fontColor={'#2B2D42'} 
-            fontSize={PixelRatio.roundToNearestPixel(14)}
+            fontSize={14}
             border={true}
             />
         </Animated.View>

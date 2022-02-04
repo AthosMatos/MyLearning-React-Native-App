@@ -1,10 +1,11 @@
 import React,{useEffect} from "react"
-import {TouchableOpacity,PixelRatio} from "react-native"
+import {TouchableOpacity} from "react-native"
 import { Icon } from "react-native-elements";
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated";
 import {width} from '../styles'
 import { SuperZoomButtonPressAnimation } from "../../../Helpers/FewPresetAnimations";
-import { ToogleAll } from "./GeneralAnimation";
+import { SecondaryColor } from "../../../../Defaults";
+import ResponsiveStuff from "../../../Helpers/ResponsiveStuff";
 
 var offsetY
 var offsetScale
@@ -40,13 +41,13 @@ export default InfoButtom = ({navigation}) =>
         style={[AnimatedStyle]}
         >
             <TouchableOpacity 
-            style={{flexDirection:'row',flex:1,justifyContent:'flex-start',marginLeft:PixelRatio.roundToNearestPixel(20)}} 
+            style={{flexDirection:'row',flex:1,justifyContent:'flex-start',alignItems:'center'}} 
             onPress={()=>
                 {
                     SuperZoomButtonPressAnimation(offsetScale)
                     navigation.navigate('Info')
                 }}>
-                <Icon name='info' color={'#2B2D42'} size={PixelRatio.roundToNearestPixel(40)}/>
+                <Icon name='info' color={SecondaryColor} size={ResponsiveStuff.get_number_ResponsiveLayoutWidthBased(0.1)}/>
             </TouchableOpacity>
         </Animated.View>
         

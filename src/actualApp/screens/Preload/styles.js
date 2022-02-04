@@ -1,33 +1,30 @@
-import { StyleSheet,PixelRatio } from "react-native"
+import EStyleSheet from "react-native-extended-stylesheet"
+import ResponsiveStuff from '../../Helpers/ResponsiveStuff'
+import {TerciaryColor} from '../../../Defaults'
 
-export const styles = StyleSheet.create(
+EStyleSheet.build({})
+
+export const styles = EStyleSheet.create(
     {
         Container: 
         {
-            backgroundColor: "#EDF2F4",
+            backgroundColor: TerciaryColor,
             flex: 1,
             justifyContent: "center",
             alignItems: "center"
         },
-        logoContainer:
-        {
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop:"0%",
-            marginBottom:"40%",
-
-        },
         logo:
         {
-            height:PixelRatio.getPixelSizeForLayoutSize(80),
-            width:PixelRatio.getPixelSizeForLayoutSize(80),
+            height:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.3),
+            width:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.3),
             resizeMode:'contain'
         },
-        newOldlogo:
+        activityindicator:
         {
-            height:PixelRatio.getPixelSizeForLayoutSize(80),
-            width:PixelRatio.getPixelSizeForLayoutSize(80),
-            resizeMode:'contain'
-        },
+           // borderColor:'black',
+            //borderWidth:1,
+            paddingTop:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.2),
+            transform:[{scale:parseFloat(ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.2,100))}]
+        }
     }
 )

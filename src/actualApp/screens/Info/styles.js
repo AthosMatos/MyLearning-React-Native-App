@@ -1,0 +1,74 @@
+import { StyleSheet,PixelRatio } from 'react-native'
+import { height, width } from '../Main/styles'
+
+const ImageSize = 0.66
+
+export const styles = StyleSheet.create({
+    headerText:
+    {
+        marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(5),
+        marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
+        fontWeight:'bold',
+        fontSize:PixelRatio.getPixelSizeForLayoutSize(10),
+        color:'#2B2D42'
+    },
+    normalText:
+    {
+        marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(5),
+        marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
+        fontSize:PixelRatio.getPixelSizeForLayoutSize(6),
+        color:'#2B2D42',
+        textAlign:'justify'
+    },
+    SmallnormalText:
+    {
+        marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(8),
+        marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
+        fontSize:PixelRatio.getPixelSizeForLayoutSize(4),
+        color:'#2B2D42',
+        textAlign:'justify'
+    },
+    TitleText:
+    {
+        marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(5),
+        marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
+        fontSize:PixelRatio.getPixelSizeForLayoutSize(9),
+        fontWeight:'bold',
+        textAlign:'center',
+        color:'#ed7d14',
+    },
+    SmallerTitleText:
+    {
+        marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(5),
+        marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
+        fontSize:PixelRatio.getPixelSizeForLayoutSize(6),
+        fontWeight:'bold',
+        textAlign:'center',
+        color:'#ed7d14',
+    },
+    SampleImage:
+    {
+        height:PixelRatio.getPixelSizeForLayoutSize(50),
+        width:PixelRatio.getPixelSizeForLayoutSize(50),
+    },
+    AppScreenImage:
+    {
+        width:720*((width*ImageSize)/1000),
+        height:1280*((width*ImageSize)/1000),
+        borderColor:'black',
+        borderWidth:2,
+        marginHorizontal:PixelRatio.roundToNearestPixel(4),
+        borderRadius:PixelRatio.roundToNearestPixel(8)
+    },
+    AppScreenImageContainer:
+    {
+        flexDirection:'row',
+    },
+    TextUnderImages:
+    {
+        fontSize:width*0.035,
+        fontWeight:'bold',
+        textAlign:'center',
+        marginBottom:height*0.02
+    }
+})

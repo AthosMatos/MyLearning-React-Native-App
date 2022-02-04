@@ -4,7 +4,7 @@ import Image from 'react-native-fast-image'
 import { getname } from '../../../Helpers/AsyncConectionHelper'
 import { loadDeviceData } from '../../../Helpers/AsyncStorageHelper'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from 'react-native-reanimated'
-import {width} from '../styles'
+import {width,height} from '../styles'
 
 var offset
 
@@ -47,53 +47,48 @@ export default CenterImage = ({uploadDone,photo,navigation}) =>
     }
 
     return (
-        <>
-        {!uploadDone ? 
             <Animated.View 
             style=
             {[{
                 alignItems:'center',
-                marginTop:PixelRatio.roundToNearestPixel(80)
+                marginTop:PixelRatio.getPixelSizeForLayoutSize(30)
             },
             AnimatedStyle
             ]}
             >
+                {!uploadDone ? 
                 <Image 
                 source={photo ? {uri:photo.uri} : require('../../../../assets/exampleimage_1.png')}
                 style={{
                     width:width*0.95,
-                    height:PixelRatio.roundToNearestPixel(250),
+                    height:height*0.3,
                     borderColor:'#2B2D42',
-                    borderWidth:PixelRatio.roundToNearestPixel(6),
-                    borderRadius:PixelRatio.roundToNearestPixel(15)
+                    borderWidth:PixelRatio.getPixelSizeForLayoutSize(3),
+                    borderRadius:PixelRatio.getPixelSizeForLayoutSize(8)
                     }}
                 />
+                :
+                <TouchableOpacity 
+                onPress={func}
+                style=
+                {{
+                    alignItems:'center',
+                    marginTop:PixelRatio.getPixelSizeForLayoutSize(30)
+                }}
+                >   
+                    <Image
+                    source={photo ? {uri:photo.uri} : require('../../../../assets/landscape.png')}
+                    style={{
+                        width:width*0.95,
+                        height:height*0.3,
+                        borderColor:'#2B2D42',
+                        borderWidth:PixelRatio.getPixelSizeForLayoutSize(3),
+                        borderRadius:PixelRatio.getPixelSizeForLayoutSize(8)
+                        }}
+                    />
+                    
+                </TouchableOpacity>
+                }
             </Animated.View>
-        :
-        <Animated.View
-        style={[AnimatedStyle]}>
-            <TouchableOpacity 
-            onPress={func}
-            style=
-            {{
-                alignItems:'center',
-                marginTop:PixelRatio.roundToNearestPixel(80)
-            }}
-            >   
-                <Image
-                source={photo ? {uri:photo.uri} : require('../../../../assets/landscape.png')}
-                style={{
-                    width:width*0.95,
-                    height:PixelRatio.roundToNearestPixel(250),
-                    borderColor:'#2B2D42',
-                    borderWidth:PixelRatio.roundToNearestPixel(6),
-                    borderRadius:PixelRatio.roundToNearestPixel(15),
-                    }}
-                />
-                
-            </TouchableOpacity>
-        </Animated.View>
-        }
-        </>
     )
 }

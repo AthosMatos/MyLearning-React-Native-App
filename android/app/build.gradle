@@ -123,12 +123,16 @@ def enableHermes = project.ext.react.get("enableHermes", true);
 android {
     ndkVersion rootProject.ext.ndkVersion
 
+    lintOptions { 
+        checkReleaseBuilds false
+    }
+
     signingConfigs {
         release {
-            storeFile file('release.keystore')
-            storePassword '2982982'
-            keyAlias 'my-key-alias'
-            keyPassword '2982982'
+            storeFile file('Release.keystore')
+            storePassword '123456'
+            keyAlias 'releasekey'
+            keyPassword '123456'
         }
     }
 
@@ -157,10 +161,10 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            storeFile file('Debug.keystore')
+            storePassword '123456'
+            keyAlias 'debugkey'
+            keyPassword '123456'
         }
        
     buildTypes {

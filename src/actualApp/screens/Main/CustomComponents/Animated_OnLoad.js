@@ -50,9 +50,9 @@ export default OnLoad = ({show,uploadDone,loading,setuploadDone,setisLoading,set
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor:'#EF233C',
-                borderRadius:PixelRatio.roundToNearestPixel(80),
-                width:PixelRatio.roundToNearestPixel(100),
-                height:PixelRatio.roundToNearestPixel(100),
+                borderRadius:PixelRatio.getPixelSizeForLayoutSize(80),
+                width:PixelRatio.getPixelSizeForLayoutSize(50),
+                height:PixelRatio.getPixelSizeForLayoutSize(50),
             }}
             onPress={()=>
             {

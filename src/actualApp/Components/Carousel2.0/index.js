@@ -39,7 +39,9 @@ const carousel = ({toggleModal}) =>
     {
         return (
             <TouchableOpacity 
-            style={{justifyContent:'center',alignItems:'center',marginVertical:PixelRatio.getPixelSizeForLayoutSize(20),}}
+            style={{justifyContent:'center',alignItems:'center',
+            marginVertical:PixelRatio.getPixelSizeForLayoutSize(20),
+            }}
             onPress={()=>
                 {
                     setCoin(item.key)
@@ -47,13 +49,13 @@ const carousel = ({toggleModal}) =>
                 }}
             >
                 <View style={{
-                    backgroundColor:'#EDF2F4',
+                    //backgroundColor:'#EDF2F4',
                     width:width*0.75,
                     height:coinsize*2.2,
-                    borderColor:'#000',
-                    borderWidth:PixelRatio.roundToNearestPixel(6),
-                    borderRadius:PixelRatio.roundToNearestPixel(30),        
-                    overflow: 'hidden',
+                    //borderColor:'#000',
+                    //borderWidth:PixelRatio.roundToNearestPixel(6),
+                    borderRadius:PixelRatio.roundToNearestPixel(30),     
+                    //overflow: 'hidden',
                     }}>
                     <Image source={item.image} 
                     style={{
@@ -63,7 +65,7 @@ const carousel = ({toggleModal}) =>
                         marginLeft:-PixelRatio.roundToNearestPixel(160),
                         //transform: [{ scale: 0.8 }]
                     }}
-                    resizeMode='cover'
+                    resizeMode='contain'
                     
                     />
                 </View>
@@ -83,8 +85,8 @@ const carousel = ({toggleModal}) =>
             enableMomentum 
             enableSnap
             sliderWidth={width}
-            itemWidth={width*0.65}
-            inactiveSlideScale={0.6}
+            itemWidth={width*0.7}
+            inactiveSlideScale={0.5}
             inactiveSlideOpacity={0.4}
             />
           

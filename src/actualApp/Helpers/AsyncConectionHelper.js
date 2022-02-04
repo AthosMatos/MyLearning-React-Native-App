@@ -5,7 +5,7 @@ import {
  } from '../Components/Carousel2.0/CoinVariables'
 import { ToogleInAll } from '../screens/Main/CustomComponents/GeneralAnimation';
 
-const SERVER_URL = 'http://104.251.214.172:4000'
+export const SERVER_URL = 'http://104.251.214.172:4000'
 
 var name
 
@@ -33,24 +33,33 @@ const isReachable  = async (setuploadstatus,setisLoading) =>
     }
 }
 
+export const Reachable  = async () =>
+{
+    const timeout = new Promise((resolve, reject) => {
+        setTimeout(reject, 5000, 'Request timed out');
+    });
+    const request = fetch(SERVER_URL);
+    try {
+        const response = await Promise
+            .race([timeout, request]);
+        return true
+    }
+    catch (error) {
+        
+        return false
+    }
+}
+
 const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef) =>
 {  
     async function pyresq()
     {
         setisLoading(true)
-        setuploadstatus('Analisando')
+        setuploadstatus('Analisando Imagem...')
         const pyrequest = await fetch(`${SERVER_URL}/pytest`)
+
         let Sjson = await pyrequest.json()
-
-        let imageW,imageH
-
-        await Image.getSize(SERVER_URL + '/getimage/' + imageNewname, (width, height) => 
-        {
-            imageW = width
-            imageH = height
-        })
-
-        console.log('json', Sjson)
+        //console.log('json', Sjson)
 
         if(Sjson.error==='image does not follow acquisition standards!')
         {
@@ -58,7 +67,7 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
             if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
             setuploadDone(false)
             setisLoading(false)
-            setuploadstatus('IDLE')
+            setuploadstatus('')
             setphoto(null)
             setshowReset(false)
             ToogleInAll()
@@ -67,10 +76,23 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
             return
         }
 
+        setuploadstatus('Gerando PDF...')
+        await fetch(`${SERVER_URL}/generatepdf`)
+
+        let imageW,imageH
+
+
         function addZero(i) {
             if (i < 10) {i = "0" + i}
             return i;
           }
+
+        setuploadstatus('Salvando no Dispositivo...')
+        await Image.getSize(SERVER_URL + '/getimage/' + imageNewname, (width, height) => 
+        {
+            imageW = width
+            imageH = height
+        })
 
         let date = new Date();
 
@@ -100,15 +122,11 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
         
         await saveDeviceData(name,shrimpdata)
 
-
-
-
         if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
         setuploadDone(true)
         setisLoading(false)
         setshowReset(false)
-        setuploadstatus('Pronto!!')
-        
+        setuploadstatus('Pronto! Clique na imagem central')
     }
     await pyresq()
     
@@ -140,7 +158,7 @@ export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,image
         return false
     }
 
-    setuploadstatus('ENVIANDO...')
+    setuploadstatus('Enviando...')
     setshowloadingButton(true)
     setisLoading(true)
     

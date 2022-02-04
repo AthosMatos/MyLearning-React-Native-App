@@ -6,7 +6,7 @@ import { styles } from "../styles";
 export default SharedElement_Logo = () =>
 {
     return (
-        <SharedElement id="image" style={styles.logoContainer}>
+        <SharedElement id="image">
             <Image style={styles.logo} 
             source = { 
                 //require('../../../assets/logo.png') 

@@ -6,6 +6,7 @@ import SharedElement_Logo from "./CustomComponents/SharedElement_Logo";
 import { useSharedValue,useAnimatedStyle,withSpring } from "react-native-reanimated";
 import { styles } from "./styles";
 import { setCoin } from "../../Components/Carousel2.0/CoinVariables";
+import { TerciaryColor } from "../../../Defaults";
 
 const Preload = ({navigation}) =>
 {
@@ -37,8 +38,10 @@ const Preload = ({navigation}) =>
         <SafeAreaView style = {styles.Container}>
 
             <StatusBar
-            backgroundColor = "#EDF2F4"
-            barStyle={'dark-content'}/>   
+            backgroundColor = {TerciaryColor}
+            barStyle={'dark-content'}
+            
+            />   
             
             <SharedElement_Logo/>
 

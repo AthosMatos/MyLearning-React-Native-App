@@ -1,11 +1,9 @@
 import React,{useEffect, useState} from 'react'
 import {PixelRatio,View,Text} from 'react-native'
-import FABv2 from '../../../Components/FABv2'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle} from "react-native-reanimated"
+import { TerciaryColor } from '../../../../Defaults'
 import {height, width} from '../styles'
-import { DeliciousButtonPressAnimation,DeliciousButtonShowAnimation } from '../../../Helpers/FewPresetAnimations'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Icon } from 'react-native-elements'
+import { styles } from '../styles'
 
 var offsetScale,offsetY
 
@@ -29,7 +27,6 @@ export default ResetButton = ({show,setphoto,setshowReset,LayoutRef}) =>
         
     },[show])
     
-   
     offsetScale = useSharedValue(0)
     offsetY = useSharedValue(0)
 
@@ -48,41 +45,27 @@ export default ResetButton = ({show,setphoto,setshowReset,LayoutRef}) =>
         <>
         {show&&
         <Animated.View 
-        style={[    
-        {
-            //paddingBottom:height*0.01,
-            justifyContent:'flex-start',
-            alignItems:'center',
-           // borderColor:'#000',
-           // borderWidth:2,
-           marginHorizontal:PixelRatio.roundToNearestPixel(10)
-        },
-        AnimatedStyle
-        ]}     
-        >
-        
-        <TouchableOpacity style={
-            {
-                width:PixelRatio.roundToNearestPixel(115),
-                height:PixelRatio.roundToNearestPixel(115),
-                backgroundColor:'red',
-                alignItems:'center',
-                justifyContent:'center',
-                borderRadius:PixelRatio.roundToNearestPixel(20),
-                elevation:4
-            }}
-            onPress={()=>
-            {
-                offsetScale.value = withSpring(1.1)
-                offsetScale.value = withSpring(0)
-                if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
-                setphoto(null)
-                if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
-                setshowReset(false)
-            }}>
-            <Icon name={'close'} color='#FFF'/>
-        </TouchableOpacity>
-       
+        style={[   
+        AnimatedStyle,
+        {flexGrow:1}
+        ]}>
+
+        <ButtomWithIcon 
+        icon={'close'} 
+        iconcolor={TerciaryColor} 
+        Buttonstyle={styles.Buttom3Style}
+        ContainerInsideStyle={{alignItems:'center',justifyContent:'center',}}
+        iconContainerStyle={{marginBottom:0}}
+        iconStyle={styles.iconsize}
+        textstyle={styles.font}
+        onPress={()=>{ 
+            LayoutRef.current.animateNextTransition()
+            offsetScale.value = withSpring(1.1)
+            offsetScale.value = withSpring(0)
+            setphoto(null)
+            setshowReset(false)
+        }}
+        /> 
         </Animated.View>
         }
         </>

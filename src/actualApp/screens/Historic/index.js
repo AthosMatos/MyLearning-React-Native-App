@@ -11,7 +11,7 @@ import RNFS from 'react-native-fs'
 import { useFocusEffect } from "@react-navigation/native";
 import { ToogleInAll } from "../Main/CustomComponents/GeneralAnimation";
 import { AfterInteractions } from "react-native-interactions";
-import Animated_Placeholder from "../../Components/Animated_Placeholder";
+import Animated_Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
 
 const Historic = ({navigation}) =>
 {
