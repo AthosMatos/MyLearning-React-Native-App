@@ -11,6 +11,7 @@ import Historic from './actualApp/screens/Historic'
 import ShrimpInfo from './actualApp/screens/shrimpcontour'
 import HistoricOpenMonth from './actualApp/screens/Historic/HistoricOpenMonth'
 import screentest from "./actualApp/screens/screentest";
+import camera from "./actualApp/Components/camera";
 
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -36,7 +37,7 @@ export default () =>
 {
     return (
         <Shared_Stack.Navigator
-        initialRouteName="MainScreen"
+        initialRouteName="Preload"
         //detachInactiveScreens
         >
             <Shared_Stack.Screen
@@ -75,6 +76,11 @@ export default () =>
              <Shared_Stack.Screen
             name="HistoricOpenMonth" 
             component={HistoricOpenMonth}
+            options={()=>options}
+            />
+            <Shared_Stack.Screen
+            name="camera" 
+            component={camera}
             options={()=>options}
             />
              <Shared_Stack.Screen

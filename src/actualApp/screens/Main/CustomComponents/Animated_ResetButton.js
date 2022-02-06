@@ -59,11 +59,12 @@ export default ResetButton = ({show,setphoto,setshowReset,LayoutRef}) =>
         iconStyle={styles.iconsize}
         textstyle={styles.font}
         onPress={()=>{ 
-            LayoutRef.current.animateNextTransition()
             offsetScale.value = withSpring(1.1)
             offsetScale.value = withSpring(0)
-            setphoto(null)
+            
             setshowReset(false)
+            setphoto(undefined)
+            
         }}
         /> 
         </Animated.View>

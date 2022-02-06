@@ -1,5 +1,5 @@
-import React,{useCallback, useEffect, useState,useLayoutEffect} from "react";
-import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView,ToastAndroid} from 'react-native'
+import React,{useCallback, useEffect, useState} from "react";
+import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView,ToastAndroid, PermissionsAndroid} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import Canvas,{Image as CanvasImage} from 'react-native-canvas'
 import { loadDeviceData } from "../../Helpers/AsyncStorageHelper";
@@ -8,6 +8,7 @@ import { Divider } from "react-native-elements";
 import FAB from "../../Components/FABv3";
 import { SERVER_URL,Reachable } from "../../Helpers/AsyncConectionHelper";
 import RNFetchBlob from "rn-fetch-blob";
+import {DownloadDirectoryPath,DocumentDirectoryPath,downloadFile} from 'react-native-fs'
 
 export default ({navigation,route}) =>
 {
@@ -296,6 +297,35 @@ export default ({navigation,route}) =>
         } 
     }
 
+    async function downloadPDF (url, fileName) {
+        //Define path to store file along with the extension
+        const path = `${DownloadDirectoryPath}/${fileName}.pdf`;
+        const headers = {
+          'Accept': 'application/pdf',
+          'Content-Type': 'application/pdf',
+          'Authorization': `Bearer [token]`
+        }
+        //Define options
+        const options = {
+          fromUrl: [baseUrl] + url,
+          toFile: path,
+          headers: headers
+        }
+        //Call downloadFile
+        const response =  downloadFile(options);
+
+        return response.promise.then(async res =>
+        {
+            if(res && res.statusCode === 200 && res.bytesWritten > 0 && res.path){
+                doSomething(res)
+            }
+            else{
+                logError(res)
+            }
+        })
+          //Transform response
+    }
+
     return (
         <SafeAreaView style={{flex:1,flexGrow:1}}> 
             <StatusBar
@@ -444,7 +474,6 @@ export default ({navigation,route}) =>
             />
             :
             <>
-        
             <Group2
             shrimpamount={shrimpgeral.shrimpamount}
             colorA1={shrimpgeral.colorA1}
@@ -486,12 +515,12 @@ export default ({navigation,route}) =>
                                     useDownloadManager : true, // setting it to true will use the device's native download manager and will be shown in the notification bar.
                                     notification : true,
                                     path:  PictureDir + "/PDF FILE:"+ Serverimage.slice(0,Serverimage.length-9) + ".pdf", // this is the path where your downloaded file will live in
-                                    description : 'Downloading image.'
-                                }
-                            }
-                            config(options).fetch('GET', SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-9)+".pdf")).then((res) => {
-                                ToastAndroid.show("Download Finalizado",ToastAndroid.SHORT)
-                            })
+                                    description : 'Downloading image.',
+                                },
+                            };
+
+                            config(options).fetch(SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-9)+".pdf"))
+
                         }
                         else
                         {
@@ -510,3 +539,8 @@ export default ({navigation,route}) =>
         </SafeAreaView>
     )
 }
+
+
+
+
+

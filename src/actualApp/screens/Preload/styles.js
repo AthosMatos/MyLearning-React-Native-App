@@ -2,8 +2,6 @@ import EStyleSheet from "react-native-extended-stylesheet"
 import ResponsiveStuff from '../../Helpers/ResponsiveStuff'
 import {TerciaryColor} from '../../../Defaults'
 
-EStyleSheet.build({})
-
 export const styles = EStyleSheet.create(
     {
         Container: 

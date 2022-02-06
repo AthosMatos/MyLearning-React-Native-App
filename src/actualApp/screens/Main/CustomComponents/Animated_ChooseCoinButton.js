@@ -25,6 +25,7 @@ export default ChooseCoinButtom = ({toggleModal,photo}) =>
         osffsetY.value = withSpring(0,{damping:15})   
     },[])
 
+
     osffsetY = useSharedValue(height)
 
     const AnimatedStyle = useAnimatedStyle(()=>

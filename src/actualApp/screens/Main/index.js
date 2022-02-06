@@ -19,30 +19,28 @@ import { requestCameraPermission } from "../../Helpers/CameraHelper";
 import { styles } from "./styles";
 import Animated_ResetButton from "./CustomComponents/Animated_ResetButton";
 import Animated_OnLoad from "./CustomComponents/Animated_OnLoad";
-
+import { LayoutRef,setLayoutRef } from "../../../Defaults";
 import {Transitioning,Transition} from "react-native-reanimated";
 
 const mainscreen = ({navigation,route}) =>
 {
     const [photo,setphoto] = useState(null)
     const [showReset,setshowReset] = useState(false)
-    const [uploadstatus,setuploadstatus] = useState('')
+    const [uploadstatus,setuploadstatus] = useState(undefined)
     const [uploadDone,setuploadDone] = useState(false)
     const [showloadingButton,setshowloadingButton] = useState(false)
     const [isLoading,setisLoading] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false)
     const [tooltip,settootip] = useState(0)
 
-    const [text1,settext1] = useState('Escolher Moeda')
-    const [text2,settext2] = useState('Tirar Foto')
-
-    const LayoutRef = createRef()
-
-    useEffect(()=>
+    setLayoutRef(createRef())
+    
+    useState(()=>
     {
         if(LayoutRef.current)LayoutRef.current.animateNextTransition()
+        
     },[photo])
-  
+
     useFocusEffect(
         useCallback(() => {
           const onBackPress = () => 
@@ -57,15 +55,6 @@ const mainscreen = ({navigation,route}) =>
             BackHandler.removeEventListener('hardwareBackPress', onBackPress)
         }, [])
     )
-
-    const undefine = () =>
-    {
-        if(text1){settext1(undefined)}
-        else {settext1('Escolher Moeda')}
-
-        if(text2){settext2(undefined)}
-        else {settext2('Tirar Foto')}
-    }
     
     const toggleModal = () =>
     {
@@ -116,9 +105,9 @@ const mainscreen = ({navigation,route}) =>
 
           <Transitioning.View style = {styles.Container}
           transition={
-          <Transition.Together>
-              <Transition.Change/>
-          </Transition.Together>}
+          <Transition.Sequence>
+              <Transition.Change interpolation="easeInOut"/>
+          </Transition.Sequence>}
           ref={LayoutRef}
           >
         
@@ -139,55 +128,51 @@ const mainscreen = ({navigation,route}) =>
             <Animated_CenterImage photo={photo} uploadDone={uploadDone} navigation={navigation} />
 
 
-            <View style={{
-                justifyContent:'flex-end',
-                //borderColor:'black',
-                //borderWidth:2,
-                flex:1,
-                }}>
-                {!showloadingButton&&
-                <View style={styles.BottomButtonsView}>
-                    
-                    <Animated_ChooseCoinButtom 
-                    toggleModal={toggleModal} 
-                    photo={photo} 
-                    />
-                        
-                    <Animated_PhotoButtom 
-                    handleUploadPhoto={()=>
-                        {
-                            handleUploadPhoto(setuploadstatus,setisLoading,photo,photo.uri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef)
-                        }}
-                    requestCameraPermission={()=>{requestCameraPermission(setphoto,setshowReset)}}
-                    text={text2}
-                    LayoutRef={LayoutRef}
-                    photo={photo}
-                    />
-
-                    <Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset} LayoutRef={LayoutRef}/>
-
-                </View>
-                }
-                <Animated_OnLoad 
-                show={showloadingButton} 
-                uploadDone={uploadDone} 
-                loading={isLoading}
-                setuploadDone ={setuploadDone}
-                setisLoading={setisLoading}
-                setuploadstatus={setuploadstatus}
-                setphoto={setphoto}
-                setshowReset={setshowReset}
-                setshowloadingButton={setshowloadingButton}
+            
+            {!showloadingButton&&
+            <View style={styles.BottomButtonsView}
+            >
+                
+                <Animated_ChooseCoinButtom 
+                toggleModal={toggleModal} 
+                photo={photo} 
                 />
-                {/*<Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset} LayoutRef={LayoutRef}/>*/}
+                    
+                <Animated_PhotoButtom 
+                handleUploadPhoto={()=>
+                    {
+                        handleUploadPhoto(setuploadstatus,setisLoading,photo,photo.uri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef)
+                    }}
+                requestCameraPermission={()=>{requestCameraPermission(setphoto,setshowReset,navigation)}}
+                photo={photo}
+                />
 
-                <View style = {styles.UploadStatusView}>
+                <Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset}/>
 
-                    <Text>{uploadstatus}</Text>
-
-                </View>
+                
 
             </View>
+            }
+            <Animated_OnLoad 
+            show={showloadingButton} 
+            uploadDone={uploadDone} 
+            loading={isLoading}
+            setuploadDone ={setuploadDone}
+            setisLoading={setisLoading}
+            setuploadstatus={setuploadstatus}
+            setphoto={setphoto}
+            setshowReset={setshowReset}
+            setshowloadingButton={setshowloadingButton}
+            />
+            {/*<Animated_ResetButton show={showReset} setphoto={setphoto} setshowReset={setshowReset} LayoutRef={LayoutRef}/>*/}
+
+            
+            <View style = {styles.UploadStatusView}>
+
+            {uploadstatus&& <Text>{uploadstatus}</Text>}
+
+            </View>
+            
 
             <Modal
             isVisible={isModalVisible}

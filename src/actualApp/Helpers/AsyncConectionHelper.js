@@ -64,14 +64,14 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
         if(Sjson.error==='image does not follow acquisition standards!')
         {
             alert('Não foi detectado Camarões.\nPor favor, tente Novamente') //add more info
-            if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+            //if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
             setuploadDone(false)
             setisLoading(false)
-            setuploadstatus('')
+            setuploadstatus(undefined)
             setphoto(null)
             setshowReset(false)
             ToogleInAll()
-            if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+            //if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
             setshowloadingButton(false)
             return
         }
@@ -96,7 +96,7 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
 
         let date = new Date();
 
-        let day = addZero(date.getDay()+2)
+        let day = addZero(date.getDay()-1)
         let month = addZero(date.getMonth()+1)
         let year = date.getFullYear()
         let hours = addZero(date.getHours())
@@ -122,7 +122,7 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
         
         await saveDeviceData(name,shrimpdata)
 
-        if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+        //if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
         setuploadDone(true)
         setisLoading(false)
         setshowReset(false)
@@ -137,8 +137,8 @@ const createFormData = (photo, body = {}) =>
     var data = new FormData()
 
     data.append('photo', {
-      name: photo.fileName,
-      type: photo.type,
+      name: "POTIPHOTO_"+photo.exif.DateTime,
+      type: 'image/jpeg',
       uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
     })
     
@@ -172,7 +172,7 @@ export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,image
             {
                 'content-type': 'multipart/form-data',
                 'Accept':'application/json'
-            }
+            },
         })
         .then((response) => response.json())
         .then((response) => {

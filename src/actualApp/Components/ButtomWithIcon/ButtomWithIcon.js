@@ -11,6 +11,7 @@ export default ButtomWithIcon = ({Buttonstyle,ContainerInsideStyle,text,textstyl
         styles.Buttom,Buttonstyle
     ]}
     onPress={onPress}
+   
     >
         <View style={[styles.ContainerInside,ContainerInsideStyle]}>
 

@@ -60,13 +60,13 @@ export default PhotoButtom = ({requestCameraPermission,handleUploadPhoto,photo,L
                 {
                     
                     handleUploadPhoto()
-                    LayoutRef.current.animateNextTransition()
+                    //LayoutRef.current.animateNextTransition()
                 }
                 :
                 ()=>
                 {
                     requestCameraPermission()
-                    LayoutRef.current.animateNextTransition()
+                    //LayoutRef.current.animateNextTransition()
                 }
         
             }

@@ -4,13 +4,16 @@ import ButtomWithIcon from "../Components/ButtomWithIcon/ButtomWithIcon"
 import ResponsiveStuff from "../Helpers/ResponsiveStuff"
 import EStyleSheet from "react-native-extended-stylesheet"
 import { Transitioning,Transition } from "react-native-reanimated"
+import Camera from "../Components/camera"
 
-const screenTest = () =>
+const screenTest = ({navigation}) =>
 {
     
 
     return (
-    <></>
+    <>
+    
+    </>
     )
 }
 

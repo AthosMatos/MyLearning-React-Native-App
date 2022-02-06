@@ -21,6 +21,8 @@ export const styles = EStyleSheet.create(
         },
         BottomButtonsView:
         {
+            //borderColor:'blue',
+            //borderWidth:2,
             justifyContent:'space-evenly',
             flexDirection:'row',
             marginBottom:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.02),

@@ -1,10 +1,11 @@
-import React,{useEffect} from 'react'
-import { PixelRatio,TouchableOpacity } from 'react-native'
-import Image from 'react-native-fast-image'
+import React,{useEffect, useState} from 'react'
+import { TouchableOpacity,View,Image as RNImage } from 'react-native'
 import { getname } from '../../../Helpers/AsyncConectionHelper'
 import { loadDeviceData } from '../../../Helpers/AsyncStorageHelper'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from 'react-native-reanimated'
-import {width,height} from '../styles'
+import EStyleSheet from 'react-native-extended-stylesheet'
+import ResponsiveStuff from '../../../Helpers/ResponsiveStuff'
+import { LayoutRef } from '../../../../Defaults'
 
 var offset
 
@@ -15,9 +16,38 @@ export function InAnimation()
 
 export default CenterImage = ({uploadDone,photo,navigation}) =>
 {
+    const [aspectRatio,setaspectRatio]= useState(526/371)
+
     useEffect(()=>{
-        offset.value = withSpring(1)   
+        offset.value = withSpring(1)
     },[])
+
+    useEffect(() => {  
+
+        if(photo)
+        {
+            console.log('imagesize' ,photo.width + ' ' + photo.height)
+            console.log('orientation' ,photo.deviceOrientation)
+            
+            if(!(photo.deviceOrientation===1 || photo.deviceOrientation===2))
+            {
+                console.log('aspectratio' ,photo.width/photo.height)
+                setaspectRatio(photo.width/photo.height)
+            }
+            else 
+            {
+                console.log('aspectratio' ,photo.height/photo.width)
+                setaspectRatio(photo.height/photo.width)
+            }
+        }
+        else 
+        {
+            setaspectRatio(526/371)
+        }
+
+    },[photo])
+
+   
 
     offset = useSharedValue(0)
 
@@ -28,7 +58,6 @@ export default CenterImage = ({uploadDone,photo,navigation}) =>
             transform:[{scale:offset.value},]
         }
     },[])
-
 
     async function func()
     {
@@ -45,50 +74,54 @@ export default CenterImage = ({uploadDone,photo,navigation}) =>
             imageH:shrimpdata.imageH,
         })
     }
+   
 
     return (
-            <Animated.View 
+            <Animated.View
             style=
-            {[{
-                alignItems:'center',
-                marginTop:PixelRatio.getPixelSizeForLayoutSize(30)
-            },
-            AnimatedStyle
+            {[styles.container,
+            AnimatedStyle,
             ]}
             >
-                {!uploadDone ? 
-                <Image 
-                source={photo ? {uri:photo.uri} : require('../../../../assets/exampleimage_1.png')}
-                style={{
-                    width:width*0.95,
-                    height:height*0.3,
-                    borderColor:'#2B2D42',
-                    borderWidth:PixelRatio.getPixelSizeForLayoutSize(3),
-                    borderRadius:PixelRatio.getPixelSizeForLayoutSize(8)
-                    }}
-                />
-                :
                 <TouchableOpacity 
+                disabled = {!uploadDone}
                 onPress={func}
-                style=
-                {{
-                    alignItems:'center',
-                    marginTop:PixelRatio.getPixelSizeForLayoutSize(30)
-                }}
+                style={styles.v}
                 >   
-                    <Image
-                    source={photo ? {uri:photo.uri} : require('../../../../assets/landscape.png')}
-                    style={{
-                        width:width*0.95,
-                        height:height*0.3,
-                        borderColor:'#2B2D42',
-                        borderWidth:PixelRatio.getPixelSizeForLayoutSize(3),
-                        borderRadius:PixelRatio.getPixelSizeForLayoutSize(8)
-                        }}
-                    />
+                    <RNImage 
+                    source={photo ? {uri:photo.uri} : require('../../../../assets/exampleimage_1.png')}
+                    style={[styles.Imageborder,
+                    {
+                        width:"100%",
+                        height:undefined,
+                        aspectRatio:aspectRatio
+                    } 
+                    ]}
+                    />    
                     
                 </TouchableOpacity>
-                }
             </Animated.View>
     )
 }
+
+const styles = EStyleSheet.create({
+    container : 
+    {
+        flex: 1,
+        //backgroundColor:'grey',
+        marginVertical:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.025),
+        marginHorizontal:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.005),
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    Imageborder:
+    {
+        borderWidth:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.008),
+        borderRadius:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.035),
+        borderColor:'#2B2D42',
+    },
+    v:
+    {
+        overflow:'hidden',
+    }
+})

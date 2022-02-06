@@ -12,3 +12,9 @@ export function ToogleInAll()
     CI_ToogleAnimation()
     IB_ToogleAnimation()
 }
+
+export let entered = false;
+export function setentered(value)
+{
+    entered = value
+}
