@@ -47,7 +47,7 @@ export default PhotoButtom = ({requestCameraPermission,handleUploadPhoto,photo,L
     return(
         <Animated.View 
         style={[
-        AnimatedStyle,
+       // AnimatedStyle,
         photo&& {flexGrow:1}
         ]}>
             <ButtomWithIcon 

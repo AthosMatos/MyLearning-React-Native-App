@@ -10,42 +10,25 @@ import { TerciaryColor } from "../../../Defaults";
 
 const Preload = ({navigation}) =>
 {
-    const offset = useSharedValue(0)
-    const reanimatedStyle = useAnimatedStyle(()=>
-    {
-        //console.log(progress.value )
-        return{
-            //opacity:progress.value,
-            opacity:offset.value,
-            transform:[{scale:offset.value},]
-        }
-    },[])
-
     setTimeout(() => 
     {  
-       offset.value = withSpring(0)
+       //offset.value = withSpring(0)
        navigation.reset({ routes:[{name: "StartScreen"} ]})
 
     }, 1500);
 
-
     useEffect(()=>{
-        offset.value = withSpring(1)
         setCoin(1)
     },[])
       
     return (
         <SafeAreaView style = {styles.Container}>
 
-            <StatusBar
-            backgroundColor = {TerciaryColor}
-            barStyle={'dark-content'}
-            
-            />   
+            <StatusBar barStyle="dark-content" backgroundColor={TerciaryColor}/>
             
             <SharedElement_Logo/>
 
-            <Animated_ActivityIndicator reanimatedStyle={reanimatedStyle}/>
+            <Animated_ActivityIndicator />
 
         </SafeAreaView>
     )

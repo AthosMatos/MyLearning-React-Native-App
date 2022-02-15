@@ -4,7 +4,6 @@ import ButtomWithIcon from '../../../Components/ButtomWithIcon/ButtomWithIcon'
 import { coinPhoto } from '../../../Components/Carousel2.0/CoinVariables'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
 import {height} from '../styles'
-import { OutJelloDown } from '../../../Helpers/FewPresetAnimations'
 import { styles } from '../styles'
 
 var osffsetY,flex
@@ -41,7 +40,7 @@ export default ChooseCoinButtom = ({toggleModal,photo}) =>
     return(
         <Animated.View
         style={[
-        AnimatedStyle,
+        //AnimatedStyle,
         {flexGrow:1}
         ]}>
             <ButtomWithIcon 

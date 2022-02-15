@@ -1,16 +1,30 @@
-import React,{useEffect} from "react"
-import {Text} from "react-native"
+import React,{useCallback, useEffect, useState} from "react"
+import {StatusBar as RNStatusBar, Text} from "react-native"
 import { ActivityIndicator } from "react-native-paper"
 import Animated,{useSharedValue,useAnimatedStyle,withSpring} from "react-native-reanimated"
 import styles from './styles'
 import { TerciaryColor,PrimaryColor } from "../../../Defaults"
+import { useFocusEffect } from "@react-navigation/native"
 
-export default Placeholder = () => 
+export default Placeholder = ({style,textStyle,activityindicatorColor,StatusBar}) => 
 {
+    const [remount,setremount] = useState() 
+
     useEffect(()=>{
         offset.value = withSpring(1)   
     },[])
 
+    useFocusEffect(
+        useCallback(() => {
+
+            setremount(true) 
+        
+            return () =>{
+            
+                setremount(false)
+            }
+        }, [])
+    )
     const offset = useSharedValue(-1)
 
     const AnimatedStyle = useAnimatedStyle(()=>
@@ -30,11 +44,13 @@ export default Placeholder = () =>
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:TerciaryColor
-    },AnimatedStyle
+    },
+    style,
+    //AnimatedStyle
     ]}
     >
-        <Text style={styles.Text}>Carregando...</Text>
-        <ActivityIndicator style={styles.activityindicator} size={'large'} color={PrimaryColor}/>
+        <Text style={[styles.Text,textStyle]}>Carregando...</Text>
+        <ActivityIndicator style={styles.activityindicator} size={'large'} color={!activityindicatorColor? PrimaryColor : activityindicatorColor}/>
 
     </Animated.View>
     )

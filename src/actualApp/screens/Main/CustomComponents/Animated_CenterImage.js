@@ -75,27 +75,21 @@ export default CenterImage = ({uploadDone,photo,navigation}) =>
         })
     }
    
-
     return (
             <Animated.View
             style=
             {[styles.container,
-            AnimatedStyle,
+            //AnimatedStyle,
             ]}
             >
                 <TouchableOpacity 
                 disabled = {!uploadDone}
                 onPress={func}
-                style={styles.v}
+                
                 >   
                     <RNImage 
                     source={photo ? {uri:photo.uri} : require('../../../../assets/exampleimage_1.png')}
-                    style={[styles.Imageborder,
-                    {
-                        width:"100%",
-                        height:undefined,
-                        aspectRatio:aspectRatio
-                    } 
+                    style={[getimgstyle(aspectRatio).image,styles.Imageborder
                     ]}
                     />    
                     
@@ -104,11 +98,28 @@ export default CenterImage = ({uploadDone,photo,navigation}) =>
     )
 }
 
+const getimgstyle = (aspectRatio) =>
+{
+    return (
+        EStyleSheet.create({
+            image:
+            {
+                width:"100%",
+                height:undefined,
+                aspectRatio:aspectRatio,
+                maxHeight:'100%',
+                maxWidth:'100%',
+            }
+        })
+    )
+}
+
 const styles = EStyleSheet.create({
     container : 
     {
         flex: 1,
         //backgroundColor:'grey',
+        height:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.35),
         marginVertical:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.025),
         marginHorizontal:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.005),
         justifyContent:'center',
@@ -120,8 +131,5 @@ const styles = EStyleSheet.create({
         borderRadius:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.035),
         borderColor:'#2B2D42',
     },
-    v:
-    {
-        overflow:'hidden',
-    }
+    
 })

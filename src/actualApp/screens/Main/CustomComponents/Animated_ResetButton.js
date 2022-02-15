@@ -46,7 +46,7 @@ export default ResetButton = ({show,setphoto,setshowReset,LayoutRef}) =>
         {show&&
         <Animated.View 
         style={[   
-        AnimatedStyle,
+        //AnimatedStyle,
         {flexGrow:1}
         ]}>
 

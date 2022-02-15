@@ -9,6 +9,8 @@ import WhatDoIneed from "./CustomComponents/WhatDoIneed";
 import { styles } from "./styles";
 import ScreensSamples from "./CustomComponents/ScreensSamples";
 import DescriptionScreens from "./CustomComponents/DescriptionScreens";
+import Animated_Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
+import { AfterInteractions } from "react-native-interactions";
 
 const Info = ({navigation}) =>
 {
@@ -27,79 +29,82 @@ const Info = ({navigation}) =>
     )
 
     return (
-        <ScrollView style = {{backgroundColor:'#fff',flex:1}}>
+        <AfterInteractions placeholder={<Animated_Placeholder/>}>
 
-            <StatusBar
-            backgroundColor = "#EDF2F4"
-            barStyle={'dark-content'}
-            />   
-    	    <View style=
-            {{
-                flexDirection:'row',
-                backgroundColor:'#EDF2F4',   
-            }}>
-                <View style={{
-                    alignItems:'flex-start',
-                    justifyContent:'center',
-                    marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(5),
-                    marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
-                    }}>
-                    <Image source={require('./imagens/logo.png')} 
-                    style={{
-                        height:PixelRatio.getPixelSizeForLayoutSize(30),
-                        width:PixelRatio.getPixelSizeForLayoutSize(30),
-                    }}
-                    />
+            <ScrollView style = {{backgroundColor:'#fff',flex:1}}>
+
+                <StatusBar
+                backgroundColor = "#EDF2F4"
+                barStyle={'dark-content'}
+                />   
+                <View style=
+                {{
+                    flexDirection:'row',
+                    backgroundColor:'#EDF2F4',   
+                }}>
+                    <View style={{
+                        alignItems:'flex-start',
+                        justifyContent:'center',
+                        marginHorizontal:PixelRatio.getPixelSizeForLayoutSize(5),
+                        marginVertical:PixelRatio.getPixelSizeForLayoutSize(3),
+                        }}>
+                        <Image source={require('./imagens/logo.png')} 
+                        style={{
+                            height:PixelRatio.getPixelSizeForLayoutSize(30),
+                            width:PixelRatio.getPixelSizeForLayoutSize(30),
+                        }}
+                        />
+                    </View>
+                
+                    <View style={{
+                        flex:1,alignItems:'flex-end',
+                        justifyContent:'center',
+                        //borderWidth:2,
+                        //borderColor:'green',
+                        }}>
+                        <Text style={styles.headerText}>PotiTutorial</Text>
+                    </View>
+                
                 </View>
-            
-                <View style={{
-                    flex:1,alignItems:'flex-end',
-                    justifyContent:'center',
-                    //borderWidth:2,
-                    //borderColor:'green',
-                    }}>
-                    <Text style={styles.headerText}>PotiTutorial</Text>
+
+                <Text style={styles.normalText}>
+                    {"Se você está lendo este tutorial é porque agora você faz parte do clube da PotiMarket." +
+                    "Este documento apresentará um tutorial sobre o uso dessa ferramenta, mostrando um passo a passo da navegação entre suas telas (interface gráfica).\n" + 
+                    "Muito obrigado pela confiança e esperamos que nossa ferramenta facilite seu dia a dia e lhe deixe completamente informado sobre o que você está prestes a consumir."}
+                </Text>
+                
+                <WhatDoIneed/>
+
+                <Text style={styles.TitleText}>Antes de tirar a foto</Text>
+                
+                <Text style={[styles.normalText]}>
+                        {'•Busque uma posição/local com iluminação indireta e suficiente para captura de foto dos camarões dispostos no PSP;\n\n' +
+                        '•Limpe e retire o excesso de água sobre o PSP e coloque-o em uma superfície plana.'
+                        }
+                </Text>
+
+                <ScreensSamples/>
+
+                <DescriptionScreens/>
+
+                <View style=
+                {{
+                    flexDirection:'row',
+                    backgroundColor:'#ed7d14',   
+                }}>
+                
+                    <View style={{
+                        flex:1,alignItems:'flex-end',
+                        justifyContent:'center',
+                        //borderWidth:2,
+                        //borderColor:'green',
+                        }}>
+                        <Text style={styles.SmallnormalText}>© Copyright PotiQuality - 2022</Text>
+                    </View>
+                
                 </View>
-            
-            </View>
-
-            <Text style={styles.normalText}>
-                {"Se você está lendo este tutorial é porque agora você faz parte do clube da PotiMarket." +
-                "Este documento apresentará um tutorial sobre o uso dessa ferramenta, mostrando um passo a passo da navegação entre suas telas (interface gráfica).\n" + 
-                "Muito obrigado pela confiança e esperamos que nossa ferramenta facilite seu dia a dia e lhe deixe completamente informado sobre o que você está prestes a consumir."}
-            </Text>
-            
-            <WhatDoIneed/>
-
-            <Text style={styles.TitleText}>Antes de tirar a foto</Text>
-            
-            <Text style={[styles.normalText]}>
-                    {'•Busque uma posição/local com iluminação indireta e suficiente para captura de foto dos camarões dispostos no PSP;\n\n' +
-                    '•Limpe e retire o excesso de água sobre o PSP e coloque-o em uma superfície plana.'
-                    }
-            </Text>
-
-            <ScreensSamples/>
-
-            <DescriptionScreens/>
-
-            <View style=
-            {{
-                flexDirection:'row',
-                backgroundColor:'#ed7d14',   
-            }}>
-            
-                <View style={{
-                    flex:1,alignItems:'flex-end',
-                    justifyContent:'center',
-                    //borderWidth:2,
-                    //borderColor:'green',
-                    }}>
-                    <Text style={styles.SmallnormalText}>© Copyright PotiQuality - 2022</Text>
-                </View>
-            
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </AfterInteractions>
     )
 }
 export default Info

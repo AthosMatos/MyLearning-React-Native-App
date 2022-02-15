@@ -14,6 +14,7 @@ import screentest from "./actualApp/screens/screentest";
 import camera from "./actualApp/Components/camera";
 
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { StatusBar } from "react-native";
 
 EStyleSheet.build({})
 enableScreens()
@@ -38,56 +39,48 @@ export default () =>
     return (
         <Shared_Stack.Navigator
         initialRouteName="Preload"
+        screenOptions={()=>options}
         //detachInactiveScreens
         >
-            <Shared_Stack.Screen
-            name="Preload" 
-            component={Preload}
-            options={()=>options}
-            />
+          <Shared_Stack.Screen
+          name="Preload" 
+          component={Preload}
+          />
 
-            <Shared_Stack.Screen
-            name="StartScreen" 
-            component={StartScreen}
-            options={()=>options}
-            />
+          <Shared_Stack.Screen
+          name="StartScreen" 
+          component={StartScreen}
+          />
 
-            <Shared_Stack.Screen
-            name="MainScreen" 
-            component={MainScreen}
-            options={()=>options}
-            />
+          <Shared_Stack.Screen
+          name="MainScreen" 
+          component={MainScreen}
+          />
 
+          <Shared_Stack.Screen
+          name="Info" 
+          component={Info}
+          />
             <Shared_Stack.Screen
-            name="Info" 
-            component={Info}
-            options={()=>options}
-            />
-             <Shared_Stack.Screen
-            name="Historic" 
-            component={Historic}
-            options={()=>options}
-            />
-             <Shared_Stack.Screen
-            name="ShrimpInfo" 
-            component={ShrimpInfo}
-            options={()=>options}
-            />
-             <Shared_Stack.Screen
-            name="HistoricOpenMonth" 
-            component={HistoricOpenMonth}
-            options={()=>options}
-            />
+          name="Historic" 
+          component={Historic}
+          />
             <Shared_Stack.Screen
-            name="camera" 
-            component={camera}
-            options={()=>options}
-            />
-             <Shared_Stack.Screen
-            name="screentest" 
-            component={screentest}
-            options={()=>options}
-            />
+          name="ShrimpInfo" 
+          component={ShrimpInfo}
+          />
+            <Shared_Stack.Screen
+          name="HistoricOpenMonth" 
+          component={HistoricOpenMonth}
+          />
+          <Shared_Stack.Screen
+          name="camera" 
+          component={camera}
+          />
+            <Shared_Stack.Screen
+          name="screentest" 
+          component={screentest}
+          />
 
         </Shared_Stack.Navigator>
     )

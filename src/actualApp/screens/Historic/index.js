@@ -12,6 +12,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { ToogleInAll } from "../Main/CustomComponents/GeneralAnimation";
 import { AfterInteractions } from "react-native-interactions";
 import Animated_Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
+import { PrimaryColor } from "../../../Defaults";
 
 const Historic = ({navigation}) =>
 {
@@ -268,13 +269,10 @@ const Historic = ({navigation}) =>
 
             <SafeAreaView style = {{backgroundColor:'#EDF2F4',flex:1}}>
 
-                <StatusBar
-                backgroundColor = "#EF233C"
-                barStyle={'dark-content'}
-                />
+                <StatusBar translucent barStyle="dark-content" backgroundColor={'rgba(0,0,0,0)'}/>
 
                 <Header
-                backgroundColor="#EF233C"
+                backgroundColor={PrimaryColor}
                 leftComponent=
                 {
                     <Text

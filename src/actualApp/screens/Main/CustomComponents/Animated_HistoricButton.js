@@ -3,7 +3,6 @@ import { PixelRatio } from "react-native"
 import FABv3 from "../../../Components/FABv3"
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
 import {height} from '../styles'
-import { SuperZoomButtonPressAnimation } from "../../../Helpers/FewPresetAnimations"
 
 var offsetY
 var offsetScale
@@ -36,11 +35,13 @@ export default HistoricButton = ({navigation}) =>
 
     return (
         <Animated.View
-        style={[{flexDirection:'row',flex:1,justifyContent:'flex-end'},AnimatedStyleEnter]}>
+        style={[{flexDirection:'row',flex:1,justifyContent:'flex-end'},
+        //AnimatedStyleEnter
+        ]}>
             <FABv3 
             onPress={()=>
                 {   
-                    SuperZoomButtonPressAnimation(offsetScale)
+                    //SuperZoomButtonPressAnimation(offsetScale)
 
                     navigation.navigate('Historic')
                 }} 

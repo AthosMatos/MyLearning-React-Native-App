@@ -7,15 +7,13 @@ import Animated_Button from "./CustomComponents/Animated_Button";
 import Image from 'react-native-fast-image'
 import { TerciaryColor } from "../../../Defaults";
 
-const mainscreen = ({navigation}) =>
+const startsreen = ({navigation}) =>
 {
     return (
         <SafeAreaView style = {styles.Container}>
-            
-            <StatusBar
-            backgroundColor = {TerciaryColor}
-            barStyle={'dark-content'}/>
-        
+             
+            <StatusBar barStyle="dark-content" backgroundColor={TerciaryColor}/>
+
             <SharedElement id="image">
                 <Image style={styles.logo}
                 source = { 
@@ -30,9 +28,9 @@ const mainscreen = ({navigation}) =>
     )
 }
 
-mainscreen.sharedElements = (route, otherRoute, showing) =>
+startsreen.sharedElements = (route, otherRoute, showing) =>
 [
     {id: 'image',animation: 'move',resize:'auto'}, 
 ]
 
-export default mainscreen
+export default startsreen

@@ -10,11 +10,11 @@ export default () =>
     return (
         <UserContextProvider>
             <NavigationContainer>
-            <OrientationLocker
-            orientation={PORTRAIT}
-            />
+                <OrientationLocker
+                orientation={PORTRAIT}
+                />
                 <MainStack/>
             </NavigationContainer>
-        </UserContextProvider>
+        </UserContextProvider>     
     )
 }

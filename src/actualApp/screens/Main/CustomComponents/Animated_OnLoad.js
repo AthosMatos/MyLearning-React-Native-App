@@ -43,7 +43,7 @@ export default OnLoad = ({show,uploadDone,loading,setuploadDone,setisLoading,set
                 alignItems: 'center',
                 paddingBottom:height*0.05
             },
-            AnimatedStyle
+            //AnimatedStyle
             ]}>
             
             <TouchableOpacity style={{

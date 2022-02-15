@@ -16,7 +16,7 @@ export default styles = EStyleSheet.create(
         {
             color:FontLightColor,
             fontSize:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.025),
-            marginVertical:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.022),
+            marginVertical:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.038),
             marginHorizontal:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.08),
         }
     })

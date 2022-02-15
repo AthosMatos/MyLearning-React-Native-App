@@ -9,6 +9,8 @@ import FAB from "../../Components/FABv3";
 import { SERVER_URL,Reachable } from "../../Helpers/AsyncConectionHelper";
 import RNFetchBlob from "rn-fetch-blob";
 import {DownloadDirectoryPath,DocumentDirectoryPath,downloadFile} from 'react-native-fs'
+import { AfterInteractions } from "react-native-interactions";
+import Animated_Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
 
 export default ({navigation,route}) =>
 {
@@ -118,7 +120,7 @@ export default ({navigation,route}) =>
         canvas.height = imgH
         //ctx.fillStyle = 'blue'
         //ctx.fillRect(0, 0, width, height)
-        ctx.strokeStyle = 'red'
+        ctx.strokeStyle = 'orange'
         ctx.lineWidth = PixelRatio.roundToNearestPixel(4)
         
 
@@ -327,6 +329,8 @@ export default ({navigation,route}) =>
     }
 
     return (
+        <AfterInteractions placeholder={<Animated_Placeholder/>}>
+
         <SafeAreaView style={{flex:1,flexGrow:1}}> 
             <StatusBar
                 backgroundColor = "#FFF"
@@ -378,7 +382,6 @@ export default ({navigation,route}) =>
                 </View>   
                 }
                 
-                
                 <TouchableOpacity onPress={() =>{}}>
                     <Canvas ref = {handleCanvas} />
                 </TouchableOpacity>
@@ -391,7 +394,7 @@ export default ({navigation,route}) =>
                 justifyContent:'space-evenly',
                 elevation:PixelRatio.getPixelSizeForLayoutSize(2),
                 backgroundColor:'rgba(255,255,255,1)'
-            }}>
+                }}>
                 
                 <TouchableOpacity style={
                 !Gbuttonselected?
@@ -401,7 +404,7 @@ export default ({navigation,route}) =>
                 alignItems:'center',
                 backgroundColor:'#828282',
                 flex:1
-                } 
+                }
                 :
                 {
                     height:PixelRatio.roundToNearestPixel(70),
@@ -519,7 +522,7 @@ export default ({navigation,route}) =>
                                 },
                             };
 
-                            config(options).fetch(SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-9)+".pdf"))
+                            //config(options).fetch(SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-6)+".pdf"))
 
                         }
                         else
@@ -537,6 +540,7 @@ export default ({navigation,route}) =>
             }
            
         </SafeAreaView>
+        </AfterInteractions>
     )
 }
 

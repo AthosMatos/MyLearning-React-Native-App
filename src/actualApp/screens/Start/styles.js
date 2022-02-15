@@ -15,7 +15,7 @@ export const styles = EStyleSheet.create(
         logo:
         {
             alignSelf:'center',
-            marginTop: ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.05),
+            marginTop: ResponsiveStuff.get_number_ResponsiveLayoutHeightBased(0.12),
             height:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.4),
             width:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.4),
             resizeMode:'contain',
@@ -23,9 +23,12 @@ export const styles = EStyleSheet.create(
         AnimatedButton:
         {
             flex: 1,
-            justifyContent:'flex-end',
+            //borderWidth:2,
+            //borderColor:'black',
+            marginTop:ResponsiveStuff.get_number_ResponsiveLayoutHeightBased(0.08),
+            justifyContent:'center',
             alignSelf:'center',
-            marginBottom:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.1)
+            
         },
     }
 )
