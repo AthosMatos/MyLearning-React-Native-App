@@ -137,9 +137,10 @@ const createFormData = (photo, body = {}) =>
     var data = new FormData()
 
     data.append('photo', {
-      name: "POTIPHOTO_"+photo.exif.DateTime,
-      type: 'image/jpeg',
-      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+        name: "POTIPHOTO_"+ photo.exif.DateTime,
+        //name: "POTIPHOTO_"+ "date",
+        type: 'image/jpeg',
+        uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
     })
     
     Object.keys(body).forEach((key) => {

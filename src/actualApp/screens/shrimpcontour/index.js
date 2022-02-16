@@ -8,9 +8,11 @@ import { Divider } from "react-native-elements";
 import FAB from "../../Components/FABv3";
 import { SERVER_URL,Reachable } from "../../Helpers/AsyncConectionHelper";
 import RNFetchBlob from "rn-fetch-blob";
-import {DownloadDirectoryPath,DocumentDirectoryPath,downloadFile} from 'react-native-fs'
+import {DownloadDirectoryPath,downloadFile,DocumentDirectoryPath} from 'react-native-fs'
 import { AfterInteractions } from "react-native-interactions";
 import Animated_Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
+import FileViewer from "react-native-file-viewer";
+
 
 export default ({navigation,route}) =>
 {
@@ -33,6 +35,8 @@ export default ({navigation,route}) =>
     const [showGeral,setshowGeral] = useState(false)
 
     useEffect(() => {
+
+       // console.log(DocumentDirectoryPath)
 
         setimageuri(route.params.imageuri)
         setimagesize(((Dimensions.get('window').height*50)/route.params.imageH)/100)
@@ -300,16 +304,20 @@ export default ({navigation,route}) =>
     }
 
     async function downloadPDF (url, fileName) {
-        //Define path to store file along with the extension
-        const path = `${DownloadDirectoryPath}/${fileName}.pdf`;
+
+       // const path = DownloadDirectoryPath+fl
+       
+        const path = DocumentDirectoryPath+"/PotiPDF.pdf"
+
+        console.log("PATH: ",path)
+
         const headers = {
           'Accept': 'application/pdf',
           'Content-Type': 'application/pdf',
-          'Authorization': `Bearer [token]`
         }
         //Define options
         const options = {
-          fromUrl: [baseUrl] + url,
+          fromUrl: url,
           toFile: path,
           headers: headers
         }
@@ -318,16 +326,31 @@ export default ({navigation,route}) =>
 
         return response.promise.then(async res =>
         {
-            if(res && res.statusCode === 200 && res.bytesWritten > 0 && res.path){
-                doSomething(res)
+            console.log(res)
+
+            if(res && res.statusCode === 200 && res.bytesWritten > 0){
+                //doSomething(res)
             }
             else{
-                logError(res)
+                //logError(res)
+                console.log("error")
             }
+        }).then(()=>{
+            ToastAndroid.show("Terminado",ToastAndroid.SHORT)
+            console.log("done")
+            FileViewer.open(path) // absolute-path-to-my-local-file.
+            .then(() => {
+            // success
+            console.log("file opened")
+            })
+            .catch((error) => {
+            // error
+            })
         })
           //Transform response
     }
 
+   
     return (
         <AfterInteractions placeholder={<Animated_Placeholder/>}>
 
@@ -510,19 +533,13 @@ export default ({navigation,route}) =>
                         if(await Reachable())
                         {
                             ToastAndroid.show("Baixando",ToastAndroid.SHORT)
-                            const { config, fs } = RNFetchBlob
-                            let PictureDir = fs.dirs.DownloadDir // this is the pictures directory. You can check the available directories in the wiki.
-                            let options = {
-                                fileCache: true,
-                                addAndroidDownloads : {
-                                    useDownloadManager : true, // setting it to true will use the device's native download manager and will be shown in the notification bar.
-                                    notification : true,
-                                    path:  PictureDir + "/PDF FILE:"+ Serverimage.slice(0,Serverimage.length-9) + ".pdf", // this is the path where your downloaded file will live in
-                                    description : 'Downloading image.',
-                                },
-                            };
 
-                            //config(options).fetch(SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-6)+".pdf"))
+                            // this is the pictures directory. You can check the available directories in the wiki.
+
+                            downloadPDF(SERVER_URL + '/getpdf/'+ (Serverimage.slice(0,Serverimage.length-9)+".pdf"),"/PDF_FILE:"+ Serverimage.slice(0,Serverimage.length-18) + ".pdf")
+
+                            console.log("SERVER PDF: ",Serverimage.slice(0,Serverimage.length-9) + ".pdf")
+                            //console.log(Serverimage.slice(0,Serverimage.length-9) + ".pdf")
 
                         }
                         else

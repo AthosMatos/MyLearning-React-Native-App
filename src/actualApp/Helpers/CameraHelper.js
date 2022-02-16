@@ -1,7 +1,7 @@
 import { PermissionsAndroid } from "react-native"
 import { launchCamera ,launchImageLibrary} from "react-native-image-picker"
 
-const handleChoosePhoto = ({setphoto}) =>
+const handleChoosePhoto = (setphoto,setshowReset) =>
     {
         launchImageLibrary({ noData: true }, (response) => {
             // console.log(response);
@@ -9,6 +9,7 @@ const handleChoosePhoto = ({setphoto}) =>
             console.log(response.assets[0].height)
             console.log(response.assets[0].width)
             setphoto(response.assets[0])
+            setshowReset(true)
             }
         })
     }
@@ -34,7 +35,9 @@ export const requestCameraPermission = async (setphoto,setshowReset,navigation) 
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log("Camera permission given");
+
         handleTakePhoto(setphoto,setshowReset,navigation)
+        //handleChoosePhoto(setphoto,setshowReset)
 
         } else {
         console.log("Camera permission denied");

@@ -19,8 +19,9 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true" tools:targetApi="28"
       android:requestLegacyExternalStorage="true">
-    
       >     
+
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -28,9 +29,11 @@
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
+
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
-              <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            
         </intent-filter>
       </activity>
     </application>
