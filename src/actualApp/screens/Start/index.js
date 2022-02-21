@@ -1,30 +1,30 @@
-import React from "react";
-import { StatusBar} from 'react-native'
-import { SafeAreaView } from "react-native-safe-area-context";
-import { SharedElement } from "react-navigation-shared-element";
+import React, { useCallback } from "react";
+import { StatusBar,View} from 'react-native'
 import { styles } from "./styles";
 import Animated_Button from "./CustomComponents/Animated_Button";
-import Image from 'react-native-fast-image'
 import { TerciaryColor } from "../../../Defaults";
+import { useFocusEffect } from "@react-navigation/native";
+import SharedElement_Logo from "./CustomComponents/SharedElement_Logo";
 
-const startsreen = ({navigation}) =>
+const startsreen = () =>
 {
+    useFocusEffect(
+        useCallback(() => {
+
+            StatusBar.setBackgroundColor(TerciaryColor,true)
+            StatusBar.setBarStyle("dark-content",true)
+           
+        }, [])
+    )
+
     return (
-        <SafeAreaView style = {styles.Container}>
-             
-            <StatusBar barStyle="dark-content" backgroundColor={TerciaryColor}/>
+        <View style = {styles.Container}>
 
-            <SharedElement id="image">
-                <Image style={styles.logo}
-                source = { 
-                    //require('../../../assets/logo.png') 
-                    require('../../../assets/newOldLogo.png') 
-                    }/>
-            </SharedElement>
+            <SharedElement_Logo/>
             
-            <Animated_Button navigation={navigation} />
+            <Animated_Button />
 
-        </SafeAreaView>
+        </View>
     )
 }
 

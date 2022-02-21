@@ -14,32 +14,31 @@ import screentest from "./actualApp/screens/screentest";
 import camera from "./actualApp/Components/camera";
 
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { StatusBar } from "react-native";
 
 EStyleSheet.build({})
 enableScreens()
 
 const Shared_Stack = createSharedElementStackNavigator()
 
-const options = {
-  headerShown:false,
-  cardStyleInterpolator: ({ current: { progress } }) => 
-  {
-    return {
-      cardStyle: {
-        opacity: progress
-      }
-    }
-  },
-
-}
-
 export default () =>
 {
     return (
         <Shared_Stack.Navigator
         initialRouteName="Preload"
-        screenOptions={()=>options}
+        screenOptions={
+          {
+            headerShown:false,
+            detachPreviousScreen:true,
+            cardStyleInterpolator: ({ current: { progress } }) => 
+            {
+              return {
+                cardStyle: {
+                  opacity: progress
+                }
+              }
+            },
+          }
+        }
         //detachInactiveScreens
         >
           <Shared_Stack.Screen

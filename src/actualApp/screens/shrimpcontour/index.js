@@ -1,20 +1,20 @@
 import React,{useCallback, useEffect, useState} from "react";
-import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView,ToastAndroid, PermissionsAndroid} from 'react-native'
+import {Dimensions,View,StatusBar,Text,ActivityIndicator,PixelRatio,FlatList,TouchableOpacity, ScrollView,ToastAndroid} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import Canvas,{Image as CanvasImage} from 'react-native-canvas'
+import Canvas from 'react-native-canvas'
 import { loadDeviceData } from "../../Helpers/AsyncStorageHelper";
 import Image from 'react-native-fast-image'
 import { Divider } from "react-native-elements";
 import FAB from "../../Components/FABv3";
 import { SERVER_URL,Reachable } from "../../Helpers/AsyncConectionHelper";
-import RNFetchBlob from "rn-fetch-blob";
-import {DownloadDirectoryPath,downloadFile,DocumentDirectoryPath} from 'react-native-fs'
+import {downloadFile,DocumentDirectoryPath} from 'react-native-fs'
 import { AfterInteractions } from "react-native-interactions";
 import Animated_Placeholder from "../../Components/Animated_Placeholder/Animated_Placeholder";
 import FileViewer from "react-native-file-viewer";
+import ResponsiveStuff from "../../Helpers/ResponsiveStuff";
 
 
-export default ({navigation,route}) =>
+export default ({route}) =>
 {
     const [isloading,setloading] = useState(true)
     const [shrimpcoord,setshrimpcoord] = useState([])
@@ -125,7 +125,7 @@ export default ({navigation,route}) =>
         //ctx.fillStyle = 'blue'
         //ctx.fillRect(0, 0, width, height)
         ctx.strokeStyle = 'orange'
-        ctx.lineWidth = PixelRatio.roundToNearestPixel(4)
+        ctx.lineWidth = ResponsiveStuff.get_number_ResponsiveLayoutWidthBased(0.01)
         
 
         if(!showGeral)

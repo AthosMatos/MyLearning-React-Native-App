@@ -2,7 +2,6 @@ import React,{useEffect,useCallback} from "react";
 import { StyleSheet, View,StatusBar,PixelRatio,BackHandler,useWindowDimensions, ScrollView,Text,Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import { ToogleInAll } from "../Main/CustomComponents/GeneralAnimation";
 import { height } from "../Main/styles";
 import { Card } from "react-native-paper";
 import WhatDoIneed from "./CustomComponents/WhatDoIneed";
@@ -18,7 +17,6 @@ const Info = ({navigation}) =>
         useCallback(() => {
             const onBackPress = () => 
             {
-                ToogleInAll()
             }
 
             BackHandler.addEventListener('hardwareBackPress', onBackPress)
@@ -29,10 +27,9 @@ const Info = ({navigation}) =>
     )
 
     return (
-        <AfterInteractions placeholder={<Animated_Placeholder/>}>
+        <Animated_Placeholder>
 
             <ScrollView style = {{backgroundColor:'#fff',flex:1}}>
-
                 <StatusBar
                 backgroundColor = "#EDF2F4"
                 barStyle={'dark-content'}
@@ -55,7 +52,7 @@ const Info = ({navigation}) =>
                         }}
                         />
                     </View>
-                
+
                     <View style={{
                         flex:1,alignItems:'flex-end',
                         justifyContent:'center',
@@ -64,7 +61,7 @@ const Info = ({navigation}) =>
                         }}>
                         <Text style={styles.headerText}>PotiTutorial</Text>
                     </View>
-                
+
                 </View>
 
                 <Text style={styles.normalText}>
@@ -72,11 +69,11 @@ const Info = ({navigation}) =>
                     "Este documento apresentará um tutorial sobre o uso dessa ferramenta, mostrando um passo a passo da navegação entre suas telas (interface gráfica).\n" + 
                     "Muito obrigado pela confiança e esperamos que nossa ferramenta facilite seu dia a dia e lhe deixe completamente informado sobre o que você está prestes a consumir."}
                 </Text>
-                
+
                 <WhatDoIneed/>
 
                 <Text style={styles.TitleText}>Antes de tirar a foto</Text>
-                
+
                 <Text style={[styles.normalText]}>
                         {'•Busque uma posição/local com iluminação indireta e suficiente para captura de foto dos camarões dispostos no PSP;\n\n' +
                         '•Limpe e retire o excesso de água sobre o PSP e coloque-o em uma superfície plana.'
@@ -92,7 +89,7 @@ const Info = ({navigation}) =>
                     flexDirection:'row',
                     backgroundColor:'#ed7d14',   
                 }}>
-                
+
                     <View style={{
                         flex:1,alignItems:'flex-end',
                         justifyContent:'center',
@@ -101,10 +98,14 @@ const Info = ({navigation}) =>
                         }}>
                         <Text style={styles.SmallnormalText}>© Copyright PotiQuality - 2022</Text>
                     </View>
-                
+
                 </View>
             </ScrollView>
-        </AfterInteractions>
+            
+        </Animated_Placeholder>
+
+            
+      
     )
 }
 export default Info

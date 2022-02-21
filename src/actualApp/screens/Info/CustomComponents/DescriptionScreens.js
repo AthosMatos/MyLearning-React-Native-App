@@ -2,7 +2,6 @@ import React,{useEffect,useCallback} from "react";
 import { StyleSheet, View,StatusBar,PixelRatio,BackHandler,useWindowDimensions, ScrollView,Text,Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import { ToogleInAll } from "../../Main/CustomComponents/GeneralAnimation";
 import { height, width } from "../../Main/styles";
 import { Card } from "react-native-paper";
 import { styles } from "../styles"; 

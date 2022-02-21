@@ -1,27 +1,22 @@
 import React,{useCallback, useEffect, useState} from "react";
-import Animated,{withSpring,useSharedValue,useAnimatedStyle, withRepeat } from "react-native-reanimated";
+import Animated,{withSpring,useSharedValue,useAnimatedStyle, withRepeat, runOnJS } from "react-native-reanimated";
 import { styles } from "../styles";
-
 import StandardButtom from "../../../Components/StandardButtom/StandardButtom";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-export default AnimatedButton = ({navigation}) =>
+export default AnimatedButton = () =>
 {
     const scaleMutiplier = useSharedValue(0)
     const opacity = useSharedValue(0)
-
+    const navigation = useNavigation()
+    
     useFocusEffect(
         useCallback(() => {
-          //alert('Screen was focused');
+         
           scaleMutiplier.value = withSpring(1)
           opacity.value = withSpring(1)
           
-          return () => {
-            scaleMutiplier.value = 0
-            //alert('Screen was unfocused');
-            // Useful for cleanup functions
-
-          }
+          return () => {}
         }, [])
     );
 
@@ -52,9 +47,24 @@ export default AnimatedButton = ({navigation}) =>
             }}
             onPressOut={()=>
             {
-                scaleMutiplier.value = withSpring(1)
-                opacity.value = withSpring(0)
-                navigation.navigate('MainScreen')
+                const gotonextScreen = () =>
+                {
+                    navigation.navigate('MainScreen')
+                }
+                scaleMutiplier.value = withSpring(1.3,{velocity:1.2},(isFinished)=>
+                {
+                    if(isFinished)
+                    {
+                        opacity.value = withSpring(0)
+                        scaleMutiplier.value = withSpring(0,{overshootClamping:10,velocity:1.2},(isFinished)=>
+                        {
+                            if(isFinished)
+                            {
+                                runOnJS(gotonextScreen)()
+                            }
+                        })
+                    }
+                })
             }}
             />
             

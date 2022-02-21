@@ -1,6 +1,6 @@
 import { PixelRatio,Dimensions } from "react-native"
 import EStyleSheet from "react-native-extended-stylesheet"
-import { TerciaryColor,PrimaryColor } from "../../../Defaults"
+import { TerciaryColor,PrimaryColor, ComplementaryColor } from "../../../Defaults"
 import ResponsiveStuff from "../../Helpers/ResponsiveStuff";
 
 export const {width, height} = Dimensions.get('window')
@@ -14,6 +14,7 @@ export const styles = EStyleSheet.create(
         },
         UpperButtonsView:
         {
+            //borderWidth:2,borderColor:'black',
             flexDirection:'row',
             alignItems:'center',
             marginHorizontal:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.02),
@@ -21,9 +22,9 @@ export const styles = EStyleSheet.create(
         },
         BottomButtonsView:
         {
-            //borderColor:'blue',
-            //borderWidth:2,
-            justifyContent:'space-evenly',
+            //borderColor:'blue',borderWidth:2,
+            justifyContent:'center',
+            alignItems:'center',
             flexDirection:'row',
             marginBottom:ResponsiveStuff.get_rem_ResponsiveLayoutHeightBased(0.02),
         },
@@ -66,6 +67,15 @@ export const styles = EStyleSheet.create(
         font:
         {
             fontWeight:'bold'
+        },
+        onload:
+        {
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor:ComplementaryColor,
+            borderRadius:PixelRatio.getPixelSizeForLayoutSize(80),
+            width:ResponsiveStuff.get_number_ResponsiveLayoutWidthBased(0.28),
+            height:ResponsiveStuff.get_number_ResponsiveLayoutWidthBased(0.28),
         }
     }
 )

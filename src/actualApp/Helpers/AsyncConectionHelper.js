@@ -3,7 +3,7 @@ import {saveDeviceData} from "../Helpers/AsyncStorageHelper";
 import {
     coin,
  } from '../Components/Carousel2.0/CoinVariables'
-import { ToogleInAll } from '../screens/Main/CustomComponents/GeneralAnimation';
+
 
 export const SERVER_URL = 'http://104.251.214.172:4000'
 
@@ -50,7 +50,7 @@ export const Reachable  = async () =>
     }
 }
 
-const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef) =>
+const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton) =>
 {  
     async function pyresq()
     {
@@ -64,14 +64,13 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
         if(Sjson.error==='image does not follow acquisition standards!')
         {
             alert('Não foi detectado Camarões.\nPor favor, tente Novamente') //add more info
-            //if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+         
             setuploadDone(false)
             setisLoading(false)
             setuploadstatus(undefined)
             setphoto(null)
             setshowReset(false)
-            ToogleInAll()
-            //if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+          
             setshowloadingButton(false)
             return
         }
@@ -122,7 +121,7 @@ const checkstep = async (imageNewname,setisLoading,setuploadstatus,imageuri,setu
         
         await saveDeviceData(name,shrimpdata)
 
-        //if(LayoutRef.current){LayoutRef.current.animateNextTransition()}
+      
         setuploadDone(true)
         setisLoading(false)
         setshowReset(false)
@@ -150,7 +149,7 @@ const createFormData = (photo, body = {}) =>
     return data
 }
 
-export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef) =>
+export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton) =>
 {
     if(!coin)
     {
@@ -191,7 +190,7 @@ export const handleUploadPhoto = async (setuploadstatus,setisLoading,photo,image
         // const json = await response.json()
         setuploadstatus('Imagem Enviada!')
         
-        checkstep(imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton,LayoutRef)
+        checkstep(imageNewname,setisLoading,setuploadstatus,imageuri,setuploadDone,setphoto,setshowReset,setshowloadingButton)
 
         // setisLoading(false)
 

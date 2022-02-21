@@ -5,18 +5,16 @@ import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-nativ
 import {width} from '../styles'
 import { SecondaryColor } from "../../../../Defaults";
 import ResponsiveStuff from "../../../Helpers/ResponsiveStuff";
+import EStyleSheet from "react-native-extended-stylesheet";
+import { useNavigation } from "@react-navigation/native";
 
 var offsetY
 var offsetScale
 
-export function InAnimation()
+export default InfoButtom = () =>
 {
-        offsetY.value = withSpring(0,{mass:0.8})   
-        offsetScale.value = withSpring(1)  
-}
-
-export default InfoButtom = ({navigation}) =>
-{
+    const navigation = useNavigation()
+    
     useEffect(()=>{
         offsetY.value = withSpring(0,{mass:0.8})   
     },[])
@@ -38,19 +36,28 @@ export default InfoButtom = ({navigation}) =>
     return (
         <Animated.View
         style={[
+           // {borderWidth:2,borderColor:'black'},
             //AnimatedStyle
         ]}
         >
             <TouchableOpacity 
-            style={{flexDirection:'row',flex:1,justifyContent:'flex-start',alignItems:'center'}} 
             onPress={()=>
                 {
                     //SuperZoomButtonPressAnimation(offsetScale)
                     navigation.navigate('Info')
                 }}>
-                <Icon name='info' color={SecondaryColor} size={ResponsiveStuff.get_number_ResponsiveLayoutWidthBased(0.1)}/>
+                <Icon name='info' color={SecondaryColor} iconStyle={styles.iconStyle}/>
             </TouchableOpacity>
+
         </Animated.View>
         
     )
 }
+
+const styles = EStyleSheet.create(
+    {
+        iconStyle:
+        {
+            fontSize:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.07),
+        }
+    })

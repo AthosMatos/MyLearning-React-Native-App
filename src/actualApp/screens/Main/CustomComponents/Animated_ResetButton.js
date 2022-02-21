@@ -1,21 +1,13 @@
-import React,{useEffect, useState} from 'react'
-import {PixelRatio,View,Text} from 'react-native'
+import React,{useEffect} from 'react'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle} from "react-native-reanimated"
 import { TerciaryColor } from '../../../../Defaults'
-import {height, width} from '../styles'
 import { styles } from '../styles'
+import ButtomWithIcon from '../../../Components/ButtomWithIcon/ButtomWithIcon'
 
 var offsetScale,offsetY
 
-export function OnUploadAnimation()
-{
-    offsetY.value = withSpring(-(height*0.02),0,()=>
-    {
-        offsetY.value = withSpring(height)
-    })
-}
 
-export default ResetButton = ({show,setphoto,setshowReset,LayoutRef}) =>
+export default ResetButton = ({show,setphoto,setshowReset}) =>
 {
     useEffect(()=>{
         if(show)

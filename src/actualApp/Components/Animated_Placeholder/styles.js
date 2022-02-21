@@ -12,7 +12,7 @@ export default styles = EStyleSheet.create(
         },
         activityindicator:
         {
-            transform:[{scale:parseFloat(ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.2,100))}]
+            transform:[{scale:parseFloat(ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.3,100))}]
         }
         
     })

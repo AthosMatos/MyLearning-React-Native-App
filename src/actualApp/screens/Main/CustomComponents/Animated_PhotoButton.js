@@ -1,34 +1,34 @@
-import React,{useEffect, useState} from 'react'
+import React,{useCallback} from 'react'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
 import {width} from '../styles'
-import { OnUploadAnimation as CCB_onUpAnim } from './Animated_ChooseCoinButton'
-import { OnUploadAnimation as RB_onUpAnim } from './Animated_ResetButton'
 import ButtomWithIcon from '../../../Components/ButtomWithIcon/ButtomWithIcon'
-import { TerciaryColor } from '../../../../Defaults'
+import { ComplementaryColor, TerciaryColor } from '../../../../Defaults'
 import { styles } from '../styles'
+import { useFocusEffect } from '@react-navigation/native'
 
 var offsetX,offsetScale
 
-export function InAnimation()
-{ 
-    offsetX.value = withSpring(0,{damping:15})
-    offsetScale.value = withSpring(1)
-}
 
-export function OnUploadAnimation()
+export default PhotoButtom = ({
+    requestCameraPermission,
+    handleUploadPhoto,
+    photo,setshowloadingButton,
+    showloadingButton,uploadDone, 
+    setuploadDone, setisLoading,
+    setuploadstatus,setphoto,
+    setshowReset}) =>
 {
-    offsetScale.value = withSpring(1.1,0,()=>
-    {
-        offsetScale.value = withSpring(0)
-       
-    })
-}
+    useFocusEffect(
+        useCallback(()=>
+        {
+            offsetX.value = withSpring(0,{damping:15})   
 
-export default PhotoButtom = ({requestCameraPermission,handleUploadPhoto,photo,LayoutRef}) =>
-{
-    useEffect(()=>{
-        offsetX.value = withSpring(0,{damping:15})   
-    },[])
+            return () =>
+            {
+
+            }
+        },[])
+    )
 
     offsetX = useSharedValue(width)
     offsetScale = useSharedValue(1)
@@ -44,36 +44,51 @@ export default PhotoButtom = ({requestCameraPermission,handleUploadPhoto,photo,L
         }
     },[])
     
+    const Onpress = () =>
+    {
+        if(showloadingButton)
+        {
+            if(uploadDone)
+            { 
+                setuploadDone(false)
+                setisLoading(false)           
+                setuploadstatus(null)      
+                setphoto(null)
+                setshowReset(false)
+                setshowloadingButton(false)
+            }
+        }
+        else
+        {
+            if(photo)
+            {
+                handleUploadPhoto()
+            }
+            else 
+            {
+                requestCameraPermission()
+            }
+        }
+        
+    }
+
     return(
         <Animated.View 
         style={[
-       // AnimatedStyle,
-        photo&& {flexGrow:1}
+        //AnimatedStyle,
+        !showloadingButton&&(photo&& {flexGrow:1,})
         ]}>
             <ButtomWithIcon 
-            icon={!photo? 'camera': 'upload'} 
+            icon={!uploadDone ? (!showloadingButton&& (!photo? 'camera': 'upload')): 'close'} 
             iconcolor={TerciaryColor} 
-            text={!photo&& "Tirar Foto"} 
-            Buttonstyle={[styles.Buttom2Style,photo&& {backgroundColor:'#7605FF'}]}
-            onPress={photo?
-                ()=>
-                {
-                    
-                    handleUploadPhoto()
-                    //LayoutRef.current.animateNextTransition()
-                }
-                :
-                ()=>
-                {
-                    requestCameraPermission()
-                    //LayoutRef.current.animateNextTransition()
-                }
-        
-            }
+            text={!showloadingButton&& (!photo&& "Tirar Foto")} 
+            Buttonstyle={[styles.Buttom2Style,photo&& {backgroundColor:ComplementaryColor},showloadingButton&& styles.onload ]}
+            onPress={Onpress}
             ContainerInsideStyle={photo&& {alignItems:'center',justifyContent:'center',}}
             iconContainerStyle={photo&& {marginBottom:0}}
             iconStyle={photo&& styles.iconsize}
             textstyle={styles.font}
+            Loading={!uploadDone&& showloadingButton}
             />
        
         </Animated.View>

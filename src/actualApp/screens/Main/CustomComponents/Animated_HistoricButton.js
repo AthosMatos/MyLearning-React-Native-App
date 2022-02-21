@@ -1,20 +1,19 @@
-import React,{useEffect, useState} from "react"
-import { PixelRatio } from "react-native"
-import FABv3 from "../../../Components/FABv3"
+import React,{useEffect } from "react"
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
 import {height} from '../styles'
+import StandardButtom from "../../../Components/StandardButtom/StandardButtom"
+import EStyleSheet from "react-native-extended-stylesheet"
+import ResponsiveStuff from "../../../Helpers/ResponsiveStuff"
+import { FontDarkColor, SecondaryColor, TerciaryColor } from "../../../../Defaults"
+import { useNavigation } from "@react-navigation/native"
 
 var offsetY
 var offsetScale
 
-export function InAnimation()
+export default HistoricButton = () =>
 {
-    offsetY.value = withSpring(0,{damping:15}) 
-    offsetScale.value = withSpring(1,{damping:15})  
-}
+    const navigation = useNavigation()
 
-export default HistoricButton = ({navigation}) =>
-{
     useEffect(()=>{
         offsetY.value = withSpring(0,{damping:15}) 
     },[])
@@ -35,22 +34,43 @@ export default HistoricButton = ({navigation}) =>
 
     return (
         <Animated.View
-        style={[{flexDirection:'row',flex:1,justifyContent:'flex-end'},
+        style={[
+        {
+            flex:1,
+            //borderWidth:2,borderColor:'black',
+            justifyContent:'flex-end',alignItems:'center',flexDirection:'row'},
         //AnimatedStyleEnter
         ]}>
-            <FABv3 
-            onPress={()=>
-                {   
-                    //SuperZoomButtonPressAnimation(offsetScale)
-
-                    navigation.navigate('Historic')
-                }} 
-            text='Historico' 
-            color={'#EDF2F4'} 
-            fontColor={'#2B2D42'} 
-            fontSize={14}
-            border={true}
+            <StandardButtom
+            text={'Historico'}
+            Buttonstyle={styles.buttonStyle}
+            textstyle={styles.textStyle}
+            onPressOut={()=>
+            {
+                navigation.navigate('Historic')
+            }}
             />
+
+
         </Animated.View>
     )
 }
+
+const styles = EStyleSheet.create(
+    {
+        buttonStyle:
+        {
+            backgroundColor:TerciaryColor,
+            elevation:0,
+            borderWidth:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.006),
+            borderColor:'black',
+
+        },
+        textStyle:
+        {
+            color:FontDarkColor,
+            fontSize:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.025),
+            marginVertical:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.030),
+            marginHorizontal:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.06),
+        }
+    })

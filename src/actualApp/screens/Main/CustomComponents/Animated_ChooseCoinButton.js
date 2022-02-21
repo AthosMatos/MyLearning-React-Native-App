@@ -1,5 +1,4 @@
 import React,{useEffect} from 'react'
-import {PixelRatio} from 'react-native'
 import ButtomWithIcon from '../../../Components/ButtomWithIcon/ButtomWithIcon'
 import { coinPhoto } from '../../../Components/Carousel2.0/CoinVariables'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from "react-native-reanimated"
@@ -7,16 +6,6 @@ import {height} from '../styles'
 import { styles } from '../styles'
 
 var osffsetY,flex
-
-export function InAnimation()
-{
-    osffsetY.value = withSpring(0,{damping:15})   
-}
-
-export function OnUploadAnimation()
-{
-    OutJelloDown(osffsetY)
-}
 
 export default ChooseCoinButtom = ({toggleModal,photo}) =>
 {

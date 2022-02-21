@@ -19,10 +19,12 @@ export const styles = EStyleSheet.create(
         },
         activityindicator:
         {
-           // borderColor:'black',
-            //borderWidth:1,
-            paddingTop:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.2),
-            transform:[{scale:parseFloat(ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.2,100))}]
+            //borderColor:'black',borderWidth:1,
+            transform:[{scale:parseFloat(ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.3,100))}]
+        },
+        activityindicatorContainer:
+        {
+            marginTop:ResponsiveStuff.get_rem_ResponsiveLayoutWidthBased(0.2),
         }
     }
 )

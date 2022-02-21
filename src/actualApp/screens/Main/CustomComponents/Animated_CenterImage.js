@@ -1,22 +1,19 @@
 import React,{useEffect, useState} from 'react'
-import { TouchableOpacity,View,Image as RNImage } from 'react-native'
+import { TouchableOpacity,Image as RNImage } from 'react-native'
 import { getname } from '../../../Helpers/AsyncConectionHelper'
 import { loadDeviceData } from '../../../Helpers/AsyncStorageHelper'
 import Animated,{ withSpring,useSharedValue,useAnimatedStyle } from 'react-native-reanimated'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import ResponsiveStuff from '../../../Helpers/ResponsiveStuff'
-import { LayoutRef } from '../../../../Defaults'
+import { useNavigation } from '@react-navigation/native'
 
 var offset
 
-export function InAnimation()
-{
-    offset.value = withSpring(1)
-}
-
-export default CenterImage = ({uploadDone,photo,navigation}) =>
+export default CenterImage = ({uploadDone,photo}) =>
 {
     const [aspectRatio,setaspectRatio]= useState(526/371)
+    const navigation = useNavigation()
+
 
     useEffect(()=>{
         offset.value = withSpring(1)
